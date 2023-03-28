@@ -11,7 +11,7 @@ int veryLongVariableName = 314;
 #define PI  3.1465
 const int LARGE_CONSTANT = 150;
 ```
-3. Function Name should be in Pascal Case
+3. Function Names classes, structs should be in Pascal Case
 ```CPP
 void AddItem(const Entity& anEntity, const ItemType& value)
 {
@@ -52,3 +52,27 @@ struct Vec2D {
   }
 };
 ```
+
+## 3. usage of enums
+* you should write an enum when every trying to specify a state or a limited data set 
+* if your enum is class specific you should write in the class to be bounded to its namespace
+```CPP
+class Process {
+  enum ProcessState 
+  {
+    NEW = 0,
+    RDY,
+    RUN,
+    BLK,
+    TRM
+  }
+
+  ProcessState state;
+
+  void SetState(ProcessState stat)
+  {
+    if (stat == ProcessState::BLK)
+      return;
+    state = stat;
+  }
+}
