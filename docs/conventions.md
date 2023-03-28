@@ -34,6 +34,14 @@ class Entity
 ----/entity-class.h 
 ----/nvim.rc
 ```
+6. output files sent by ref should be prefixed by `out`
+```CPP
+int FunctionWithManyReturns(int x, int y, int& outSum)
+{
+  outSum = x + y;
+  return x * y;
+}
+```
 
 ## 2. Usage of classes and structs
 you should a structs 
