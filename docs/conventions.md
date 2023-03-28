@@ -18,21 +18,37 @@ void AddItem(const Entity& anEntity, const ItemType& value)
   anEntity.Add(value);
 }
 ```
-4. private member data in class should be prefixed with `m_`
-```CPP
-class Entity
-{
-private:
-  m_Data,
-  m_Top,
-  m_Last
-};
-```
 4. static member data in class should be prefixed with `s_`
 ```CPP
   ```CPP
 class Entity
 {
   static int s_RefCount = 0;
+};
+```
+5. file name should be all in lower case separated by `-`
+```
+./dir
+--/sample-folder
+----/entity-class.cpp 
+----/entity-class.h 
+----/nvim.rc
+```
+
+## 2. Usage of classes and structs
+you should a structs 
+* when you want the data member to be public by default 
+* when you want to represent a simple data structure like a mathematical vector
+* you should avoid it when using inheritance
+```CPP
+struct Vec2D {
+  double x,
+  double y,
+  double z
+
+  Vec3D(int xCo, int yCo, int zCo) 
+    :x(xCo), y(yCo), z(zCO)
+  {  
+  }
 };
 ```
