@@ -39,7 +39,7 @@
   - Searching for an element: O(n)
 
 - _stacks and queues have fast insertion and removal times, but slower search times compared to other data structures_
-- _riority queues offer fast access to the highest priority element, but insertion and removal times are slower compared to stacks and queues_
+- _priority queues offer fast access to the highest priority element, but insertion and removal times are slower compared to stacks and queues_
 - _Trees and BSTs provide fast searching times, but their insertion and removal times depend on the structure of the tree and its balancing._
 - _Lists offer fast insertion and removal times at both the beginning and the end, but searching for an element is slower compared to other data structures_
 
@@ -50,18 +50,19 @@
 - RUN => should be only one Item per processor
 - I/O => must be only one item
 - TRM => (output is sorted ascending by trm time)
+  => queue
 - BLK => (FIFO Behavior)
   => Queue
 - FCFS RDY => (FIFO behavior)
-  => Queue
+  => List (when IO and come back to rdy que with different wt) 
 - SJF RDY => (shortest remaining time first)
-  => pQueue
+  => pQueue (minHeap)
 - RR RDY => Circular loop Behavior
-  => Queue
+  => Queue || circular queue
 
 ### processor holding ds
 
-- Processors =>
+- Processors => list ADT
 
 ---
 
@@ -91,5 +92,8 @@
 - All Data Structures for lists implementation
 - File Loading Function
 - Simple Simulator Function
-
+- when many processes ask for IO in the same time take the shortest IO time first
 - _No Actual Scheduling is required at phase 1_
+
+
+* Ask about FCFS behavior
