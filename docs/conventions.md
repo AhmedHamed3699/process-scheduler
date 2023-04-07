@@ -72,7 +72,8 @@ class Process {
     RDY,
     RUN,
     BLK,
-    TRM
+    TRM,
+    ORPH
   }
 
   ProcessState state;
