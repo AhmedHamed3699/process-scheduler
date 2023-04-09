@@ -152,6 +152,7 @@
     <ClCompile Include="src\control\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ds\DummyADT.h" />
     <ClInclude Include="src\entity\Processor.h" />
     <ClInclude Include="src\entity\Process.h" />
     <ClInclude Include="src\control\Scheduler.h" />
