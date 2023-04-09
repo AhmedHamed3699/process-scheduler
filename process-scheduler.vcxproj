@@ -154,6 +154,7 @@
     <ClInclude Include="src\control\Clock.h" />
     <ClInclude Include="src\control\Simulator.h" />
     <ClInclude Include="src\control\UI.h" />
+    <ClInclude Include="src\data.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
