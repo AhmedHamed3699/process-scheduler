@@ -33,6 +33,9 @@
     <ClCompile Include="src\entity\Process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\entity\Processor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\control\Simulator.h">
@@ -51,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\Process.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\entity\Processor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entity\Processor.cpp" />
     <ClCompile Include="src\entity\Process.cpp" />
     <ClCompile Include="src\control\Scheduler.cpp" />
     <ClCompile Include="src\control\Clock.cpp" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src\control\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\entity\Processor.h" />
     <ClInclude Include="src\entity\Process.h" />
     <ClInclude Include="src\control\Scheduler.h" />
     <ClInclude Include="src\control\Clock.h" />
