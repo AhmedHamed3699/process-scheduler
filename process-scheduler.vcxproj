@@ -146,10 +146,12 @@
     <ClCompile Include="src\control\Clock.cpp" />
     <ClCompile Include="src\control\Simulator.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\control\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\control\Clock.h" />
     <ClInclude Include="src\control\Simulator.h" />
+    <ClInclude Include="src\control\UI.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

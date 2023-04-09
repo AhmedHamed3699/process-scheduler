@@ -24,12 +24,18 @@
     <ClCompile Include="src\control\Clock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\control\UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\control\Simulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\control\Clock.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\control\UI.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
