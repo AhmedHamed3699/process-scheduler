@@ -1,0 +1,9 @@
+#pragma once
+///=////////////////////////////////////////////=///
+///  Processor Class: runs and stores processes  ///
+/// Created By scheduler maintained by scheduler ///
+///=////////////////////////////////////////////=///
+class Processor
+{
+};
+
