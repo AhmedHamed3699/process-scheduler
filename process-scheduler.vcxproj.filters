@@ -68,7 +68,7 @@
     <ClInclude Include="src\ds\Node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Queue.h">
+    <ClInclude Include="src\ds\Queue.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
