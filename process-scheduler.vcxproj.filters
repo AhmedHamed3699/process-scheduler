@@ -62,5 +62,14 @@
     <ClInclude Include="src\ds\DummyADT.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ds\List.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ds\Node.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
