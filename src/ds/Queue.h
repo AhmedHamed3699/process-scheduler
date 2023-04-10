@@ -5,7 +5,7 @@
 #include "Node.h"
 
 template<class ItemType>
-class LinkedQueue
+class Queue
 {
 private:
 	// The queue is implemented as a chain of linked nodes that has
@@ -14,9 +14,9 @@ private:
 	Node<ItemType>* backPtr;
 	Node<ItemType>* frontPtr;
 public:
-	LinkedQueue();
-	LinkedQueue(const LinkedQueue& aQueue);
-	virtual ~LinkedQueue();
+	Queue();
+	Queue(const Queue& aQueue);
+	virtual ~Queue();
 
 	bool isEmpty() const;
 	bool enqueue(const ItemType& newEntry);
@@ -25,13 +25,13 @@ public:
 };
 
 template<class ItemType>
-inline LinkedQueue<ItemType>::LinkedQueue()
+inline Queue<ItemType>::Queue()
 	: backPtr(nullptr), frontPtr(nullptr)
 {
 }
 
 template<class ItemType>
-inline LinkedQueue<ItemType>::LinkedQueue(const LinkedQueue& aQueue)
+inline Queue<ItemType>::Queue(const Queue& aQueue)
 {
 	Node<ItemType>* originChainPtr = aQueue.frontPtr;
 
@@ -50,7 +50,7 @@ inline LinkedQueue<ItemType>::LinkedQueue(const LinkedQueue& aQueue)
 }
 
 template<class ItemType>
-inline LinkedQueue<ItemType>::~LinkedQueue()
+inline Queue<ItemType>::~Queue()
 {
 	while (!isEmpty())
 	{
@@ -59,13 +59,13 @@ inline LinkedQueue<ItemType>::~LinkedQueue()
 }
 
 template<class ItemType>
-inline bool LinkedQueue<ItemType>::isEmpty() const
+inline bool Queue<ItemType>::isEmpty() const
 {
 	return frontPtr == nullptr;
 }
 
 template<class ItemType>
-inline bool LinkedQueue<ItemType>::enqueue(const ItemType& newEntry)
+inline bool Queue<ItemType>::enqueue(const ItemType& newEntry)
 {
 	Node<ItemType>* newNodePtr = new Node<ItemType>(newEntry);
 
@@ -78,7 +78,7 @@ inline bool LinkedQueue<ItemType>::enqueue(const ItemType& newEntry)
 }
 
 template<class ItemType>
-inline bool LinkedQueue<ItemType>::dequeue()
+inline bool Queue<ItemType>::dequeue()
 {
 	bool result = false;
 
@@ -105,7 +105,7 @@ inline bool LinkedQueue<ItemType>::dequeue()
 }
 
 template<class ItemType>
-inline ItemType LinkedQueue<ItemType>::peekFront() const
+inline ItemType Queue<ItemType>::peekFront() const
 {
 	return frontPtr->getItem();	// didn't check for empty because it's in the specification as a @pre
 }
