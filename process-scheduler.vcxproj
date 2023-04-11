@@ -152,6 +152,7 @@
     <ClCompile Include="src\control\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ds\PriorityQueue.h" />
     <ClInclude Include="src\ds\Queue.h" />
     <ClInclude Include="src\ds\List.h" />
     <ClInclude Include="src\ds\Node.h" />

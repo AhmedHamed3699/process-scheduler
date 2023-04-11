@@ -4,6 +4,11 @@
 ///=////////////////////////////////////////=///
 class Clock
 {
-	// TODO: Still a SPUD 
+private:
+	unsigned int time;
+public:
+	Clock();
+	unsigned int GetCurrentTime() const;
+	void Reset();
+	void Step();
 };
-
