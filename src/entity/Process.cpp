@@ -1,6 +1,6 @@
 #include "Process.h"
 
-Process::Process(int id, unsigned int ioNum): PID(id), IONumOfReq(ioNum), descendant(nullptr), IOCounter(0)
+Process::Process(int id, unsigned int ioNum): PID(id), IONumOfReq(ioNum), descendant(nullptr), IOCounter(0), status(NEW)
 {
 }
 
@@ -27,6 +27,16 @@ unsigned int Process::GetIONumOfReq() const
 void Process::SetIONumOfReq(unsigned int ioNum)
 {
 	IONumOfReq = ioNum;
+}
+
+ProcessStatus Process::GetStatus() const
+{
+	return status;
+}
+
+void Process::SetStatus(ProcessStatus outStatus)
+{
+	status = outStatus;
 }
 
 bool Process::NeedIO() const
