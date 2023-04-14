@@ -11,3 +11,16 @@ enum ProcessStatus {
 	TRM,		//the process has finished its execution (terminated)
 	ORPH		//the process' parent is terminated so the process is now an orphan (must be killed immed)
 };
+
+struct TimeInfo
+{
+	unsigned int AT;	 //arrivalTime
+	unsigned int RT;	 //responseTime
+	unsigned int CT;	 //cpuTime
+	unsigned int RCT;	 //remainingCpuTime
+	unsigned int TT;	 //terminationTime
+	unsigned int TRT;	 //turnaroundTime
+	unsigned int WT;	 //waitingTime
+	unsigned int[] IO_R; //IO_RequestTime
+	unsigned int[] IO_D; //IO_Duration
+};
