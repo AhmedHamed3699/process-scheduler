@@ -1,1 +1,47 @@
 #include "Process.h"
+
+Process::Process(int id, unsigned int ioNum): PID(id), IONumOfReq(ioNum), descendant(nullptr), IOCounter(0), status(NEW)
+{
+}
+
+int Process::GetID() const
+{
+	return PID;
+}
+
+Process* Process::GetDescendant() const
+{
+	return descendant;
+}
+
+void Process::SetDescendant(Process* child)
+{
+	descendant = child;
+}
+
+unsigned int Process::GetIONumOfReq() const
+{
+	return IONumOfReq;
+}
+
+void Process::SetIONumOfReq(unsigned int ioNum)
+{
+	IONumOfReq = ioNum;
+}
+
+ProcessStatus Process::GetStatus() const
+{
+	return status;
+}
+
+void Process::SetStatus(ProcessStatus outStatus)
+{
+	status = outStatus;
+}
+
+bool Process::NeedIO() const
+{
+	return false;
+}
+
+
