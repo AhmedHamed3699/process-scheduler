@@ -31,5 +31,7 @@ public:
 
 	virtual Process* ExecuteProcess() = 0;
 	virtual void AddProcessToList(Process process) = 0;
+
+	~Processor();
 };
 
