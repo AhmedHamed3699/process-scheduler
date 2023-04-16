@@ -12,13 +12,14 @@ class Simulator
 public:
 
 	Clock clk;
-	Schedular schedular;
+	Scheduler scheduler;
 	UI ui;
 
 	void ShowMenu();
 	bool LoadInpuitFile();
 	bool CreateOutputFile();
 	void Run();
+	void Simulation();
 
 	//void Run(mode : UIMode);
 };

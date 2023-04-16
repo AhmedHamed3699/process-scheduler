@@ -17,5 +17,10 @@ bool Simulator::CreateOutputFile()
 
 void Simulator::Run()
 {
+	Simulation();
+}
+
+void Simulator::Simulation()
+{
 
 }
