@@ -2,6 +2,7 @@
 ///=////////////////////////////////////////////=///
 /// This file should contain structures and enums///
 ///=////////////////////////////////////////////=///
+#include "ds/Queue.h"
 
 enum ProcessStatus {
 	NEW,		//the process is in the NEW List (didn't arrive yet)
@@ -21,6 +22,6 @@ struct TimeInfo
 	unsigned int TT;	 //terminationTime
 	unsigned int TRT;	 //turnaroundTime
 	unsigned int WT;	 //waitingTime
-	unsigned int[] IO_R; //IO_RequestTime
-	unsigned int[] IO_D; //IO_Duration
+	Queue<unsigned int> IO_R;	// IO RequestTime
+	Queue<unsigned int> IO_D;	// IO Duration
 };

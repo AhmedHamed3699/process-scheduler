@@ -19,6 +19,16 @@ void Process::SetDescendant(Process* child)
 	descendant = child;
 }
 
+TimeInfo Process::GetTimeInfo() const
+{
+	return timeInfo;
+}
+
+void Process::SetTimeInfo(TimeInfo tI)
+{
+	timeInfo = tI;
+}
+
 unsigned int Process::GetIONumOfReq() const
 {
 	return IONumOfReq;
