@@ -25,3 +25,8 @@ struct TimeInfo
 	Queue<unsigned int> IO_R;	// IO RequestTime
 	Queue<unsigned int> IO_D;	// IO Duration
 };
+
+enum ProcessorStatus {
+	IDLE,
+	BUSY
+};
