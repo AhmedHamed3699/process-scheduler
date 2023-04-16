@@ -1,7 +1,7 @@
 #include "Processor.h"
 
 Processor::Processor(Scheduler* outScheduler): scheduler(outScheduler),
-status(IDLE), currentProcess(nullptr), totalBusyTime(0), expectedFinishTime(0)
+status(IDLE), currentProcess(nullptr), totalBusyTime(0), expectedFinishTime(0), startingTime(0)
 {
 }
 
