@@ -31,14 +31,12 @@ inline Queue<ItemType>::Queue()
 }
 
 template<class ItemType>
-inline Queue<ItemType>::Queue(const Queue& aQueue)
+inline Queue<ItemType>::Queue(const Queue& aQueue): frontPtr(nullptr), backPtr(nullptr)
 {
 	Node<ItemType>* originChainPtr = aQueue.frontPtr;
 
 	if (originChainPtr == nullptr)
 	{
-		frontPtr = nullptr;
-		backPtr = nullptr;
 		return;
 	}
 
