@@ -2,10 +2,24 @@
 ///=////////////////////////////////////////////////=///
 /// Simulator Class Responsible of the file Handling ///
 ///=////////////////////////////////////////////////=///
+
+# include "Clock.h"
+# include "Scheduler.h"
+# include "UI.h"
+
 class Simulator
 {
-	// TODO: Still a SPUD 
 public:
-	void Run() {};
+
+	Clock clk;
+	Schedular schedular;
+	UI ui;
+
+	void ShowMenu();
+	bool LoadInpuitFile();
+	bool CreateOutputFile();
+	void Run();
+
+	//void Run(mode : UIMode);
 };
 
