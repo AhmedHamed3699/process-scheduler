@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\entity\ProcessorSJF.cpp" />
     <ClCompile Include="src\entity\Processor.cpp" />
     <ClCompile Include="src\entity\Process.cpp" />
     <ClCompile Include="src\control\Scheduler.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="src\control\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\entity\ProcessorSJF.h" />
     <ClInclude Include="src\ds\PriorityQueue.h" />
     <ClInclude Include="src\ds\Queue.h" />
     <ClInclude Include="src\ds\List.h" />
