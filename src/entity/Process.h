@@ -10,6 +10,7 @@ class Process
 private:
 	const int PID;
 	Process* descendant;
+	TimeInfo timeInfo;
 	unsigned int IONumOfReq;
 	unsigned int IOCounter;			//keep track of the current IO time and duration (as one process can have many IO)
 	ProcessStatus status;			//any process created will have NEW as its initial status
@@ -19,6 +20,8 @@ public:
 	int GetID() const;
 	Process* GetDescendant() const;
 	void SetDescendant(Process* child);
+	TimeInfo GetTimeInfo() const;
+	void SetTimeInfo(TimeInfo tI);
 	unsigned int GetIONumOfReq() const;			//can be used to know if the process would request IO or not
 	void SetIONumOfReq(unsigned int ioNum);
 	ProcessStatus GetStatus() const;
