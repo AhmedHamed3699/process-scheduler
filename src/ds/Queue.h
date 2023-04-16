@@ -22,6 +22,8 @@ public:
 	bool enqueue(const ItemType& newEntry);
 	bool dequeue();
 	ItemType peekFront() const;
+
+	void operator = (const Queue& original);
 };
 
 template<class ItemType>
@@ -106,4 +108,16 @@ template<class ItemType>
 inline ItemType Queue<ItemType>::peekFront() const
 {
 	return frontPtr->getItem();	// didn't check for empty because it's in the specification as a @pre
+}
+
+template<class ItemType>
+void Queue<ItemType>::operator = (const Queue<ItemType>& aQueue)
+{
+	Node<ItemType>* originChainPtr = aQueue.frontPtr;
+
+	while (originChainPtr != nullptr)
+	{
+		enqueue(originChainPtr->getItem());
+		originChainPtr = originChainPtr->getNext();
+	}
 }
