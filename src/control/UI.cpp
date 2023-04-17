@@ -19,9 +19,9 @@ void UI::WriteError(std::string msg)
 void UI::PrintHeadline()
 {
 	SetColor(CYAN);
-	std::cout << ".-----------------------------." << std::endl;
-	std::cout << "| Process Scheduler Simulator |" << std::endl;
-	std::cout << "'-----------------------------'" << std::endl;
+	std::cout << "            .-----------------------------." << std::endl;
+	std::cout << "            | Process Scheduler Simulator |" << std::endl;
+	std::cout << "            '-----------------------------'" << std::endl;
 	std::cout << std::endl;
 	ResetColor();
 }
@@ -57,6 +57,36 @@ void UI::PrintUIModeMenu()
 		SetMode(INTERACTIVE);
 		break;
 	}
+}
+
+void UI::PrintTimeStamp()
+{
+	SetColor(CYAN);
+	std::cout << "-________________________________________________________-" << std::endl;
+
+	std::cout << "                   Current Timestamp: " << clk->GetTime() << std::endl;
+
+	SetColor(BRIGHT_BLUE);
+	std::cout << "-------------------  RDY PROCESSES  ----------------------" << std::endl;
+
+	SetColor(GREY);
+	std::cout << "-------------------  BLK PROCESSES  ----------------------" << std::endl;
+
+	SetColor(BRIGHT_GREEN);
+	std::cout << "-------------------  RUN PROCESSES  ----------------------" << std::endl;
+
+	SetColor(PURPLE);
+	std::cout << "-------------------  TRM PROCESSES  ----------------------" << std::endl;
+
+	SetColor(CYAN);
+	std::cout << "-________________________________________________________-" << std::endl;
+	ResetColor();
+}
+
+// Constructor
+UI::UI(Clock* aClk)
+	:clk(aClk)
+{
 }
 
 
