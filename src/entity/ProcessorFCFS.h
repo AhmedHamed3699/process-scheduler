@@ -2,6 +2,7 @@
 #include "Processor.h"
 #include "Process.h"
 #include "../ds/List.h"
+#include "../data.h"
 
 class ProcessorFCFS : public Processor
 {
@@ -15,6 +16,7 @@ private:
 	void ForkHandler();				//Handles how Forking would be done
 
 public:
+	ProcessorFCFS(Scheduler* outScheduler);
 	Process* ExecuteProcess();					//The function responsible for executing a process
 	void AddProcessToList(Process* process);		//Adds a Process to the list of a Processor 
 };
