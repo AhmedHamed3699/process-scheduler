@@ -27,11 +27,22 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 
 Process* ProcessorFCFS::ExecuteProcess()
 {
+	//TODO: remove this later
+	if (readyList.IsEmpty())
+	{
+		return nullptr;
+	}
+	Process* process = readyList.GetEntry(1);
+	readyList.Remove(1);
+	currentProcess = process;
+
+
 	return nullptr;
 }
 
 void ProcessorFCFS::AddProcessToList(Process* process)
 {
+	readyList.Insert(readyList.GetLength() + 1, process);
 }
 
 void ProcessorFCFS::Print()

@@ -40,6 +40,41 @@ void Simulator::Run()
 	scheduler.CreateNewProcess(10);
 	scheduler.CreateNewProcess(11);
 
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+	scheduler.ScheduleNext();
+
+
+	scheduler.CreateNewProcess(20);
+	scheduler.CreateNewProcess(21);
+	scheduler.CreateNewProcess(22);
+	scheduler.CreateNewProcess(23);
+
+	scheduler.TerminateProcess(nullptr);
+	scheduler.TerminateProcess(nullptr);
+	scheduler.TerminateProcess(nullptr);
+	scheduler.TerminateProcess(nullptr);
+
+	scheduler.CreateNewProcess(24);
+	scheduler.CreateNewProcess(25);
+	scheduler.CreateNewProcess(26);
+	scheduler.CreateNewProcess(27);
+
+	scheduler.BlockProcess(nullptr);
+	scheduler.BlockProcess(nullptr);
+	scheduler.BlockProcess(nullptr);
+	scheduler.BlockProcess(nullptr);
+
+	scheduler.RunProcesses();
+
 	clk.Step();
 
 	ui.PrintTimeStamp();

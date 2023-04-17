@@ -94,3 +94,77 @@ void Scheduler::PrintRUNList()
 	}
 	std::cout << std::endl;
 }
+
+/// ////////////////////////////////// ///
+///     Process State Management       ///
+/// ////////////////////////////////// ///
+void Scheduler::ScheduleNext()
+{
+	if (NEWList.isEmpty())
+	{
+		return;
+	}
+
+	Process* process = NEWList.peekFront();
+	NEWList.dequeue();
+
+	/// TODO: implement the scheduling algorithm
+
+	// get the next processor
+	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
+	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
+
+	// schedule the process
+	processor->AddProcessToList(process);
+}
+
+void Scheduler::ScheduleNextFCFS(Process* process)
+{
+}
+
+void Scheduler::ScheduleNextSJF(Process* process)
+{
+}
+
+void Scheduler::ScheduleNextRR(Process* process)
+{
+}
+
+void Scheduler::TerminateProcess(Process* process)
+{
+	/// TODO: remove later
+	if (NEWList.isEmpty())
+	{
+		return;
+	}
+	process = NEWList.peekFront();
+	NEWList.dequeue();
+
+
+	TRMList.enqueue(process);
+}
+
+void Scheduler::BlockProcess(Process* process)
+{
+	/// TODO: remove later
+	if (NEWList.isEmpty())
+	{
+		return;
+	}
+	process = NEWList.peekFront();
+	NEWList.dequeue();
+
+
+	BLKList.enqueue(process);
+
+}
+
+/// TODO: remove this later
+void Scheduler::RunProcesses()
+{
+	for (int i = 0; i < processors.GetLength(); i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		processor->ExecuteProcess();
+	}
+}
