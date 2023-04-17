@@ -61,8 +61,12 @@ void Scheduler::PrintTRMList()
 
 void Scheduler::PrintBLKList()
 {
+	std::cout << BLKList.getSize() << " BLK: ";
+	BLKList.Print();
+	std::cout << std::endl;
 }
 
 void Scheduler::PrintRUNList()
 {
+
 }
