@@ -3,6 +3,7 @@
 /// QUEUE ADT: provides plain Abstract Data type for managing FIFO data ///
 ///=///////////////////////////////////////////////////////////////////=///
 #include "Node.h"
+#include <iostream>
 
 template<class ItemType>
 class Queue
@@ -22,6 +23,7 @@ public:
 	bool enqueue(const ItemType& newEntry);
 	bool dequeue();
 	ItemType peekFront() const;
+	void Print();
 
 	void operator = (const Queue& original);
 };
@@ -33,7 +35,7 @@ inline Queue<ItemType>::Queue()
 }
 
 template<class ItemType>
-inline Queue<ItemType>::Queue(const Queue& aQueue): frontPtr(nullptr), backPtr(nullptr)
+inline Queue<ItemType>::Queue(const Queue& aQueue) : frontPtr(nullptr), backPtr(nullptr)
 {
 	Node<ItemType>* originChainPtr = aQueue.frontPtr;
 
@@ -108,6 +110,24 @@ template<class ItemType>
 inline ItemType Queue<ItemType>::peekFront() const
 {
 	return frontPtr->getItem();	// didn't check for empty because it's in the specification as a @pre
+}
+
+template<class ItemType>
+inline void Queue<ItemType>::Print()
+{
+	Node<ItemType>* curPtr = frontPtr;
+	while (curPtr)
+	{
+		curPtr->getItem()->Print();
+
+		if (curPtr->getNext())
+		{
+			std::cout << ", ";
+		}
+
+		curPtr = curPtr->getNext();
+	}
+
 }
 
 template<class ItemType>
