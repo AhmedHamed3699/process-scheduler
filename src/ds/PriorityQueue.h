@@ -206,4 +206,9 @@ inline void PriorityQueue<ItemType>::Print()
 			std::cout << ", ";
 		}
 	}
+
+	if (itemCount == 0)
+	{
+		std::cout << "Empty List";
+	}
 }

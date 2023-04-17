@@ -139,6 +139,10 @@ inline void Queue<ItemType>::Print()
 		curPtr = curPtr->getNext();
 	}
 
+	if (isEmpty())
+	{
+		std::cout << "Empty List";
+	}
 }
 
 template<class ItemType>
