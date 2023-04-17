@@ -57,6 +57,9 @@ void Scheduler::PrintRDYLists()
 
 void Scheduler::PrintTRMList()
 {
+	std::cout << TRMList.getSize() << " TRM: ";
+	TRMList.Print();
+	std::cout << std::endl;
 }
 
 void Scheduler::PrintBLKList()
