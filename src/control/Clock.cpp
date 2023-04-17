@@ -2,7 +2,7 @@
 
 Clock::Clock() : time(0) {}
 
-unsigned int Clock::GetCurrentTime() const
+unsigned int Clock::GetTime() const
 {
 	return time;
 }
