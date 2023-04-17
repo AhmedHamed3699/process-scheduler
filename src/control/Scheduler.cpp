@@ -51,7 +51,6 @@ void Scheduler::PrintRDYLists()
 		Processor* processor = processors.GetEntry(i);
 		std::cout << "Processor " << i << " ";
 		processor->Print();
-		std::cout << std::endl;
 	}
 }
 
