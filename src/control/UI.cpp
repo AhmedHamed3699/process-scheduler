@@ -29,3 +29,9 @@ void UI::SetColor(Color color)
 	HANDLE consoleOutputHandle = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(consoleOutputHandle, color);
 }
+
+// Mode management
+void UI::SetMode(UIMode aMode)
+{
+	mode = aMode;
+}

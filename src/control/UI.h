@@ -9,6 +9,8 @@
 
 class UI
 {
+	/// Data Members
+	UIMode mode;
 
 public:
 	/// Output functions
@@ -18,5 +20,8 @@ public:
 	/// Color Control functions
 	void ResetColor();
 	void SetColor(Color color);
+
+	/// Mode Management functions
+	void SetMode(UIMode aMode);
 };
 
