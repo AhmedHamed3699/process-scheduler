@@ -179,6 +179,11 @@ inline void List<ItemType>::Print()
 
 		curPtr = curPtr->getNext();
 	}
+
+	if (itemCount == 0)
+	{
+		std::cout << "Empty List";
+	}
 }
 
 template<class ItemType>

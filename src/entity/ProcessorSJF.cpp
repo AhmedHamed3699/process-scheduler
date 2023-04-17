@@ -22,3 +22,10 @@ void ProcessorSJF::AddProcessToList(Process* process)
 {
 	readyList.enqueue(process);
 }
+
+void ProcessorSJF::Print()
+{
+	std::cout << "[SJF ]: " << readyList.getSize() << " RDY: ";
+	readyList.Print();
+	std::cout << std::endl;
+}

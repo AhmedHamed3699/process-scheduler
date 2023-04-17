@@ -33,3 +33,10 @@ Process* ProcessorFCFS::ExecuteProcess()
 void ProcessorFCFS::AddProcessToList(Process* process)
 {
 }
+
+void ProcessorFCFS::Print()
+{
+	std::cout << "[FCFS]: " << readyList.GetLength() << " RDY: ";
+	readyList.Print();
+	std::cout << std::endl;
+}

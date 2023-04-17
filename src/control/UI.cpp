@@ -68,15 +68,19 @@ void UI::PrintTimeStamp()
 
 	SetColor(BRIGHT_BLUE);
 	std::cout << "-------------------  RDY PROCESSES  ----------------------" << std::endl;
+	scheduler->PrintRDYLists();
 
 	SetColor(GREY);
 	std::cout << "-------------------  BLK PROCESSES  ----------------------" << std::endl;
+	scheduler->PrintBLKList();
 
 	SetColor(BRIGHT_GREEN);
 	std::cout << "-------------------  RUN PROCESSES  ----------------------" << std::endl;
+	scheduler->PrintRUNList();
 
 	SetColor(PURPLE);
 	std::cout << "-------------------  TRM PROCESSES  ----------------------" << std::endl;
+	scheduler->PrintTRMList();
 
 	SetColor(CYAN);
 	std::cout << "-________________________________________________________-" << std::endl;
@@ -84,8 +88,8 @@ void UI::PrintTimeStamp()
 }
 
 // Constructor
-UI::UI(Clock* aClk)
-	:clk(aClk)
+UI::UI(Clock* aClk, Scheduler* aScheduler)
+	:clk(aClk), scheduler(aScheduler)
 {
 }
 

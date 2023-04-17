@@ -26,6 +26,7 @@ public:
 	bool enqueue(const ItemType& newData);
 	bool dequeue();
 	bool dequeue(ItemType& min);
+	int getSize() const;
 	void clear();
 	void Print(); // for UI
 	virtual ~PriorityQueue();
@@ -180,6 +181,12 @@ bool PriorityQueue<ItemType>::dequeue(ItemType& min)
 }
 
 template<class ItemType>
+inline int PriorityQueue<ItemType>::getSize() const
+{
+	return itemCount;
+}
+
+template<class ItemType>
 void PriorityQueue<ItemType>::clear()
 {
 	itemCount = 0;
@@ -198,5 +205,10 @@ inline void PriorityQueue<ItemType>::Print()
 		{
 			std::cout << ", ";
 		}
+	}
+
+	if (itemCount == 0)
+	{
+		std::cout << "Empty List";
 	}
 }
