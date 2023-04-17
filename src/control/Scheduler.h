@@ -11,7 +11,8 @@
 #include "../entity/ProcessorFCFS.h"
 #include "../entity/ProcessorSJF.h"
 #include "../entity/ProcessorRR.h"
-
+#include <iostream>
+#include <string>
 
 class Scheduler
 {
@@ -31,7 +32,7 @@ private:
 	Queue<Process*> TRMList;
 	Queue<Process*> BLKList;
 	Process* IOProcess;
-
+	int nextProcessorIndex = 0; /// TODO: remove this later
 
 	/// ////////////////////////////////// ///
 	///    constructors and destructor     ///
@@ -43,8 +44,28 @@ public:
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
 	/// ////////////////////////////////// ///
-public:
 	void CreateProcessor(ProcessorType aType);
 	void CreateNewProcess(int id);
+
+	/// ////////////////////////////////// ///
+	///           UI AID Functions         ///
+	/// ////////////////////////////////// ///
+	void PrintRDYLists();
+	void PrintTRMList();
+	void PrintBLKList();
+	void PrintRUNList();
+
+	/// ////////////////////////////////// ///
+	///      Process State Management      ///
+	/// ////////////////////////////////// ///
+	void ScheduleNext();
+	void ScheduleNextFCFS(Process* process);
+	void ScheduleNextSJF(Process* process);
+	void ScheduleNextRR(Process* process);
+	void TerminateProcess(Process* process);
+	void BlockProcess(Process* process);
+
+	/// TODO:  remove this later
+	void RunProcesses();
 };
 

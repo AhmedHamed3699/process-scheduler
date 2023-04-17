@@ -19,10 +19,27 @@ ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 
 Process* ProcessorRR::ExecuteProcess()
 {
+	//TODO: remove this later
+	if (readyList.getSize() == 0)
+	{
+		return nullptr;
+	}
+	Process* process = readyList.peekFront();
+	readyList.dequeue();
+	currentProcess = process;
+
+
 	return nullptr;
 }
 
 void ProcessorRR::AddProcessToList(Process* process)
 {
 	readyList.enqueue(process);
+}
+
+void ProcessorRR::Print()
+{
+	std::cout << "[ RR ]: " << readyList.getSize() << " RDY: ";
+	readyList.Print();
+	std::cout << std::endl;
 }

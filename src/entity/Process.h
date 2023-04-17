@@ -4,6 +4,7 @@
 /// Created By scheduler maintained by scheduler and processor ///
 ///=//////////////////////////////////////////////////////////=///
 #include "../data.h"
+#include <iostream>
 
 class Process
 {
@@ -30,6 +31,9 @@ public:
 	//returns true if the process needs IO in this timestep
 	//You may need to change its parameters depending on your implementation (ex: you may want to send the time to it)
 	//You may also remove this method and just get the timeInfo of the process to check for IO time
-	bool NeedIO() const;						
+	bool NeedIO() const;
+
+	// for printing
+	void Print();
 };
 

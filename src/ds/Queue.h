@@ -3,6 +3,7 @@
 /// QUEUE ADT: provides plain Abstract Data type for managing FIFO data ///
 ///=///////////////////////////////////////////////////////////////////=///
 #include "Node.h"
+#include <iostream>
 
 template<class ItemType>
 class Queue
@@ -13,6 +14,7 @@ private:
 	// queue and a tail pointer for the back of the queue.
 	Node<ItemType>* backPtr;
 	Node<ItemType>* frontPtr;
+	unsigned int size;
 public:
 	Queue();
 	Queue(const Queue& aQueue);
@@ -21,19 +23,21 @@ public:
 	bool isEmpty() const;
 	bool enqueue(const ItemType& newEntry);
 	bool dequeue();
+	unsigned int getSize() const;
 	ItemType peekFront() const;
+	void Print();
 
 	void operator = (const Queue& original);
 };
 
 template<class ItemType>
 inline Queue<ItemType>::Queue()
-	: backPtr(nullptr), frontPtr(nullptr)
+	: backPtr(nullptr), frontPtr(nullptr), size(0)
 {
 }
 
 template<class ItemType>
-inline Queue<ItemType>::Queue(const Queue& aQueue): frontPtr(nullptr), backPtr(nullptr)
+inline Queue<ItemType>::Queue(const Queue& aQueue) : frontPtr(nullptr), backPtr(nullptr), size(0)
 {
 	Node<ItemType>* originChainPtr = aQueue.frontPtr;
 
@@ -68,6 +72,8 @@ template<class ItemType>
 inline bool Queue<ItemType>::enqueue(const ItemType& newEntry)
 {
 	Node<ItemType>* newNodePtr = new Node<ItemType>(newEntry);
+	size++;
+
 
 	if (isEmpty())
 		frontPtr = newNodePtr;
@@ -86,6 +92,7 @@ inline bool Queue<ItemType>::dequeue()
 	{
 		// Queue is not empty: remove front
 		Node<ItemType>* nodeToDeletePtr = frontPtr;
+		size--;
 
 		if (frontPtr == backPtr) // Special case: one node in queue
 		{
@@ -105,9 +112,37 @@ inline bool Queue<ItemType>::dequeue()
 }
 
 template<class ItemType>
+inline unsigned int Queue<ItemType>::getSize() const
+{
+	return size;
+}
+
+template<class ItemType>
 inline ItemType Queue<ItemType>::peekFront() const
 {
 	return frontPtr->getItem();	// didn't check for empty because it's in the specification as a @pre
+}
+
+template<class ItemType>
+inline void Queue<ItemType>::Print()
+{
+	Node<ItemType>* curPtr = frontPtr;
+	while (curPtr)
+	{
+		curPtr->getItem()->Print();
+
+		if (curPtr->getNext())
+		{
+			std::cout << ", ";
+		}
+
+		curPtr = curPtr->getNext();
+	}
+
+	if (isEmpty())
+	{
+		std::cout << "Empty List";
+	}
 }
 
 template<class ItemType>

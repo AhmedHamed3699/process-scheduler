@@ -14,7 +14,7 @@ public:
 
 	Clock clk;
 	Scheduler scheduler;
-	UI ui;
+	UI ui{ &clk, &scheduler };
 
 	void ShowMenu();
 	bool LoadInpuitFile();
@@ -22,7 +22,8 @@ public:
 	void Run();
 	void Simulation();
 
-	Simulator() {};
+	Simulator()
+	{};
 
 	//void Run(mode : UIMode);
 };

@@ -5,6 +5,7 @@
 ///=////////////////////////////////////////////=///
 #include "Process.h"
 #include "../data.h"
+#include <iostream>
 
 // Forward class declaration
 class Scheduler;
@@ -39,5 +40,6 @@ public:
 	virtual Process* ExecuteProcess() = 0;					//The function responsible for executing a process
 	virtual void AddProcessToList(Process* process) = 0;		//Adds a Process to the list of a Processor 
 
+	virtual void Print() = 0;
 };
 
