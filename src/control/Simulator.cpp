@@ -73,6 +73,8 @@ void Simulator::Run()
 	scheduler.BlockProcess(nullptr);
 	scheduler.BlockProcess(nullptr);
 
+	scheduler.RunProcesses();
+
 	clk.Step();
 
 	ui.PrintTimeStamp();

@@ -96,7 +96,7 @@ void Scheduler::PrintRUNList()
 }
 
 /// ////////////////////////////////// ///
-///           UI AID Functions         ///
+///     Process State Management       ///
 /// ////////////////////////////////// ///
 void Scheduler::ScheduleNext()
 {
@@ -157,4 +157,14 @@ void Scheduler::BlockProcess(Process* process)
 
 	BLKList.enqueue(process);
 
+}
+
+/// TODO: remove this later
+void Scheduler::RunProcesses()
+{
+	for (int i = 0; i < processors.GetLength(); i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		processor->ExecuteProcess();
+	}
 }

@@ -56,7 +56,7 @@ public:
 	void PrintRUNList();
 
 	/// ////////////////////////////////// ///
-	///           UI AID Functions         ///
+	///      Process State Management      ///
 	/// ////////////////////////////////// ///
 	void ScheduleNext();
 	void ScheduleNextFCFS(Process* process);
@@ -64,5 +64,8 @@ public:
 	void ScheduleNextRR(Process* process);
 	void TerminateProcess(Process* process);
 	void BlockProcess(Process* process);
+
+	/// TODO:  remove this later
+	void RunProcesses();
 };
 
