@@ -4,10 +4,16 @@
 /// Output Functions
 void UI::WriteWarning(std::string msg)
 {
+	SetColor(YELLOW);
+	std::cout << "Warning: " << msg << std::endl;
+	ResetColor();
 }
 
 void UI::WriteError(std::string msg)
 {
+	SetColor(RED);
+	std::cout << "ERROR: " << msg << std::endl;
+	ResetColor();
 }
 
 
