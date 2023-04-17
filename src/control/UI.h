@@ -9,14 +9,23 @@
 
 class UI
 {
+	/// Data Members
+private:
+	UIMode mode;
 
 public:
 	/// Output functions
-	void WriteWarning(std::string msg);
-	void WriteError(std::string msg);
+	void WriteWarning(std::string msg);	// USEFULL for Debugging
+	void WriteError(std::string msg);	// USEFULL for Debugging
+	void PrintHeadline();
+	void PrintUIModeMenu();
 
+private:
 	/// Color Control functions
 	void ResetColor();
 	void SetColor(Color color);
+
+	/// Mode Management functions
+	void SetMode(UIMode aMode);
 };
 

@@ -17,6 +17,8 @@ bool Simulator::CreateOutputFile()
 
 void Simulator::Run()
 {
+	ui.PrintHeadline();
+	ui.PrintUIModeMenu();
 	Simulation();
 }
 
