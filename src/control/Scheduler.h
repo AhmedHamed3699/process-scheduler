@@ -12,6 +12,7 @@
 #include "../entity/ProcessorSJF.h"
 #include "../entity/ProcessorRR.h"
 #include <iostream>
+#include <string>
 
 class Scheduler
 {

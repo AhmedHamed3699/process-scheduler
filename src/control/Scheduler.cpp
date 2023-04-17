@@ -68,5 +68,27 @@ void Scheduler::PrintBLKList()
 
 void Scheduler::PrintRUNList()
 {
+	string* RUNList = new string[processors.GetLength()];
+	unsigned int runListSize = 0;
 
+	for (int i = 1; i <= processors.GetLength(); i++)
+	{
+		Processor* processor = processors.GetEntry(i);
+		if (processor->GetCurrentProcess() != nullptr)
+		{
+			RUNList[runListSize++] = to_string(processor->GetCurrentProcess()->GetID()) + "(P" + to_string(i) + ")";
+		}
+	}
+
+
+	std::cout << runListSize << " RUN: ";
+	for (unsigned int i = 0; i < runListSize; i++)
+	{
+		std::cout << RUNList[i];
+		if (i < runListSize - 1)
+		{
+			std::cout << ", ";
+		}
+	}
+	std::cout << std::endl;
 }
