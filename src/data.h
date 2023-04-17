@@ -55,6 +55,16 @@ enum ProcessorType
 	PROCESSOR_TYPE_SIZE
 };
 
+// Modes of UI
+enum UIMode
+{
+	INTERACTIVE,
+	STEP_BY_STEP,
+	SILENT,
+	// not an actual mode
+	UI_MODE_SIZE
+};
+
 
 /// ////////////////// ///
 ///      Structs       ///
