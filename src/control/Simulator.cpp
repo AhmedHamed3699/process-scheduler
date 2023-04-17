@@ -19,6 +19,7 @@ void Simulator::Run()
 {
 	ui.PrintHeadline();
 	ui.PrintUIModeMenu();
+	ui.PrintTimeStamp();
 	Simulation();
 }
 
