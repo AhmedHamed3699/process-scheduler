@@ -7,6 +7,7 @@
 #include <windows.h>
 #include "../data.h"
 #include "Clock.h"
+#include "Scheduler.h"
 
 class UI
 {
@@ -14,6 +15,7 @@ class UI
 private:
 	UIMode mode;
 	const Clock* clk;
+	Scheduler* scheduler;
 
 public:
 	/// Output functions
@@ -24,7 +26,7 @@ public:
 	void PrintTimeStamp();
 
 	/// Constructor
-	UI(Clock* aClk);
+	UI(Clock* aClk, Scheduler* aScheduler);
 
 private:
 	/// Color Control functions
