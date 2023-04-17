@@ -32,6 +32,7 @@ Process* ProcessorFCFS::ExecuteProcess()
 
 void ProcessorFCFS::AddProcessToList(Process* process)
 {
+	readyList.Insert(readyList.GetLength() + 1, process);
 }
 
 void ProcessorFCFS::Print()
