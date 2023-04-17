@@ -19,6 +19,16 @@ ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 
 Process* ProcessorRR::ExecuteProcess()
 {
+	//TODO: remove this later
+	if (readyList.getSize() == 0)
+	{
+		return nullptr;
+	}
+	Process* process = readyList.peekFront();
+	readyList.dequeue();
+	currentProcess = process;
+
+
 	return nullptr;
 }
 
