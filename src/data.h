@@ -4,6 +4,10 @@
 ///=////////////////////////////////////////////=///
 #include "ds/Queue.h"
 
+/// ////////////////// ///
+///     Enumerators    ///
+/// ////////////////// ///
+
 enum ProcessStatus {
 	NEW,		//the process is in the NEW List (didn't arrive yet)
 	RDY,		//the process is in a RDY List of a processor
@@ -13,6 +17,48 @@ enum ProcessStatus {
 	ORPH		//the process' parent is terminated so the process is now an orphan (must be killed immed)
 };
 
+enum ProcessorStatus {
+	IDLE,
+	BUSY
+};
+
+// Terminal Output colors codes
+enum Color
+{
+	BLUE = 1,
+	GREEN,
+	CYAN,
+	RED,
+	PURPLE,
+	DARK_YELLOW,
+	DEFAULT_WHITE,
+	GREY,
+	BRIGHT_BLUE,
+	BRIGHT_GREEN,
+	BRIGHT_CYAN,
+	BRIGHT_RED,
+	PINK,
+	YELLOW,
+	BRIGHT_WHITE,
+	// not an actual color
+	COLOR_SIZE
+};
+
+// Types of Processors
+enum ProcessorType
+{
+	FCFS,
+	SJF,
+	RR,
+
+	// not an actual size
+	PROCESSOR_TYPE_SIZE
+};
+
+
+/// ////////////////// ///
+///      Structs       ///
+/// ////////////////// ///
 struct TimeInfo
 {
 	unsigned int AT;	 //arrivalTime
@@ -59,42 +105,4 @@ struct SimulationParameters
 		RTF(rtf),
 		N_PROCESS(nProcess)
 	{}
-};
-
-enum ProcessorStatus {
-	IDLE,
-	BUSY
-};
-
-// Terminal Output colors codes
-enum Color
-{
-	BLUE = 1,
-	GREEN,
-	CYAN,
-	RED,
-	PURPLE,
-	DARK_YELLOW,
-	DEFAULT_WHITE,
-	GREY,
-	BRIGHT_BLUE,
-	BRIGHT_GREEN,
-	BRIGHT_CYAN,
-	BRIGHT_RED,
-	PINK,
-	YELLOW,
-	BRIGHT_WHITE,
-	// not an actual color
-	COLOR_SIZE
-};
-
-// Types of Processors
-enum ProcessorType
-{
-	FCFS,
-	SJF,
-	RR,
-
-	// not an actual size
-	PROCESSOR_TYPE_SIZE
 };
