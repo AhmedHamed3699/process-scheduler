@@ -41,3 +41,28 @@ void Scheduler::CreateNewProcess(int id)
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
 }
+/// ////////////////////////////////// ///
+///           UI AID Functions         ///
+/// ////////////////////////////////// ///
+void Scheduler::PrintRDYLists()
+{
+	for (int i = 1; i <= processors.GetLength(); i++)
+	{
+		Processor* processor = processors.GetEntry(i);
+		std::cout << "Processor " << i << " ";
+		processor->Print();
+		std::cout << std::endl;
+	}
+}
+
+void Scheduler::PrintTRMList()
+{
+}
+
+void Scheduler::PrintBLKList()
+{
+}
+
+void Scheduler::PrintRUNList()
+{
+}

@@ -11,7 +11,7 @@
 #include "../entity/ProcessorFCFS.h"
 #include "../entity/ProcessorSJF.h"
 #include "../entity/ProcessorRR.h"
-
+#include <iostream>
 
 class Scheduler
 {
@@ -43,8 +43,15 @@ public:
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
 	/// ////////////////////////////////// ///
-public:
 	void CreateProcessor(ProcessorType aType);
 	void CreateNewProcess(int id);
+
+	/// ////////////////////////////////// ///
+	///           UI AID Functions         ///
+	/// ////////////////////////////////// ///
+	void PrintRDYLists();
+	void PrintTRMList();
+	void PrintBLKList();
+	void PrintRUNList();
 };
 
