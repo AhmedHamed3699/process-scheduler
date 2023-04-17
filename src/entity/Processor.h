@@ -13,6 +13,7 @@ class Processor
 {
 protected:
 	Scheduler* scheduler;				//Pointer to Scheduler
+	ProcessorType type;					// type of processor
 	ProcessorStatus status;				//current state of the Processor
 	Process* currentProcess;			//the process being executed right now by the processor
 	unsigned int totalBusyTime;			//the total time the processor was busy (executing a process)
@@ -22,7 +23,7 @@ protected:
 	virtual void IOHandler() = 0;				//it manages how the I/O for a process would happen
 	virtual void WorkStealingHandler() = 0;		//it manages how the work stealing between processors would happen
 public:
-	Processor(Scheduler* outScheduler);
+	Processor(Scheduler* outScheduler, ProcessorType aType);
 	virtual ~Processor();
 
 	//Setters and Getters for the data members

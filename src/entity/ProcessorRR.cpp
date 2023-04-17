@@ -12,12 +12,17 @@ void ProcessorRR::MigratonHandler()
 {
 }
 
+ProcessorRR::ProcessorRR(Scheduler* outScheduler)
+	:Processor(outScheduler, RR)
+{
+}
+
 Process* ProcessorRR::ExecuteProcess()
 {
-    return nullptr;
+	return nullptr;
 }
 
 void ProcessorRR::AddProcessToList(Process* process)
 {
-    readyList.enqueue(process);
+	readyList.enqueue(process);
 }

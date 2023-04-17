@@ -20,6 +20,11 @@ void ProcessorFCFS::ForkHandler()
 {
 }
 
+ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
+	:Processor(outScheduler, FCFS)
+{
+}
+
 Process* ProcessorFCFS::ExecuteProcess()
 {
 	return nullptr;

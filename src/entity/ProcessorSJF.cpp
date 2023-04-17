@@ -8,6 +8,11 @@ void ProcessorSJF::WorkStealingHandler()
 {
 }
 
+ProcessorSJF::ProcessorSJF(Scheduler* outScheduler)
+	:Processor(outScheduler, SJF)
+{
+}
+
 Process* ProcessorSJF::ExecuteProcess()
 {
 	return nullptr;

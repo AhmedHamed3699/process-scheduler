@@ -67,7 +67,8 @@ enum ProcessorStatus {
 };
 
 // Terminal Output colors codes
-enum Color {
+enum Color
+{
 	BLUE = 1,
 	GREEN,
 	CYAN,
@@ -85,4 +86,15 @@ enum Color {
 	BRIGHT_WHITE,
 	// not an actual color
 	COLOR_SIZE
+};
+
+// Types of Processors
+enum ProcessorType
+{
+	FCFS,
+	SJF,
+	RR,
+
+	// not an actual size
+	PROCESSOR_TYPE_SIZE
 };

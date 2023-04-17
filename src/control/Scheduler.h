@@ -8,6 +8,9 @@
 #include "../ds/Queue.h"
 #include "../entity/Process.h"
 #include "../entity/Processor.h"
+#include "../entity/ProcessorFCFS.h"
+#include "../entity/ProcessorSJF.h"
+#include "../entity/ProcessorRR.h"
 
 
 class Scheduler
@@ -29,19 +32,19 @@ private:
 	Queue<Process*> BLKList;
 	Process* IOProcess;
 
+
+	/// ////////////////////////////////// ///
+	///    constructors and destructor     ///
+	/// ////////////////////////////////// ///
 public:
-	Scheduler()
-		:simulationParameters(1, 22, 33, 44, 55, 66, 77, 88, 424)
-	{
-		// TODO: reomve later
-		cout << "fork prob " << simulationParameters.FORK_PROBABILITY << endl;
-		cout << "mwt " << simulationParameters.MAX_WAITING_TIME << endl;
-		cout << "n fcfs " << simulationParameters.N_FCFS << endl;
-		cout << "n rr " << simulationParameters.N_RR << endl;
-		cout << "n sjf " << simulationParameters.N_SJF << endl;
-		cout << "n process " << simulationParameters.N_PROCESS << endl;
-		cout << "rtf " << simulationParameters.RTF << endl;
-		cout << "stl " << simulationParameters.STL << endl;
-	}
+	Scheduler();
+
+
+	/// ////////////////////////////////// ///
+	///         Creation and setup         ///
+	/// ////////////////////////////////// ///
+public:
+	void CreateProcessor(ProcessorType aType);
+	void CreateNewProcess(int id);
 };
 
