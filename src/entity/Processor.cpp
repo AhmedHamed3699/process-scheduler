@@ -1,6 +1,6 @@
 #include "Processor.h"
 
-Processor::Processor(Scheduler* outScheduler): scheduler(outScheduler),
+Processor::Processor(Scheduler* outScheduler, ProcessorType aType) : scheduler(outScheduler), type(aType),
 status(IDLE), currentProcess(nullptr), totalBusyTime(0), expectedFinishTime(0), startingTime(0)
 {
 }
