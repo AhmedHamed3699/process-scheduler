@@ -132,6 +132,16 @@ void Scheduler::ScheduleNextRR(Process* process)
 
 void Scheduler::TerminateProcess(Process* process)
 {
+	/// TODO: remove later
+	if (NEWList.isEmpty())
+	{
+		return;
+	}
+	process = NEWList.peekFront();
+	NEWList.dequeue();
+
+
+	TRMList.enqueue(process);
 }
 
 void Scheduler::BlockProcess(Process* process)
