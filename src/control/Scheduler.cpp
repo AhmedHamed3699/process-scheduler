@@ -94,3 +94,46 @@ void Scheduler::PrintRUNList()
 	}
 	std::cout << std::endl;
 }
+
+/// ////////////////////////////////// ///
+///           UI AID Functions         ///
+/// ////////////////////////////////// ///
+void Scheduler::ScheduleNext()
+{
+	if (NEWList.isEmpty())
+	{
+		return;
+	}
+
+	Process* process = NEWList.peekFront();
+	NEWList.dequeue();
+
+	/// TODO: implement the scheduling algorithm
+
+	// get the next processor
+	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
+	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
+
+	// schedule the process
+	processor->AddProcessToList(process);
+}
+
+void Scheduler::ScheduleNextFCFS(Process* process)
+{
+}
+
+void Scheduler::ScheduleNextSJF(Process* process)
+{
+}
+
+void Scheduler::ScheduleNextRR(Process* process)
+{
+}
+
+void Scheduler::TerminateProcess(Process* process)
+{
+}
+
+void Scheduler::BlockProcess(Process* process)
+{
+}
