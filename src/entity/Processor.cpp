@@ -45,6 +45,24 @@ void Processor::SetExpectedFinishTime(unsigned int time)
 	expectedFinishTime = time;
 }
 
+void Processor::Print()
+{
+	switch (type)
+	{
+	case FCFS:
+		std::cout << "[FCFS]:";
+		break;
+	case SJF:
+		std::cout << "[SJF ]:";
+		break;
+	case RR:
+		std::cout << "[ RR ]:";
+		break;
+	default:
+		break;
+	}
+}
+
 Processor::~Processor()
 {
 }

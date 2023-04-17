@@ -8,7 +8,7 @@ private:
 	unsigned int time;
 public:
 	Clock();
-	unsigned int GetCurrentTime() const;
+	unsigned int GetTime() const;
 	void Reset();
 	void Step();
 };

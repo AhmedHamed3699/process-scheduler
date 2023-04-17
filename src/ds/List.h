@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Node.h"
+#include <iostream> // for UI Print
 
 template<class ItemType>
 class List
 {
 private:
 	Node<ItemType>* headPtr;	// Pointer to first node in the chain 
-							    // (contains the first entry in the list) 
+	// (contains the first entry in the list) 
 	int itemCount;				// Current count of list items
 
 	// Locates a specified node in a linked list. 
@@ -28,6 +29,8 @@ public:
 	bool Insert(int newPosition, const ItemType& newEntry);
 	bool Remove(int position);
 	void Clear();
+
+	void Print(); // made for ui
 
 	/** position must be >= 1 && position <= itemCount */
 	ItemType GetEntry(int position) const;
@@ -160,6 +163,23 @@ void List<ItemType>::Clear()
 	while (!IsEmpty())
 		Remove(1);
 } // end clear
+
+template<class ItemType>
+inline void List<ItemType>::Print()
+{
+	Node<ItemType>* curPtr = headPtr;
+	while (curPtr)
+	{
+		curPtr->getItem()->Print();
+
+		if (curPtr->getNext())
+		{
+			std::cout << ", ";
+		}
+
+		curPtr = curPtr->getNext();
+	}
+}
 
 template<class ItemType>
 ItemType List<ItemType>::GetEntry(int position) const

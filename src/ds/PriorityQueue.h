@@ -1,6 +1,7 @@
 #pragma once
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 using namespace std;
 
 template<class ItemType>
@@ -26,6 +27,7 @@ public:
 	bool dequeue();
 	bool dequeue(ItemType& min);
 	void clear();
+	void Print(); // for UI
 	virtual ~PriorityQueue();
 };
 
@@ -184,4 +186,17 @@ void PriorityQueue<ItemType>::clear()
 	maxItems = DEFAULT_CAPACITY;
 	delete[] items;
 	items = new ItemType[DEFAULT_CAPACITY];
+}
+
+template<class ItemType>
+inline void PriorityQueue<ItemType>::Print()
+{
+	for (int i = 0; i < itemCount; i++)
+	{
+		items[i]->Print();
+		if (i != itemCount - 1)
+		{
+			std::cout << ", ";
+		}
+	}
 }
