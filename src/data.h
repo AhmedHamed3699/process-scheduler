@@ -26,6 +26,41 @@ struct TimeInfo
 	Queue<unsigned int> IO_D;	// IO Duration
 };
 
+struct SimulationParameters
+{
+	const unsigned int MAX_WAITING_TIME;
+	const unsigned int RR_TIME_SLICE;
+	const unsigned int N_FCFS;
+	const unsigned int N_SJF;
+	const unsigned int N_RR;
+	const unsigned int FORK_PROBABILITY;
+	const unsigned int STL;
+	const unsigned int RTF;
+	const unsigned int N_PROCESS;
+
+	SimulationParameters(
+		unsigned int maxWaitingTime,
+		unsigned int RRTimeSlice,
+		unsigned int nFCFS,
+		unsigned int nSJF,
+		unsigned int nRR,
+		unsigned int forkProbability,
+		unsigned int stl,
+		unsigned int rtf,
+		unsigned int nProcess
+	)
+		:MAX_WAITING_TIME(maxWaitingTime),
+		RR_TIME_SLICE(RRTimeSlice),
+		N_FCFS(nFCFS),
+		N_SJF(nSJF),
+		N_RR(nRR),
+		FORK_PROBABILITY(forkProbability),
+		STL(stl),
+		RTF(rtf),
+		N_PROCESS(nProcess)
+	{}
+};
+
 enum ProcessorStatus {
 	IDLE,
 	BUSY

@@ -3,9 +3,11 @@
 ///  Processor Class: runs and stores processes  ///
 /// Created By scheduler maintained by scheduler ///
 ///=////////////////////////////////////////////=///
-#include "../control/Scheduler.h"
 #include "Process.h"
 #include "../data.h"
+
+// Forward class declaration
+class Scheduler;
 
 class Processor
 {

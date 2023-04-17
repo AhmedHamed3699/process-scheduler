@@ -21,6 +21,8 @@ public:
 	void Run();
 	void Simulation();
 
+	Simulator() {};
+
 	//void Run(mode : UIMode);
 };
 
