@@ -8,6 +8,9 @@
 #include "../ds/Queue.h"
 #include "../entity/Process.h"
 #include "../entity/Processor.h"
+#include "../entity/ProcessorFCFS.h"
+#include "../entity/ProcessorSJF.h"
+#include "../entity/ProcessorRR.h"
 
 
 class Scheduler
@@ -35,5 +38,13 @@ private:
 	/// ////////////////////////////////// ///
 public:
 	Scheduler();
+
+
+	/// ////////////////////////////////// ///
+	///         Creation and setup         ///
+	/// ////////////////////////////////// ///
+public:
+	void CreateProcessor(ProcessorType aType);
+	void CreateNewProcess(int id);
 };
 
