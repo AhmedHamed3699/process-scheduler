@@ -14,6 +14,7 @@ private:
 	// queue and a tail pointer for the back of the queue.
 	Node<ItemType>* backPtr;
 	Node<ItemType>* frontPtr;
+	unsigned int size;
 public:
 	Queue();
 	Queue(const Queue& aQueue);
@@ -22,6 +23,7 @@ public:
 	bool isEmpty() const;
 	bool enqueue(const ItemType& newEntry);
 	bool dequeue();
+	unsigned int getSize() const;
 	ItemType peekFront() const;
 	void Print();
 
@@ -30,12 +32,12 @@ public:
 
 template<class ItemType>
 inline Queue<ItemType>::Queue()
-	: backPtr(nullptr), frontPtr(nullptr)
+	: backPtr(nullptr), frontPtr(nullptr), size(0)
 {
 }
 
 template<class ItemType>
-inline Queue<ItemType>::Queue(const Queue& aQueue) : frontPtr(nullptr), backPtr(nullptr)
+inline Queue<ItemType>::Queue(const Queue& aQueue) : frontPtr(nullptr), backPtr(nullptr), size(0)
 {
 	Node<ItemType>* originChainPtr = aQueue.frontPtr;
 
@@ -70,6 +72,8 @@ template<class ItemType>
 inline bool Queue<ItemType>::enqueue(const ItemType& newEntry)
 {
 	Node<ItemType>* newNodePtr = new Node<ItemType>(newEntry);
+	size++;
+
 
 	if (isEmpty())
 		frontPtr = newNodePtr;
@@ -88,6 +92,7 @@ inline bool Queue<ItemType>::dequeue()
 	{
 		// Queue is not empty: remove front
 		Node<ItemType>* nodeToDeletePtr = frontPtr;
+		size--;
 
 		if (frontPtr == backPtr) // Special case: one node in queue
 		{
@@ -104,6 +109,12 @@ inline bool Queue<ItemType>::dequeue()
 		result = true;
 	}
 	return result;
+}
+
+template<class ItemType>
+inline unsigned int Queue<ItemType>::getSize() const
+{
+	return size;
 }
 
 template<class ItemType>

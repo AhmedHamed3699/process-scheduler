@@ -26,6 +26,7 @@ public:
 	bool enqueue(const ItemType& newData);
 	bool dequeue();
 	bool dequeue(ItemType& min);
+	int getSize() const;
 	void clear();
 	void Print(); // for UI
 	virtual ~PriorityQueue();
@@ -177,6 +178,12 @@ bool PriorityQueue<ItemType>::dequeue(ItemType& min)
 	items[0] = items[--itemCount];
 	minHeapify(0);
 	return true;
+}
+
+template<class ItemType>
+inline int PriorityQueue<ItemType>::getSize() const
+{
+	return itemCount;
 }
 
 template<class ItemType>
