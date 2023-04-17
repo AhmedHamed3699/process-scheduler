@@ -26,3 +26,10 @@ void ProcessorRR::AddProcessToList(Process* process)
 {
 	readyList.enqueue(process);
 }
+
+void ProcessorRR::Print()
+{
+	std::cout << "[ RR ]: " << readyList.getSize() << " RDY: ";
+	readyList.Print();
+	std::cout << std::endl;
+}
