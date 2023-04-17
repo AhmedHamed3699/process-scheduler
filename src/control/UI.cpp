@@ -16,6 +16,15 @@ void UI::WriteError(std::string msg)
 	ResetColor();
 }
 
+void UI::PrintHeadline()
+{
+	SetColor(CYAN);
+	std::cout << ".-----------------------------." << std::endl;
+	std::cout << "| Process Scheduler Simulator |" << std::endl;
+	std::cout << "'-----------------------------'" << std::endl;
+	ResetColor();
+}
+
 
 /// Color Control Functions
 void UI::ResetColor()
