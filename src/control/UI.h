@@ -18,6 +18,7 @@ public:
 	void WriteWarning(std::string msg);	// USEFULL for Debugging
 	void WriteError(std::string msg);	// USEFULL for Debugging
 	void PrintHeadline();
+	void PrintUIModeMenu();
 
 private:
 	/// Color Control functions
