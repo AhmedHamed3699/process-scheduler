@@ -39,9 +39,7 @@ private:
 	/// ////////////////////////////////// ///
 public:
 	Scheduler();
-	Scheduler(unsigned int maxW, unsigned int RRTS, unsigned int numFCFS,
-		unsigned int numSJF, unsigned int numRR, unsigned int fP,
-		unsigned int STL, unsigned int RTF, unsigned int numProcess);
+
 
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
