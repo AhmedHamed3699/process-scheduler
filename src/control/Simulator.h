@@ -13,7 +13,7 @@ public:
 
 	Clock clk;
 	Scheduler scheduler;
-	UI ui{ &clk };
+	UI ui{ &clk, &scheduler };
 
 	void ShowMenu();
 	bool LoadInpuitFile();
