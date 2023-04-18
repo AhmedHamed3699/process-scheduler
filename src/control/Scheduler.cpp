@@ -157,17 +157,7 @@ void Scheduler::TerminateProcess(Process* process)
 
 void Scheduler::BlockProcess(Process* process)
 {
-	/// TODO: remove later
-	if (NEWList.isEmpty())
-	{
-		return;
-	}
-	process = NEWList.peekFront();
-	NEWList.dequeue();
-
-
 	BLKList.enqueue(process);
-
 }
 /// ////////////////////////////////// ///
 ///        Statistics Functions        ///
