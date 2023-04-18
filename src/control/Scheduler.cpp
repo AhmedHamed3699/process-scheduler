@@ -119,13 +119,14 @@ void Scheduler::ScheduleNext()
 	Process* process = NEWList.peekFront();
 	NEWList.dequeue();
 
-	/// TODO: implement the scheduling algorithm
+	/// TODO: implement the scheduling algorithm (Phase 2)
 
 	// get the next processor
 	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
 	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
 
 	// schedule the process
+	process->SetStatus(RDY);
 	processor->AddProcessToList(process);
 }
 
@@ -143,39 +144,54 @@ void Scheduler::ScheduleNextRR(Process* process)
 
 void Scheduler::TerminateProcess(Process* process)
 {
-	/// TODO: remove later
-	if (NEWList.isEmpty())
+	if (process->GetStatus() == TRM)
 	{
 		return;
 	}
-	process = NEWList.peekFront();
-	NEWList.dequeue();
-
-
+	process->SetStatus(TRM);
 	TRMList.enqueue(process);
 }
 
 void Scheduler::BlockProcess(Process* process)
 {
-	/// TODO: remove later
-	if (NEWList.isEmpty())
+	if (process->GetStatus() == BLK)
 	{
 		return;
 	}
-	process = NEWList.peekFront();
-	NEWList.dequeue();
-
-
+	process->SetStatus(BLK);
 	BLKList.enqueue(process);
-
 }
+/// ////////////////////////////////// ///
+///        Statistics Functions        ///
+/// ////////////////////////////////// ///
 
-/// TODO: remove this later
-void Scheduler::RunProcesses()
+unsigned int Scheduler::CalculateAverageWaitTime()
 {
-	for (int i = 0; i < processors.GetLength(); i++)
-	{
-		Processor* processor = processors.GetEntry(i + 1);
-		processor->ExecuteProcess();
-	}
+	return 0;
 }
+
+unsigned int Scheduler::CalculateAverageTurnaroundTime()
+{
+	return 0;
+}
+
+unsigned int Scheduler::CalculateAverageResponseTime()
+{
+	return 0;
+}
+
+unsigned int* Scheduler::CalculateProcessorsUtilization()
+{
+	return nullptr;
+}
+
+unsigned int* Scheduler::CalculateProcessorsLoad()
+{
+	return nullptr;
+}
+
+unsigned int Scheduler::CalculateAverageProcessorsUtilization()
+{
+	return 0;
+}
+
