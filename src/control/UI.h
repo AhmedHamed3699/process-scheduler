@@ -25,6 +25,9 @@ public:
 	void PrintUIModeMenu();
 	void PrintTimeStamp();
 
+	/// Input Related functions
+	void Wait();
+
 	/// Constructor
 	UI(Clock* aClk, Scheduler* aScheduler);
 

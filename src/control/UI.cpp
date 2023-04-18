@@ -87,7 +87,22 @@ void UI::PrintTimeStamp()
 	ResetColor();
 }
 
-// Constructor
+/// Input Related Functions
+void UI::Wait()
+{
+	if (mode == INTERACTIVE)
+	{
+		std::cout << "Press any key to move to next step...";
+		std::cin.get();
+		std::cin.get();
+	}
+	if (mode == STEP_BY_STEP)
+	{
+		Sleep(1000);
+	}
+}
+
+/// Constructor
 UI::UI(Clock* aClk, Scheduler* aScheduler)
 	:clk(aClk), scheduler(aScheduler), mode(INTERACTIVE)
 {
@@ -107,7 +122,7 @@ void UI::SetColor(Color color)
 	SetConsoleTextAttribute(consoleOutputHandle, color);
 }
 
-// Mode management
+/// Mode management
 void UI::SetMode(UIMode aMode)
 {
 	mode = aMode;

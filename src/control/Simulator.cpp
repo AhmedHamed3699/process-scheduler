@@ -58,7 +58,7 @@ bool Simulator::LoadInpuitFile()
 			InFile >> lParenthesis >> IO_R >> comma >> IO_D >> rParenthesis;
 
 			// TODO: add the IO_R and IO_D values to the process
-			
+
 			//to read the comma between each pair
 			if (i < N - 1)
 			{
@@ -96,6 +96,8 @@ void Simulator::Run()
 	ui.PrintHeadline();
 	ui.PrintUIModeMenu();
 	ui.PrintTimeStamp();
+
+	ui.Wait();
 
 	scheduler.CreateProcessor(FCFS);
 	scheduler.CreateProcessor(SJF);
