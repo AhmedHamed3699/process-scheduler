@@ -93,7 +93,7 @@ void Simulator::Simulation()
 	ui.PrintHeadline();
 	ui.PrintUIModeMenu();
 
-	while (true)
+	while (!isDone())
 	{
 		clk.Step();
 		scheduler.CreateAllProcessors();
@@ -101,7 +101,7 @@ void Simulator::Simulation()
 		scheduler.RunProcesses();
 		scheduler.MoveFromRun();
 		scheduler.MoveFromBLK();
-		scheduler.SimulateKill();
+		//scheduler.SimulateKill();
 		ui.PrintTimeStamp();
 	}
 }

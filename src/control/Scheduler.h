@@ -32,6 +32,7 @@ private:
 	Queue<Process*> BLKList;
 	Process* IOProcess;
 	int nextProcessorIndex = 0; /// TODO: remove this later
+	int numberOfTerminated; // this means we must change N_PROCESS when we fork .. or terminate the program in another way
 
 	/// ////////////////////////////////// ///
 	///    constructors and destructor     ///
@@ -65,8 +66,9 @@ public:
 	void TerminateProcess(Process* process);
 	void BlockProcess(Process* process);
 
-	/// TODO:  remove All later
+	bool isDone(); // to know when to terminate the program
 
+	/// TODO:  remove All later
 	void RunProcesses();
 	void MoveToRDY(Process* process);
 	void MoveFromRun();

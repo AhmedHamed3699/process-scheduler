@@ -6,7 +6,7 @@
 /// ////////////////////////////////// ///
 Scheduler::Scheduler()
 	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0),
-	IOProcess(nullptr)
+	IOProcess(nullptr), numberOfTerminated(0)
 {
 }
 
@@ -150,31 +150,18 @@ void Scheduler::ScheduleNextRR(Process* process)
 
 void Scheduler::TerminateProcess(Process* process)
 {
-	/// TODO: remove later
-	if (NEWList.isEmpty())
-	{
-		return;
-	}
-	process = NEWList.peekFront();
-	NEWList.dequeue();
-
-
 	TRMList.enqueue(process);
+	numberOfTerminated++;
 }
 
 void Scheduler::BlockProcess(Process* process)
 {
-	/// TODO: remove later
-	if (NEWList.isEmpty())
-	{
-		return;
-	}
-	process = NEWList.peekFront();
-	NEWList.dequeue();
-
-
 	BLKList.enqueue(process);
+}
 
+bool Scheduler::isDone()
+{
+	return (simulationParameters.N_PROCESS == numberOfTerminated);
 }
 
 void Scheduler::RunProcesses()
