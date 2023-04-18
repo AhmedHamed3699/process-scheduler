@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Node.h"
+#include "../entity/Process.h"
 #include <iostream> // for UI Print
 
 template<class ItemType>
@@ -24,17 +25,18 @@ public:
 	List(const List<ItemType>& aList);
 	virtual ~List();
 
-	bool IsEmpty() const;
-	int GetLength() const;
-	bool Insert(int newPosition, const ItemType& newEntry);
+	virtual bool IsEmpty() const;
+	virtual int GetLength() const;
+	virtual bool Insert(int newPosition, const ItemType& newEntry);
 	bool Remove(int position);
-	void Clear();
+	Process* RemoveById(int id);
+	virtual void Clear();
 
-	void Print(); // made for ui
+	virtual void Print(); // made for ui
 
 	/** position must be >= 1 && position <= itemCount */
-	ItemType GetEntry(int position) const;
-	void SetEntry(int position, const ItemType& newEntry);
+	virtual ItemType GetEntry(int position) const;
+	virtual void SetEntry(int position, const ItemType& newEntry);
 };
 
 template<class ItemType>
@@ -75,6 +77,8 @@ List<ItemType>::List(const List<ItemType>& aList)
 template<class ItemType>
 Node<ItemType>* List<ItemType>::GetNodeAt(int position) const
 {
+	if (position > itemCount || position < 1)
+		return nullptr;
 	// Count from the beginning of the chain 
 	Node<ItemType>* curPtr = headPtr;
 	for (int skip = 1; skip < position; skip++)
@@ -156,6 +160,37 @@ bool List<ItemType>::Remove(int position)
 	} // end if 
 	return ableToRemove;
 } // end remove
+
+template<class ItemType>
+Process* List<ItemType>::RemoveById(int id)
+{
+	Node<Process*>* ptr = headPtr;
+	Node<Process*>* prv = nullptr;
+	while (ptr)
+	{
+		if (*(ptr->getItem()) == id)
+		{
+			Node<Process*>* temp = ptr;
+			if (!prv)
+			{
+				headPtr = ptr->getNext();
+				ptr = headPtr;
+			}
+			else
+			{
+				prv->setNext(ptr->getNext());
+				ptr = ptr->getNext();
+			}
+			temp->setNext(nullptr);
+			itemCount--;
+
+			return temp->getItem();;
+		}
+		prv = ptr;
+		ptr = ptr->getNext();
+	}
+	return nullptr;
+}
 
 template<class ItemType>
 void List<ItemType>::Clear()

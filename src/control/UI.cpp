@@ -33,8 +33,7 @@ void UI::PrintUIModeMenu()
 
 	char aMode;
 	std::cin >> aMode;
-
-
+	std::cin.ignore(1000, '\n');
 	// TODO: delete in phase 2
 	WriteWarning("only Interactive mode is available in phase 1");
 
@@ -123,7 +122,6 @@ void UI::Wait()
 	if (mode == INTERACTIVE)
 	{
 		std::cout << "Press any key to move to next step...";
-		std::cin.get();
 		std::cin.get();
 	}
 	if (mode == STEP_BY_STEP)

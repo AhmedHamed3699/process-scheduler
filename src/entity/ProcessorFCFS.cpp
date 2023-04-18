@@ -1,4 +1,5 @@
 #include "ProcessorFCFS.h"
+#include "../control/Scheduler.h"
 
 void ProcessorFCFS::IOHandler()
 {
@@ -12,8 +13,18 @@ void ProcessorFCFS::MigratonHandler()
 {
 }
 
-void ProcessorFCFS::KillProcessHandler()
+bool ProcessorFCFS::KillProcessHandler(int PID)
 {
+	Process* killedProcess = readyList.RemoveById(PID);
+	if (killedProcess == nullptr)
+		return false;
+	if (killedProcess == GetCurrentProcess())
+	{
+		SetCurrentProcess(nullptr);
+		SetStatus(IDLE);
+	}
+	scheduler->TerminateProcess(killedProcess);
+	return true;
 }
 
 void ProcessorFCFS::ForkHandler()
@@ -25,7 +36,7 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorFCFS::ExecuteProcess()
+Process* ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 	//TODO: remove this later
 	if (readyList.IsEmpty())
@@ -33,15 +44,20 @@ Process* ProcessorFCFS::ExecuteProcess()
 		return nullptr;
 	}
 	Process* process = readyList.GetEntry(1);
+	if (process->GetTimeInfo().AT == CurrentTime)
+		return nullptr;
+
 	readyList.Remove(1);
 	currentProcess = process;
-
+	process->SetStatus(RUN);
+	SetStatus(BUSY);
 
 	return nullptr;
 }
 
 void ProcessorFCFS::AddProcessToList(Process* process)
 {
+	process->SetStatus(RDY);
 	readyList.Insert(readyList.GetLength() + 1, process);
 }
 

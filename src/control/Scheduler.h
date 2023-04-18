@@ -27,7 +27,6 @@ private:
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
 	/// ////////////////////////////////// ///
-private:
 	List<Processor*> processors;
 	Queue<Process*> NEWList;
 	Queue<Process*> TRMList;
@@ -44,13 +43,17 @@ public:
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
 	/// ////////////////////////////////// ///
+	void CreateAllProcessors();
 	// Create a new processor of the given type and add it to the list of processors
 	void CreateProcessor(ProcessorType aType);
 	// Create a new process with the given id and add it to the NEW list
-	void CreateNewProcess(int id);
+	void CreateNewProcess(int id); 
+	// Create a new process with the all params and add it to the NEW list
+	void CreateNewProcess(int AT, int PID, int CT);
 
 	SimulationParameters GetSimulationParameters();
 	void SetSimulationParameters(SimulationParameters sP);
+	bool isDone(); // to know when to terminate the program
 
 
 	/// ////////////////////////////////// ///
@@ -70,7 +73,7 @@ public:
 	/// ////////////////////////////////// ///
 	// in phase 1 get the next process from the NEW list and add it to the 
 	// first processor then the second and so on
-	void ScheduleNext();
+	void ScheduleNext(int currentTime);
 	void ScheduleNextFCFS(Process* process);
 	void ScheduleNextSJF(Process* process);
 	void ScheduleNextRR(Process* process);
@@ -78,6 +81,15 @@ public:
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state
 	void BlockProcess(Process* process);
+
+	/// ////////////////////////////////// ///
+	///        Simulation Functions        ///
+	/// ////////////////////////////////// ///
+	void RunProcesses(int CurrentTime);
+	void MoveToRDY(Process* process);
+	void MoveFromRun();
+	void MoveFromBLK();
+	void SimulateKill();
 
 	/// ////////////////////////////////// ///
 	///        Statistics Functions        ///
@@ -88,6 +100,5 @@ public:
 	unsigned int* CalculateProcessorsUtilization();
 	unsigned int* CalculateProcessorsLoad();
 	unsigned int CalculateAverageProcessorsUtilization();
-
 };
 

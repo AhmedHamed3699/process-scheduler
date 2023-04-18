@@ -1,4 +1,6 @@
 #include "Simulator.h"
+#include <cstdlib>
+#include <time.h>
 
 void Simulator::ShowMenu()
 {
@@ -47,8 +49,8 @@ bool Simulator::LoadInpuitFile()
 		int AT, PID, CT, N;
 		InFile >> AT >> PID >> CT >> N;
 
-		scheduler.CreateNewProcess(PID);
-		// TODO: set the AT, CT and N for each process
+		scheduler.CreateNewProcess(AT,PID,CT);
+		// TODO: set N for each process
 
 		for (int i = 0; i < N; i++)
 		{
@@ -92,12 +94,29 @@ bool Simulator::CreateOutputFile()
 
 void Simulator::Run()
 {
-	ui.PrintHeadline();
-	ui.PrintUIModeMenu();
 	Simulation();
 }
 
 void Simulator::Simulation()
 {
+	srand(time(0));
 	LoadInpuitFile();
+	scheduler.CreateAllProcessors();
+
+	ui.PrintHeadline();
+	ui.PrintUIModeMenu();
+
+	while (true)
+	{
+		clk.Step();
+		scheduler.ScheduleNext(clk.GetTime());
+		scheduler.RunProcesses(clk.GetTime());
+		scheduler.MoveFromRun();
+		scheduler.MoveFromBLK();
+		scheduler.SimulateKill();
+		ui.PrintTimeStamp();
+		if (scheduler.isDone())
+			return;
+		ui.Wait();
+	}
 }
