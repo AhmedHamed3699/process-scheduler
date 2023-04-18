@@ -62,7 +62,7 @@ void UI::PrintUIModeMenu()
 void UI::PrintTimeStamp()
 {
 	SetColor(CYAN);
-	std::cout << "-________________________________________________________-" << std::endl;
+	std::cout << "_--------------------------------------------------------_" << std::endl;
 
 	std::cout << "                   Current Timestamp: " << clk->GetTime() << std::endl;
 
@@ -87,9 +87,64 @@ void UI::PrintTimeStamp()
 	ResetColor();
 }
 
-// Constructor
+/// Silent Mode Functions
+void UI::PrintSilentModeStart()
+{
+	SetColor(PINK);
+	std::cout << "Silent Mode .......\n";
+	std::cout << "Simulation started...\n";
+	ResetColor();
+}
+
+void UI::PrintSilentModeEnd()
+{
+	SetColor(PINK);
+	std::cout << "Simulation ended...\n";
+	ResetColor();
+}
+
+void UI::PrintOutputFileMsg(bool isCreated)
+{
+	if (isCreated)
+	{
+		SetColor(PINK);
+		std::cout << "Output file created successfully...\n";
+		ResetColor();
+	}
+	else
+	{
+		WriteError("Output file creation failed...\n");
+	}
+}
+
+/// Input Related Functions
+void UI::Wait()
+{
+	if (mode == INTERACTIVE)
+	{
+		std::cout << "Press any key to move to next step...";
+		std::cin.get();
+		std::cin.get();
+	}
+	if (mode == STEP_BY_STEP)
+	{
+		Sleep(1000);
+	}
+}
+
+std::string UI::GetInputFileName()
+{
+	SetColor(CYAN);
+	std::cout << "Enter the name of the input file: ";
+	ResetColor();
+	std::string fileName;
+	std::cin >> fileName;
+	return fileName;
+}
+
+/// Constructor
 UI::UI(Clock* aClk, Scheduler* aScheduler)
-	:clk(aClk), scheduler(aScheduler)
+	:clk(aClk), scheduler(aScheduler), mode(INTERACTIVE)
 {
 }
 
@@ -107,7 +162,7 @@ void UI::SetColor(Color color)
 	SetConsoleTextAttribute(consoleOutputHandle, color);
 }
 
-// Mode management
+/// Mode management
 void UI::SetMode(UIMode aMode)
 {
 	mode = aMode;

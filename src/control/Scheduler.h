@@ -22,6 +22,7 @@ class Scheduler
 	/// ////////////////////////////////// ///
 private:
 	SimulationParameters simulationParameters;
+	int nextProcessorIndex = 0; /// TODO: remove this later (Phase 2)
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
@@ -31,7 +32,6 @@ private:
 	Queue<Process*> TRMList;
 	Queue<Process*> BLKList;
 	Process* IOProcess;
-	int nextProcessorIndex = 0; /// TODO: remove this later
 
 	/// ////////////////////////////////// ///
 	///    constructors and destructor     ///
@@ -39,42 +39,66 @@ private:
 public:
 	Scheduler();
 
-	SimulationParameters GetSimulationParameters();
-	void SetSimulationParameters(SimulationParameters sP);
 
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
 	/// ////////////////////////////////// ///
 	void CreateAllProcessors();
+	// Create a new processor of the given type and add it to the list of processors
 	void CreateProcessor(ProcessorType aType);
-	void CreateNewProcess(int id);
+	// Create a new process with the given id and add it to the NEW list
+	void CreateNewProcess(int id); 
+	// Create a new process with the all params and add it to the NEW list
 	void CreateNewProcess(int AT, int PID, int CT);
+
+	SimulationParameters GetSimulationParameters();
+	void SetSimulationParameters(SimulationParameters sP);
+	bool isDone(); // to know when to terminate the program
+
 
 	/// ////////////////////////////////// ///
 	///           UI AID Functions         ///
 	/// ////////////////////////////////// ///
+	// Calls Print function for each processor
 	void PrintRDYLists();
+	// Calls Print for the TRM list
 	void PrintTRMList();
+	// Calls Print for the BLK list
 	void PrintBLKList();
+	// Calls Print for the NEW list
 	void PrintRUNList();
 
 	/// ////////////////////////////////// ///
 	///      Process State Management      ///
 	/// ////////////////////////////////// ///
+	// in phase 1 get the next process from the NEW list and add it to the 
+	// first processor then the second and so on
 	void ScheduleNext(int currentTime);
 	void ScheduleNextFCFS(Process* process);
 	void ScheduleNextSJF(Process* process);
 	void ScheduleNextRR(Process* process);
+	// if process is not terminated then add it to the TRM list and change its state
 	void TerminateProcess(Process* process);
+	// if process is not blocked then add it to the BLK list and change its state
 	void BlockProcess(Process* process);
 
-	bool isDone(); // to know when to terminate the program
-
-	/// TODO:  remove All later
+	/// ////////////////////////////////// ///
+	///        Simulation Functions        ///
+	/// ////////////////////////////////// ///
 	void RunProcesses(int CurrentTime);
 	void MoveToRDY(Process* process);
 	void MoveFromRun();
 	void MoveFromBLK();
 	void SimulateKill();
+
+	/// ////////////////////////////////// ///
+	///        Statistics Functions        ///
+	/// ////////////////////////////////// ///
+	unsigned int CalculateAverageWaitTime();
+	unsigned int CalculateAverageTurnaroundTime();
+	unsigned int CalculateAverageResponseTime();
+	unsigned int* CalculateProcessorsUtilization();
+	unsigned int* CalculateProcessorsLoad();
+	unsigned int CalculateAverageProcessorsUtilization();
 };
 

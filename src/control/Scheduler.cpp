@@ -10,16 +10,6 @@ Scheduler::Scheduler()
 {
 }
 
-SimulationParameters Scheduler::GetSimulationParameters()
-{
-	return simulationParameters;
-}
-
-void Scheduler::SetSimulationParameters(SimulationParameters sP)
-{
-	simulationParameters = sP;
-}
-
 
 /// ////////////////////////////////// ///
 ///         Creation and setup         ///
@@ -81,6 +71,23 @@ void Scheduler::CreateNewProcess(int AT, int PID, int CT)
 
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
+}
+
+SimulationParameters Scheduler::GetSimulationParameters()
+{
+	return simulationParameters;
+}
+
+void Scheduler::SetSimulationParameters(SimulationParameters sP)
+{
+	simulationParameters = sP;
+}
+
+bool Scheduler::isDone()
+{
+	// this means we must change N_PROCESS when we fork .. or terminate the program in another way
+
+	return (simulationParameters.N_PROCESS == TRMList.getSize());
 }
 
 /// ////////////////////////////////// ///
@@ -152,7 +159,7 @@ void Scheduler::ScheduleNext(int currentTime)
 
 		NEWList.dequeue();
 
-		/// TODO: implement the scheduling algorithm
+		/// TODO: implement the scheduling algorithm (Phase 2)
 
 		// get the next processor
 		Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
@@ -177,22 +184,27 @@ void Scheduler::ScheduleNextRR(Process* process)
 
 void Scheduler::TerminateProcess(Process* process)
 {
+	if (process->GetStatus() == TRM)
+	{
+		return;
+	}
 	process->SetStatus(TRM);
 	TRMList.enqueue(process);
 }
 
 void Scheduler::BlockProcess(Process* process)
 {
+	if (process->GetStatus() == BLK)
+	{
+		return;
+	}
 	process->SetStatus(BLK);
 	BLKList.enqueue(process);
 }
 
-bool Scheduler::isDone()
-{
-	// this means we must change N_PROCESS when we fork .. or terminate the program in another way
-
-	return (simulationParameters.N_PROCESS == TRMList.getSize());
-}
+/// ////////////////////////////////// ///
+///        Simulation Functions        ///
+/// ////////////////////////////////// ///
 
 void Scheduler::RunProcesses(int CurrentTime)
 {
@@ -274,3 +286,38 @@ void Scheduler::SimulateKill()
 			return;
 	}
 }
+
+/// ////////////////////////////////// ///
+///        Statistics Functions        ///
+/// ////////////////////////////////// ///
+
+unsigned int Scheduler::CalculateAverageWaitTime()
+{
+	return 0;
+}
+
+unsigned int Scheduler::CalculateAverageTurnaroundTime()
+{
+	return 0;
+}
+
+unsigned int Scheduler::CalculateAverageResponseTime()
+{
+	return 0;
+}
+
+unsigned int* Scheduler::CalculateProcessorsUtilization()
+{
+	return nullptr;
+}
+
+unsigned int* Scheduler::CalculateProcessorsLoad()
+{
+	return nullptr;
+}
+
+unsigned int Scheduler::CalculateAverageProcessorsUtilization()
+{
+	return 0;
+}
+
