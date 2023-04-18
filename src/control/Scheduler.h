@@ -22,7 +22,7 @@ class Scheduler
 	/// ////////////////////////////////// ///
 private:
 	SimulationParameters simulationParameters;
-	int nextProcessorIndex = 0; /// TODO: remove this later
+	int nextProcessorIndex = 0; /// TODO: remove this later (Phase 2)
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///

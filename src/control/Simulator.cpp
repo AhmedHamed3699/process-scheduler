@@ -42,7 +42,7 @@ bool Simulator::LoadInpuitFile()
 
 
 	/// read Infos for each process
-	for (int i = 0; i < nProcess; i++)
+	for (unsigned int i = 0; i < nProcess; i++)
 	{
 		int AT, PID, CT, N;
 		InFile >> AT >> PID >> CT >> N;
