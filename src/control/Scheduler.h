@@ -67,6 +67,18 @@ public:
 	void TerminateProcess(Process* process);
 	void BlockProcess(Process* process);
 
+	/// ////////////////////////////////// ///
+	///        Statistics Functions        ///
+	/// ////////////////////////////////// ///
+	unsigned int CalculateAverageWaitTime();
+	unsigned int CalculateAverageTurnaroundTime();
+	unsigned int CalculateAverageResponseTime();
+	unsigned int* CalculateProcessorsUtilization();
+	unsigned int* CalculateProcessorsLoad();
+	unsigned int CalculateAverageProcessorsUtilization();
+
+
+
 	/// TODO:  remove this later
 	void RunProcesses();
 };
