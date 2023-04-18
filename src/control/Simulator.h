@@ -2,7 +2,8 @@
 ///=////////////////////////////////////////////////=///
 /// Simulator Class Responsible of the file Handling ///
 ///=////////////////////////////////////////////////=///
-
+#include <fstream>
+#include <iostream>
 # include "Clock.h"
 # include "Scheduler.h"
 # include "UI.h"

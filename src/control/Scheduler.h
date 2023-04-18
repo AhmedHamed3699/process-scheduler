@@ -40,6 +40,8 @@ private:
 public:
 	Scheduler();
 
+	SimulationParameters GetSimulationParameters();
+	void SetSimulationParameters(SimulationParameters sP);
 
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
