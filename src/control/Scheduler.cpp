@@ -203,12 +203,3 @@ unsigned int Scheduler::CalculateAverageProcessorsUtilization()
 	return 0;
 }
 
-/// TODO: remove this later
-void Scheduler::RunProcesses()
-{
-	for (int i = 0; i < processors.GetLength(); i++)
-	{
-		Processor* processor = processors.GetEntry(i + 1);
-		processor->ExecuteProcess();
-	}
-}

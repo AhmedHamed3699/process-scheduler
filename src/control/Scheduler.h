@@ -78,9 +78,5 @@ public:
 	unsigned int* CalculateProcessorsLoad();
 	unsigned int CalculateAverageProcessorsUtilization();
 
-
-
-	/// TODO:  remove this later
-	void RunProcesses();
 };
 
