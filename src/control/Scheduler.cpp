@@ -57,10 +57,10 @@ void Scheduler::CreateNewProcess(int id)
 	NEWList.enqueue(newProcess);
 }
 
-void Scheduler::CreateNewProcess(int AT, int PID, int CT)
+void Scheduler::CreateNewProcess(int AT, int PID, int CT, int N)
 {
 	// create new processor
-	Process* newProcess = new Process(PID);
+	Process* newProcess = new Process(PID, N);
 	newProcess->SetStatus(NEW);
 
 	TimeInfo timeInfo;
