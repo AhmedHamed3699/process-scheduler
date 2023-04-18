@@ -15,8 +15,9 @@ bool Simulator::CreateOutputFile()
 	return true;
 }
 
-void Simulator::Run()
+void Simulator::Run(UIMode mode)
 {
+	/*
 	/// TODO: This is just a test code. It will be removed later.
 	ui.PrintHeadline();
 	ui.PrintUIModeMenu();
@@ -78,6 +79,7 @@ void Simulator::Run()
 	clk.Step();
 
 	ui.PrintTimeStamp();
+	*/
 	Simulation();
 }
 

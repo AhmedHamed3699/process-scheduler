@@ -14,16 +14,12 @@ public:
 	Clock clk;
 	Scheduler scheduler;
 	UI ui{ &clk, &scheduler };
-
+	
+	Simulator() {};
 	void ShowMenu();
 	bool LoadInpuitFile();
 	bool CreateOutputFile();
-	void Run();
+	void Run(UIMode mode);
 	void Simulation();
-
-	Simulator()
-	{};
-
-	//void Run(mode : UIMode);
 };
 
