@@ -14,6 +14,7 @@ private:
 	TimeInfo timeInfo;
 	unsigned int IONumOfReq;
 	ProcessStatus status;			//any process created will have NEW as its initial status
+	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_R 
 public:
 	Process(int id, unsigned int ioNum = 0);
 
