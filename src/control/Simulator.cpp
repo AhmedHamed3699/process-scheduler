@@ -49,8 +49,8 @@ bool Simulator::LoadInpuitFile()
 		int AT, PID, CT, N;
 		InFile >> AT >> PID >> CT >> N;
 
-		scheduler.CreateNewProcess(PID);
-		// TODO: set the AT, CT and N for each process
+		scheduler.CreateNewProcess(AT,PID,CT);
+		// TODO: set N for each process
 
 		for (int i = 0; i < N; i++)
 		{
@@ -164,6 +164,7 @@ void Simulator::Simulation()
 {
 	srand(time(0));
 	LoadInpuitFile();
+	scheduler.CreateAllProcessors();
 
 	ui.PrintHeadline();
 	ui.PrintUIModeMenu();
@@ -171,7 +172,6 @@ void Simulator::Simulation()
 	while (!scheduler.isDone())
 	{
 		clk.Step();
-		scheduler.CreateAllProcessors();
 		scheduler.ScheduleNext(clk.GetTime());
 		scheduler.RunProcesses();
 		scheduler.MoveFromRun();

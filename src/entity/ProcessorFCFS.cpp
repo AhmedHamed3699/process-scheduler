@@ -14,7 +14,7 @@ void ProcessorFCFS::MigratonHandler()
 
 bool ProcessorFCFS::KillProcessHandler(int PID)
 {
-	
+	return true;
 }
 
 void ProcessorFCFS::ForkHandler()
@@ -37,6 +37,7 @@ Process* ProcessorFCFS::ExecuteProcess()
 	readyList.Remove(1);
 	currentProcess = process;
 	process->SetStatus(RUN);
+	SetStatus(BUSY);
 
 	return nullptr;
 }

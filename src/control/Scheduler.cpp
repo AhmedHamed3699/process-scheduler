@@ -66,6 +66,23 @@ void Scheduler::CreateNewProcess(int id)
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
 }
+
+void Scheduler::CreateNewProcess(int AT, int PID, int CT)
+{
+	// create new processor
+	Process* newProcess = new Process(PID);
+	newProcess->SetStatus(NEW);
+
+	TimeInfo timeInfo;
+	timeInfo.AT = AT;
+	timeInfo.CT = CT;
+
+	newProcess->SetTimeInfo(timeInfo);
+
+	// add processor to the NEW list
+	NEWList.enqueue(newProcess);
+}
+
 /// ////////////////////////////////// ///
 ///           UI AID Functions         ///
 /// ////////////////////////////////// ///
@@ -125,27 +142,25 @@ void Scheduler::PrintRUNList()
 /// ////////////////////////////////// ///
 void Scheduler::ScheduleNext(int currentTime)
 {
-	if (NEWList.isEmpty())
+	while (!NEWList.isEmpty())
 	{
-		return;
+		Process* process = NEWList.peekFront();
+
+		TimeInfo timeInfo = process->GetTimeInfo();
+		if (timeInfo.AT != currentTime)
+			return;
+
+		NEWList.dequeue();
+
+		/// TODO: implement the scheduling algorithm
+
+		// get the next processor
+		Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
+		nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
+
+		// schedule the process
+		processor->AddProcessToList(process);
 	}
-
-	Process* process = NEWList.peekFront();
-	
-	TimeInfo timeInfo = process->GetTimeInfo();
-	if (timeInfo.AT != currentTime)
-		return;
-
-	NEWList.dequeue();
-
-	/// TODO: implement the scheduling algorithm
-
-	// get the next processor
-	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
-	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
-
-	// schedule the process
-	processor->AddProcessToList(process);
 }
 
 void Scheduler::ScheduleNextFCFS(Process* process)
@@ -186,9 +201,9 @@ void Scheduler::RunProcesses()
 		Processor* processor = processors.GetEntry(i + 1);
 		if(processor->GetStatus() == IDLE)
 		{
-			processor->SetStatus(BUSY);
 			processor->ExecuteProcess();
 		}
+		
 	}
 }
 
@@ -208,6 +223,9 @@ void Scheduler::MoveFromRun()
 	{
 		Processor* processor = processors.GetEntry(i + 1);
 		Process* CurrentProcess = processor->GetCurrentProcess();
+		if (CurrentProcess == nullptr)
+			continue;
+
 		int probability = (rand() % 100) + 1;
 		if (probability <= 15)
 		{
@@ -233,6 +251,9 @@ void Scheduler::MoveFromRun()
 void Scheduler::MoveFromBLK()
 {
 	int probability = (rand() % 100) + 1;
+	if (BLKList.isEmpty())
+		return;
+
 	Process* BlockesProcess = BLKList.peekFront();
 	if (probability < 10)
 	{

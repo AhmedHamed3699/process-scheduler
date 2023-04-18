@@ -24,6 +24,7 @@ Process* ProcessorSJF::ExecuteProcess()
 	readyList.dequeue();
 	currentProcess = process;
 	process->SetStatus(RUN);
+	SetStatus(BUSY);
 
 
 	return nullptr;

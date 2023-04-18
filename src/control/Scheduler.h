@@ -48,6 +48,7 @@ public:
 	void CreateAllProcessors();
 	void CreateProcessor(ProcessorType aType);
 	void CreateNewProcess(int id);
+	void CreateNewProcess(int AT, int PID, int CT);
 
 	/// ////////////////////////////////// ///
 	///           UI AID Functions         ///
