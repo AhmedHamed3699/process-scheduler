@@ -89,7 +89,7 @@ void UI::PrintTimeStamp()
 
 // Constructor
 UI::UI(Clock* aClk, Scheduler* aScheduler)
-	:clk(aClk), scheduler(aScheduler)
+	:clk(aClk), scheduler(aScheduler), mode(INTERACTIVE)
 {
 }
 
