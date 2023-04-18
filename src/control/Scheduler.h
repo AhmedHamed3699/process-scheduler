@@ -69,9 +69,15 @@ public:
 	void RunProcesses();
 
 	/// TODO:  remove this later
-	void MoveToRDY(); // Related to simulation function
+	void MoveToRDY();
 
 	/// TODO:  remove this later
-	void MoveFromRun(); // Related to simulation function
+	void MoveFromRun();
+
+	/// TODO:  remove this later
+	void MoveFromBLK();
+
+	/// TODO:  remove this later
+	void SimulateKill();
 };
 

@@ -1,6 +1,5 @@
 #include "Scheduler.h"
 #include <cstdlib>
-#include <time.h>
 
 /// ////////////////////////////////// ///
 ///    constructors and destructor     ///
@@ -203,7 +202,6 @@ void Scheduler::MoveToRDY(Process* process)
 /// TODO: remove this later
 void Scheduler::MoveFromRun()
 {
-	srand(time(0));
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
@@ -221,5 +219,24 @@ void Scheduler::MoveFromRun()
 		{
 			TerminateProcess(CurrentProcess);
 		}
+	}
+}
+
+void Scheduler::MoveFromBLK()
+{
+	int probability = (rand() % 100) + 1;
+	if (probability < 10)
+	{
+		MoveToRDY(CurrentProcess);
+	}
+}
+
+void Scheduler::SimulateKill()
+{
+	int RandID = rand();
+	for (int i = 0; i < simulationParameters.N_FCFS; i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		
 	}
 }

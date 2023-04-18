@@ -1,4 +1,6 @@
 #include "Simulator.h"
+#include <cstdlib>
+#include <time.h>
 
 void Simulator::ShowMenu()
 {
@@ -85,6 +87,7 @@ void Simulator::Run(UIMode mode)
 
 void Simulator::Simulation()
 {
+	srand(time(0));
 	LoadInpuitFile();
 	while (true)
 	{
@@ -93,5 +96,8 @@ void Simulator::Simulation()
 		scheduler.ScheduleNext(clk.GetTime());
 		scheduler.RunProcesses();
 		scheduler.MoveFromRun();
+		scheduler.MoveFromBLK();
+		scheduler.SimulateKill();
+
 	}
 }
