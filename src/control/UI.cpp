@@ -113,7 +113,7 @@ void UI::PrintOutputFileMsg(bool isCreated)
 	}
 	else
 	{
-		WriteError("Output file creation failed...\n")
+		WriteError("Output file creation failed...\n");
 	}
 }
 
@@ -130,6 +130,16 @@ void UI::Wait()
 	{
 		Sleep(1000);
 	}
+}
+
+std::string UI::GetInputFileName()
+{
+	SetColor(CYAN);
+	std::cout << "Enter the name of the input file: ";
+	ResetColor();
+	std::string fileName;
+	std::cin >> fileName;
+	return fileName;
 }
 
 /// Constructor

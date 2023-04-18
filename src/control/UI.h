@@ -32,6 +32,7 @@ public:
 
 	/// Input Related functions
 	void Wait();
+	std::string GetInputFileName();
 
 	/// Constructor
 	UI(Clock* aClk, Scheduler* aScheduler);
