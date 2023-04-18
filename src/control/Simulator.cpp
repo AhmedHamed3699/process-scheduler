@@ -90,6 +90,7 @@ void Simulator::Simulation()
 	{
 		clk.Step();
 		scheduler.CreateAllProcessors();
-
+		scheduler.ScheduleNext(clk.GetTime());
+		scheduler.RunProcesses();
 	}
 }
