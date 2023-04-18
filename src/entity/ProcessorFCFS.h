@@ -1,13 +1,13 @@
 #pragma once
 #include "Processor.h"
 #include "Process.h"
-#include "../ds/ProcessorList.h"
+#include "../ds/List.h"
 #include "../data.h"
 
 class ProcessorFCFS : public Processor
 {
 private:
-	ProcessorList<Process*> readyList;
+	List<Process*> readyList;
 
 	void IOHandler();						//it manages how the I/O for a process would happen
 	void WorkStealingHandler();				//it manages how the work stealing between processors would happen

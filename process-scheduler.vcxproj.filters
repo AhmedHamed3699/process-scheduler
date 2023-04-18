@@ -92,8 +92,5 @@
     <ClInclude Include="src\entity\ProcessorFCFS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\ds\ProcessorList.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

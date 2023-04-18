@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Node.h"
+#include "../entity/Process.h"
 #include <iostream> // for UI Print
 
 template<class ItemType>
@@ -28,6 +29,7 @@ public:
 	virtual int GetLength() const;
 	virtual bool Insert(int newPosition, const ItemType& newEntry);
 	bool Remove(int position);
+	Process* RemoveById(int id);
 	virtual void Clear();
 
 	virtual void Print(); // made for ui
@@ -158,6 +160,37 @@ bool List<ItemType>::Remove(int position)
 	} // end if 
 	return ableToRemove;
 } // end remove
+
+template<class ItemType>
+Process* List<ItemType>::RemoveById(int id)
+{
+	Node<Process*>* ptr = headPtr;
+	Node<Process*>* prv = nullptr;
+	while (ptr)
+	{
+		if (*(ptr->getItem()) == id)
+		{
+			Node<Process*>* temp = ptr;
+			if (!prv)
+			{
+				headPtr = ptr->getNext();
+				ptr = headPtr;
+			}
+			else
+			{
+				prv->setNext(ptr->getNext());
+				ptr = ptr->getNext();
+			}
+			temp->setNext(nullptr);
+			itemCount--;
+
+			return temp->getItem();;
+		}
+		prv = ptr;
+		ptr = ptr->getNext();
+	}
+	return nullptr;
+}
 
 template<class ItemType>
 void List<ItemType>::Clear()

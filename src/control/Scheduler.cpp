@@ -264,7 +264,7 @@ void Scheduler::MoveFromBLK()
 
 void Scheduler::SimulateKill()
 {
-	int RandID = rand() % 10;
+	int RandID = rand() % 31;
 	for (int i = 0; i < simulationParameters.N_FCFS; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
