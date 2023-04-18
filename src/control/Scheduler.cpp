@@ -119,13 +119,14 @@ void Scheduler::ScheduleNext()
 	Process* process = NEWList.peekFront();
 	NEWList.dequeue();
 
-	/// TODO: implement the scheduling algorithm
+	/// TODO: implement the scheduling algorithm (Phase 2)
 
 	// get the next processor
 	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
 	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
 
 	// schedule the process
+	process->SetStatus(RDY);
 	processor->AddProcessToList(process);
 }
 
@@ -143,11 +144,21 @@ void Scheduler::ScheduleNextRR(Process* process)
 
 void Scheduler::TerminateProcess(Process* process)
 {
+	if (process->GetStatus() == TRM)
+	{
+		return;
+	}
+	process->SetStatus(TRM);
 	TRMList.enqueue(process);
 }
 
 void Scheduler::BlockProcess(Process* process)
 {
+	if (process->GetStatus() == BLK)
+	{
+		return;
+	}
+	process->SetStatus(BLK);
 	BLKList.enqueue(process);
 }
 /// ////////////////////////////////// ///
