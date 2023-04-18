@@ -25,6 +25,11 @@ public:
 	void PrintUIModeMenu();
 	void PrintTimeStamp();
 
+	/// Silent Mode functions
+	void PrintSilentModeStart();
+	void PrintSilentModeEnd();
+	void PrintOutputFileMsg(bool isCreated);
+
 	/// Input Related functions
 	void Wait();
 

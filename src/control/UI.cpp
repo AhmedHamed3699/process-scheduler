@@ -87,6 +87,36 @@ void UI::PrintTimeStamp()
 	ResetColor();
 }
 
+/// Silent Mode Functions
+void UI::PrintSilentModeStart()
+{
+	SetColor(PINK);
+	std::cout << "Silent Mode .......\n";
+	std::cout << "Simulation started...\n";
+	ResetColor();
+}
+
+void UI::PrintSilentModeEnd()
+{
+	SetColor(PINK);
+	std::cout << "Simulation ended...\n";
+	ResetColor();
+}
+
+void UI::PrintOutputFileMsg(bool isCreated)
+{
+	if (isCreated)
+	{
+		SetColor(PINK);
+		std::cout << "Output file created successfully...\n";
+		ResetColor();
+	}
+	else
+	{
+		WriteError("Output file creation failed...\n")
+	}
+}
+
 /// Input Related Functions
 void UI::Wait()
 {
