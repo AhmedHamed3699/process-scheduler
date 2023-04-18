@@ -92,5 +92,6 @@ void Simulator::Simulation()
 		scheduler.CreateAllProcessors();
 		scheduler.ScheduleNext(clk.GetTime());
 		scheduler.RunProcesses();
+		scheduler.MoveFromRun();
 	}
 }

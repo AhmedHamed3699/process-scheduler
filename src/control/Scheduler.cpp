@@ -1,4 +1,6 @@
 #include "Scheduler.h"
+#include <cstdlib>
+#include <time.h>
 
 /// ////////////////////////////////// ///
 ///    constructors and destructor     ///
@@ -119,7 +121,7 @@ void Scheduler::ScheduleNext(int currentTime)
 
 	Process* process = NEWList.peekFront();
 	
-	TimeInfo timeInfo = process->GetTimeInfo;
+	TimeInfo timeInfo = process->GetTimeInfo();
 	if (timeInfo.AT != currentTime)
 		return;
 
@@ -187,7 +189,37 @@ void Scheduler::RunProcesses()
 	}
 }
 
+/// TODO: remove this later
+void Scheduler::MoveToRDY(Process* process)
+{
+	// get the next processor
+	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
+	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
+
+	// schedule the process
+	processor->AddProcessToList(process);
+}
+
+/// TODO: remove this later
 void Scheduler::MoveFromRun()
 {
-
+	srand(time(0));
+	for (int i = 0; i < processors.GetLength(); i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		Process* CurrentProcess = processor->GetCurrentProcess();
+		int probability = (rand() % 100) + 1;
+		if (probability <= 15)
+		{
+			BlockProcess(CurrentProcess);
+		}
+		else if (probability >= 20 && probability <= 30)
+		{
+			MoveToRDY(CurrentProcess);
+		}
+		else if (probability >= 50 && probability <= 60)
+		{
+			TerminateProcess(CurrentProcess);
+		}
+	}
 }
