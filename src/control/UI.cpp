@@ -62,7 +62,7 @@ void UI::PrintUIModeMenu()
 void UI::PrintTimeStamp()
 {
 	SetColor(CYAN);
-	std::cout << "-________________________________________________________-" << std::endl;
+	std::cout << "_--------------------------------------------------------_" << std::endl;
 
 	std::cout << "                   Current Timestamp: " << clk->GetTime() << std::endl;
 
