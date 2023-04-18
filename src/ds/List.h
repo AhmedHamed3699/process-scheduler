@@ -24,17 +24,17 @@ public:
 	List(const List<ItemType>& aList);
 	virtual ~List();
 
-	bool IsEmpty() const;
-	int GetLength() const;
-	bool Insert(int newPosition, const ItemType& newEntry);
-	bool Remove(int position);
-	void Clear();
+	virtual bool IsEmpty() const;
+	virtual int GetLength() const;
+	virtual bool Insert(int newPosition, const ItemType& newEntry);
+	virtual bool Remove(int position);
+	virtual void Clear();
 
-	void Print(); // made for ui
+	virtual void Print(); // made for ui
 
 	/** position must be >= 1 && position <= itemCount */
-	ItemType GetEntry(int position) const;
-	void SetEntry(int position, const ItemType& newEntry);
+	virtual ItemType GetEntry(int position) const;
+	virtual void SetEntry(int position, const ItemType& newEntry);
 };
 
 template<class ItemType>

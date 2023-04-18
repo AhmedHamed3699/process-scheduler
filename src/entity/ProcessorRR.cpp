@@ -17,14 +17,17 @@ ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorRR::ExecuteProcess()
+Process* ProcessorRR::ExecuteProcess(int CurrentTime)
 {
 	//TODO: remove this later
-	if (readyList.getSize() == 0)
+	if (readyList.isEmpty())
 	{
 		return nullptr;
 	}
 	Process* process = readyList.peekFront();
+	if (process->GetTimeInfo().AT == CurrentTime)
+		return nullptr;
+
 	readyList.dequeue();
 	currentProcess = process;
 	process->SetStatus(RUN);

@@ -13,14 +13,17 @@ ProcessorSJF::ProcessorSJF(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorSJF::ExecuteProcess()
+Process* ProcessorSJF::ExecuteProcess(int CurrentTime)
 {
 	//TODO: remove this later
-	if (readyList.getSize() == 0)
+	if (readyList.isEmpty())
 	{
 		return nullptr;
 	}
 	Process* process = readyList.peekFront();
+	if(process->GetTimeInfo().AT == CurrentTime)
+		return nullptr;
+
 	readyList.dequeue();
 	currentProcess = process;
 	process->SetStatus(RUN);

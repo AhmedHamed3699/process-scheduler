@@ -26,7 +26,7 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorFCFS::ExecuteProcess()
+Process* ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 	//TODO: remove this later
 	if (readyList.IsEmpty())
@@ -34,6 +34,9 @@ Process* ProcessorFCFS::ExecuteProcess()
 		return nullptr;
 	}
 	Process* process = readyList.GetEntry(1);
+	if (process->GetTimeInfo().AT == CurrentTime)
+		return nullptr;
+
 	readyList.Remove(1);
 	currentProcess = process;
 	process->SetStatus(RUN);
