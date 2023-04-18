@@ -66,6 +66,7 @@ void Scheduler::CreateNewProcess(int AT, int PID, int CT)
 	TimeInfo timeInfo;
 	timeInfo.AT = AT;
 	timeInfo.CT = CT;
+	timeInfo.RCT = CT;
 
 	newProcess->SetTimeInfo(timeInfo);
 
