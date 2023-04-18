@@ -170,6 +170,38 @@ void Scheduler::BlockProcess(Process* process)
 
 }
 /// ////////////////////////////////// ///
+///        Statistics Functions        ///
+/// ////////////////////////////////// ///
+
+unsigned int Scheduler::CalculateAverageWaitTime()
+{
+	return 0;
+}
+
+unsigned int Scheduler::CalculateAverageTurnaroundTime()
+{
+	return 0;
+}
+
+unsigned int Scheduler::CalculateAverageResponseTime()
+{
+	return 0;
+}
+
+unsigned int* Scheduler::CalculateProcessorsUtilization()
+{
+	return nullptr;
+}
+
+unsigned int* Scheduler::CalculateProcessorsLoad()
+{
+	return nullptr;
+}
+
+unsigned int Scheduler::CalculateAverageProcessorsUtilization()
+{
+	return 0;
+}
 
 /// TODO: remove this later
 void Scheduler::RunProcesses()

@@ -22,6 +22,7 @@ class Scheduler
 	/// ////////////////////////////////// ///
 private:
 	SimulationParameters simulationParameters;
+	int nextProcessorIndex = 0; /// TODO: remove this later
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
@@ -32,7 +33,6 @@ private:
 	Queue<Process*> TRMList;
 	Queue<Process*> BLKList;
 	Process* IOProcess;
-	int nextProcessorIndex = 0; /// TODO: remove this later
 
 	/// ////////////////////////////////// ///
 	///    constructors and destructor     ///
@@ -40,14 +40,15 @@ private:
 public:
 	Scheduler();
 
-	SimulationParameters GetSimulationParameters();
-	void SetSimulationParameters(SimulationParameters sP);
 
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
 	/// ////////////////////////////////// ///
 	void CreateProcessor(ProcessorType aType);
 	void CreateNewProcess(int id);
+	SimulationParameters GetSimulationParameters();
+	void SetSimulationParameters(SimulationParameters sP);
+
 
 	/// ////////////////////////////////// ///
 	///           UI AID Functions         ///
