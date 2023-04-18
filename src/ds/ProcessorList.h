@@ -8,12 +8,15 @@ private:
 	Node<ItemType>* headPtr;	// Pointer to first node in the chain 
 	int itemCount;				// Current count of list items
 
+	Node<ItemType>* GetNodeAt(int position) const;
 public:
 	ProcessorList();
 	ProcessorList(const ProcessorList<ItemType>& aList);
 	virtual ~ProcessorList();
 
 	Process* RemoveById(int id);
+	bool Remove(int position);
+	bool IsEmpty() const;
 	void Clear();
 };
 
@@ -51,20 +54,35 @@ ProcessorList<ItemType>::ProcessorList(const ProcessorList<ItemType>& aList)
 		}
 	}
 }
+template<class ItemType>
+Node<ItemType>* ProcessorList<ItemType>::GetNodeAt(int position) const
+{
+	if (position > itemCount || position < 1)
+		return nullptr;
+	// Count from the beginning of the chain 
+	Node<ItemType>* curPtr = headPtr;
+	for (int skip = 1; skip < position; skip++)
+		curPtr = curPtr->getNext();
+	return curPtr;
+} // end getNodeAt 
 
 
 template<class ItemType>
-Process* ProcessorList<ItemType>::RemoveById(int id)
+bool ProcessorList<ItemType>::IsEmpty() const
+{
+	return (itemCount == 0);
+}
+
+template<class ItemType>
+ItemType* ProcessorList<ItemType>::RemoveById(int id)
 {
 	Node<ItemType>* ptr = headPtr;
 	Node<ItemType>* prv = nullptr;
-	if (!ptr)
-		return;
 	while (ptr)
 	{
 		if (ptr->getItem() == id)
 		{
-			Node<T>* temp = ptr;
+			Node<ItemType>* temp = ptr;
 			if (!prv)
 			{
 				headPtr = ptr->getNext();
@@ -85,6 +103,38 @@ Process* ProcessorList<ItemType>::RemoveById(int id)
 	}
 	return nullptr;
 }
+
+template<class ItemType>
+bool ProcessorList<ItemType>::Remove(int position)
+{
+	bool ableToRemove = (position >= 1) && (position <= itemCount);
+	if (ableToRemove)
+	{
+		Node<ItemType>* curPtr = nullptr;
+		if (position == 1)
+		{
+			// Remove the first node in the chain 
+			curPtr = headPtr; // Save pointer to node 
+			headPtr = headPtr->getNext();
+		}
+		else
+		{
+			// Find node that is before the one to delete 
+			Node<ItemType>* prevPtr = GetNodeAt(position - 1);
+			// Point to node to delete 
+			curPtr = prevPtr->getNext();
+			// Disconnect indicated node from chain by connecting the 
+			 // prior node with the one after 
+			prevPtr->setNext(curPtr->getNext());
+		} // end if 
+	   // Return node to system 
+		curPtr->setNext(nullptr);
+		delete curPtr;
+		curPtr = nullptr;
+		itemCount--; // Decrease count of entries 
+	} // end if 
+	return ableToRemove;
+} // end remove
 
 template<class ItemType>
 void ProcessorList<ItemType>::Clear()

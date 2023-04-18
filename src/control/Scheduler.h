@@ -71,7 +71,7 @@ public:
 	bool isDone(); // to know when to terminate the program
 
 	/// TODO:  remove All later
-	void RunProcesses();
+	void RunProcesses(int CurrentTime);
 	void MoveToRDY(Process* process);
 	void MoveFromRun();
 	void MoveFromBLK();

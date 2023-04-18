@@ -27,7 +27,7 @@ public:
 	virtual bool IsEmpty() const;
 	virtual int GetLength() const;
 	virtual bool Insert(int newPosition, const ItemType& newEntry);
-	virtual bool Remove(int position);
+	bool Remove(int position);
 	virtual void Clear();
 
 	virtual void Print(); // made for ui

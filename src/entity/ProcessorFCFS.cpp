@@ -1,4 +1,5 @@
 #include "ProcessorFCFS.h"
+#include "../control/Scheduler.h"
 
 void ProcessorFCFS::IOHandler()
 {
@@ -14,7 +15,16 @@ void ProcessorFCFS::MigratonHandler()
 
 bool ProcessorFCFS::KillProcessHandler(int PID)
 {
-	return (readyList.RemoveById(PID);
+	Process* killedProcess = readyList.RemoveById(PID);
+	if (killedProcess == nullptr)
+		return false;
+	if (killedProcess == GetCurrentProcess())
+	{
+		SetCurrentProcess(nullptr);
+		SetStatus(IDLE);
+	}
+	scheduler->TerminateProcess(killedProcess);
+	return true;
 }
 
 void ProcessorFCFS::ForkHandler()

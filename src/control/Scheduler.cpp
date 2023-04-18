@@ -194,14 +194,14 @@ bool Scheduler::isDone()
 	return (simulationParameters.N_PROCESS == TRMList.getSize());
 }
 
-void Scheduler::RunProcesses()
+void Scheduler::RunProcesses(int CurrentTime)
 {
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
 		if(processor->GetStatus() == IDLE)
 		{
-			processor->ExecuteProcess();
+			processor->ExecuteProcess(CurrentTime);
 		}
 		
 	}
@@ -264,7 +264,7 @@ void Scheduler::MoveFromBLK()
 
 void Scheduler::SimulateKill()
 {
-	int RandID = rand();
+	int RandID = rand() % 10;
 	for (int i = 0; i < simulationParameters.N_FCFS; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);

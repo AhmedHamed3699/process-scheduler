@@ -173,7 +173,7 @@ void Simulator::Simulation()
 	{
 		clk.Step();
 		scheduler.ScheduleNext(clk.GetTime());
-		scheduler.RunProcesses();
+		scheduler.RunProcesses(clk.GetTime());
 		scheduler.MoveFromRun();
 		scheduler.MoveFromBLK();
 		scheduler.SimulateKill();

@@ -49,6 +49,11 @@ void Process::SetStatus(ProcessStatus outStatus)
 	status = outStatus;
 }
 
+bool Process::operator== (const Process& p)
+{
+	return (PID == p.GetID());
+}
+
 bool Process::NeedIO() const
 {
 	return false;
