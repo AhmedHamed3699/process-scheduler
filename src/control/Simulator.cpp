@@ -168,7 +168,7 @@ void Simulator::Simulation()
 	ui.PrintHeadline();
 	ui.PrintUIModeMenu();
 
-	while (!isDone())
+	while (!scheduler.isDone())
 	{
 		clk.Step();
 		scheduler.CreateAllProcessors();

@@ -6,7 +6,7 @@
 /// ////////////////////////////////// ///
 Scheduler::Scheduler()
 	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0),
-	IOProcess(nullptr), numberOfTerminated(0)
+	IOProcess(nullptr)
 {
 }
 
@@ -62,6 +62,7 @@ void Scheduler::CreateNewProcess(int id)
 {
 	// create new processor
 	Process* newProcess = new Process(id);
+	newProcess->SetStatus(NEW);
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
 }
@@ -161,18 +162,21 @@ void Scheduler::ScheduleNextRR(Process* process)
 
 void Scheduler::TerminateProcess(Process* process)
 {
+	process->SetStatus(TRM);
 	TRMList.enqueue(process);
-	numberOfTerminated++;
 }
 
 void Scheduler::BlockProcess(Process* process)
 {
+	process->SetStatus(BLK);
 	BLKList.enqueue(process);
 }
 
 bool Scheduler::isDone()
 {
-	return (simulationParameters.N_PROCESS == numberOfTerminated);
+	// this means we must change N_PROCESS when we fork .. or terminate the program in another way
+
+	return (simulationParameters.N_PROCESS == TRMList.getSize());
 }
 
 void Scheduler::RunProcesses()
@@ -181,7 +185,10 @@ void Scheduler::RunProcesses()
 	{
 		Processor* processor = processors.GetEntry(i + 1);
 		if(processor->GetStatus() == IDLE)
+		{
+			processor->SetStatus(BUSY);
 			processor->ExecuteProcess();
+		}
 	}
 }
 
@@ -204,14 +211,20 @@ void Scheduler::MoveFromRun()
 		int probability = (rand() % 100) + 1;
 		if (probability <= 15)
 		{
+			processor->SetStatus(IDLE);
+			processor->SetCurrentProcess(nullptr);
 			BlockProcess(CurrentProcess);
 		}
 		else if (probability >= 20 && probability <= 30)
 		{
+			processor->SetStatus(IDLE);
+			processor->SetCurrentProcess(nullptr);
 			MoveToRDY(CurrentProcess);
 		}
 		else if (probability >= 50 && probability <= 60)
 		{
+			processor->SetStatus(IDLE);
+			processor->SetCurrentProcess(nullptr);
 			TerminateProcess(CurrentProcess);
 		}
 	}
@@ -220,9 +233,11 @@ void Scheduler::MoveFromRun()
 void Scheduler::MoveFromBLK()
 {
 	int probability = (rand() % 100) + 1;
+	Process* BlockesProcess = BLKList.peekFront();
 	if (probability < 10)
 	{
-		MoveToRDY(CurrentProcess);
+		BLKList.dequeue();
+		MoveToRDY(BlockesProcess);
 	}
 }
 

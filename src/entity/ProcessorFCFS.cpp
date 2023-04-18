@@ -36,13 +36,14 @@ Process* ProcessorFCFS::ExecuteProcess()
 	Process* process = readyList.GetEntry(1);
 	readyList.Remove(1);
 	currentProcess = process;
-
+	process->SetStatus(RUN);
 
 	return nullptr;
 }
 
 void ProcessorFCFS::AddProcessToList(Process* process)
 {
+	process->SetStatus(RDY);
 	readyList.Insert(readyList.GetLength() + 1, process);
 }
 

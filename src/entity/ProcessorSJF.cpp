@@ -23,6 +23,7 @@ Process* ProcessorSJF::ExecuteProcess()
 	Process* process = readyList.peekFront();
 	readyList.dequeue();
 	currentProcess = process;
+	process->SetStatus(RUN);
 
 
 	return nullptr;
@@ -30,6 +31,7 @@ Process* ProcessorSJF::ExecuteProcess()
 
 void ProcessorSJF::AddProcessToList(Process* process)
 {
+	process->SetStatus(RDY);
 	readyList.enqueue(process);
 }
 

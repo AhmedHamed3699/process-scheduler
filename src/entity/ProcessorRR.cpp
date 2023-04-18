@@ -27,6 +27,7 @@ Process* ProcessorRR::ExecuteProcess()
 	Process* process = readyList.peekFront();
 	readyList.dequeue();
 	currentProcess = process;
+	process->SetStatus(RUN);
 
 
 	return nullptr;
@@ -34,6 +35,7 @@ Process* ProcessorRR::ExecuteProcess()
 
 void ProcessorRR::AddProcessToList(Process* process)
 {
+	process->SetStatus(RDY);
 	readyList.enqueue(process);
 }
 
