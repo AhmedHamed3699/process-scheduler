@@ -40,6 +40,8 @@ public:
 	virtual Process* ExecuteProcess() = 0;					//The function responsible for executing a process
 	virtual void AddProcessToList(Process* process) = 0;		//Adds a Process to the list of a Processor 
 
+	virtual bool KillProcessHandler(int PID);		//responsible for dealing with SIGKILL and Orphans
+
 	virtual void Print() = 0;
 };
 

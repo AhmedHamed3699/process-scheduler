@@ -12,8 +12,9 @@ void ProcessorFCFS::MigratonHandler()
 {
 }
 
-void ProcessorFCFS::KillProcessHandler()
+bool ProcessorFCFS::KillProcessHandler(int PID)
 {
+	
 }
 
 void ProcessorFCFS::ForkHandler()

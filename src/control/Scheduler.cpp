@@ -237,6 +237,9 @@ void Scheduler::SimulateKill()
 	for (int i = 0; i < simulationParameters.N_FCFS; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-		
+		bool found = processor->KillProcessHandler(RandID);
+
+		if (found)
+			return;
 	}
 }

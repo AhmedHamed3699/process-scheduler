@@ -28,6 +28,7 @@ public:
 	int GetLength() const;
 	bool Insert(int newPosition, const ItemType& newEntry);
 	bool Remove(int position);
+	bool Search((const ItemType& anEntry) const;
 	void Clear();
 
 	void Print(); // made for ui
@@ -75,6 +76,8 @@ List<ItemType>::List(const List<ItemType>& aList)
 template<class ItemType>
 Node<ItemType>* List<ItemType>::GetNodeAt(int position) const
 {
+	if (position > itemCount || position < 1)
+		return nullptr;
 	// Count from the beginning of the chain 
 	Node<ItemType>* curPtr = headPtr;
 	for (int skip = 1; skip < position; skip++)
@@ -156,6 +159,12 @@ bool List<ItemType>::Remove(int position)
 	} // end if 
 	return ableToRemove;
 } // end remove
+
+template<class ItemType>
+bool List<ItemType>::Search((const ItemType& anEntry) const
+{
+	return (getPointerTo(anEntry));
+}
 
 template<class ItemType>
 void List<ItemType>::Clear()

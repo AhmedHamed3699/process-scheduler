@@ -45,6 +45,9 @@ void Processor::SetExpectedFinishTime(unsigned int time)
 	expectedFinishTime = time;
 }
 
+bool Processor::KillProcessHandler(int PID)
+{}
+
 Processor::~Processor()
 {
 }

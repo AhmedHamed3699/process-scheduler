@@ -89,6 +89,10 @@ void Simulator::Simulation()
 {
 	srand(time(0));
 	LoadInpuitFile();
+
+	ui.PrintHeadline();
+	ui.PrintUIModeMenu();
+
 	while (true)
 	{
 		clk.Step();
@@ -98,6 +102,6 @@ void Simulator::Simulation()
 		scheduler.MoveFromRun();
 		scheduler.MoveFromBLK();
 		scheduler.SimulateKill();
-
+		ui.PrintTimeStamp();
 	}
 }
