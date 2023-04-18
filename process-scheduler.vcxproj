@@ -155,6 +155,7 @@
     <ClCompile Include="src\control\UI.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\ds\Pair.h" />
     <ClInclude Include="src\entity\ProcessorRR.h" />
     <ClInclude Include="src\entity\ProcessorFCFS.h" />
     <ClInclude Include="src\entity\ProcessorSJF.h" />
