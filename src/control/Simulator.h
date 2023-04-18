@@ -19,7 +19,7 @@ public:
 	void ShowMenu();
 	bool LoadInpuitFile();
 	bool CreateOutputFile();
-	void Run(UIMode mode);
+	void Run(UIMode mode = INTERACTIVE);
 	void Simulation();
 };
 

@@ -12,6 +12,18 @@ Scheduler::Scheduler()
 /// ////////////////////////////////// ///
 ///         Creation and setup         ///
 /// ////////////////////////////////// ///
+void Scheduler::CreateAllProcessors()
+{
+	for (int i = 0; i < simulationParameters.N_FCFS; i++)
+		CreateProcessor(FCFS);
+
+	for (int i = 0; i < simulationParameters.N_SJF; i++)
+		CreateProcessor(SJF);
+
+	for (int i = 0; i < simulationParameters.N_RR; i++)
+		CreateProcessor(RR);
+}
+
 void Scheduler::CreateProcessor(ProcessorType aType)
 {
 	Processor* newProcessor;
@@ -98,7 +110,7 @@ void Scheduler::PrintRUNList()
 /// ////////////////////////////////// ///
 ///     Process State Management       ///
 /// ////////////////////////////////// ///
-void Scheduler::ScheduleNext()
+void Scheduler::ScheduleNext(int currentTime)
 {
 	if (NEWList.isEmpty())
 	{
@@ -106,6 +118,11 @@ void Scheduler::ScheduleNext()
 	}
 
 	Process* process = NEWList.peekFront();
+	
+	TimeInfo timeInfo = process->GetTimeInfo;
+	if (timeInfo.AT != currentTime)
+		return;
+
 	NEWList.dequeue();
 
 	/// TODO: implement the scheduling algorithm

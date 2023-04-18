@@ -85,5 +85,11 @@ void Simulator::Run(UIMode mode)
 
 void Simulator::Simulation()
 {
+	LoadInpuitFile();
+	while (true)
+	{
+		clk.Step();
+		scheduler.CreateAllProcessors();
 
+	}
 }

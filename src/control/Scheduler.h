@@ -26,7 +26,6 @@ private:
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
 	/// ////////////////////////////////// ///
-private:
 	List<Processor*> processors;
 	Queue<Process*> NEWList;
 	Queue<Process*> TRMList;
@@ -44,6 +43,7 @@ public:
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
 	/// ////////////////////////////////// ///
+	void CreateAllProcessors();
 	void CreateProcessor(ProcessorType aType);
 	void CreateNewProcess(int id);
 
@@ -58,7 +58,7 @@ public:
 	/// ////////////////////////////////// ///
 	///      Process State Management      ///
 	/// ////////////////////////////////// ///
-	void ScheduleNext();
+	void ScheduleNext(int currentTime);
 	void ScheduleNextFCFS(Process* process);
 	void ScheduleNextSJF(Process* process);
 	void ScheduleNextRR(Process* process);
