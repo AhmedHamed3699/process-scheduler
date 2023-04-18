@@ -1,7 +1,6 @@
 #pragma once
-#include <algorithm>
-#include <cmath>
 #include <iostream>
+#include <type_traits>
 using namespace std;
 
 template<class ItemType>
@@ -15,6 +14,7 @@ private:
 	int left(const int nodeIndex) const;
 	int right(int nodeIndex) const;
 	int parent(int nodeIndex) const;
+	bool isLower(const ItemType& a, const ItemType& b) const;
 	void minHeapify(int nodeIndex);
 	void buildHeap();
 public:
@@ -89,15 +89,23 @@ int PriorityQueue<ItemType>::parent(int nodeIndex) const
 }
 
 template<class ItemType>
+bool PriorityQueue<ItemType>::isLower(const ItemType& a, const ItemType& b) const
+{
+	if (is_pointer<ItemType>::value)
+		return (*a < b);
+	return (a < b);
+}
+
+template<class ItemType>
 void PriorityQueue<ItemType>::minHeapify(int nodeIndex)
 {
 	int l = left(nodeIndex);
 	int r = right(nodeIndex);
 	int smallest = nodeIndex;
 
-	if (l < itemCount && items[l] < items[smallest])
+	if (l < itemCount && isLower(items[l], items[smallest]))
 		smallest = l;
-	if (r < itemCount && items[r] < items[smallest])
+	if (r < itemCount && isLower(items[r], items[smallest]))
 		smallest = r;
 	if (smallest != nodeIndex)
 	{
@@ -148,7 +156,7 @@ bool PriorityQueue<ItemType>::enqueue(const ItemType& newData)
 	while (i > 0)
 	{
 		int p = parent(i);
-		if (items[i] >= items[p])
+		if (!isLower(items[i], items[p]))
 			break;
 
 		swap(items[i], items[p]);

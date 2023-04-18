@@ -54,6 +54,11 @@ bool Process::operator== (int id)
 	return (PID == id);
 }
 
+bool Process::operator< (Process* p)
+{
+	return (timeInfo.RCT < p->timeInfo.RCT);
+}
+
 bool Process::NeedIO() const
 {
 	return false;

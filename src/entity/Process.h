@@ -28,6 +28,7 @@ public:
 	ProcessStatus GetStatus() const;
 	void SetStatus(ProcessStatus outStatus);
 	bool operator== (int id);
+	bool operator< (Process* p);
 
 	//returns true if the process needs IO in this timestep
 	//You may need to change its parameters depending on your implementation (ex: you may want to send the time to it)
