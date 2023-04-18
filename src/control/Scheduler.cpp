@@ -177,7 +177,6 @@ void Scheduler::BlockProcess(Process* process)
 
 }
 
-/// TODO: remove this later
 void Scheduler::RunProcesses()
 {
 	for (int i = 0; i < processors.GetLength(); i++)
@@ -188,7 +187,6 @@ void Scheduler::RunProcesses()
 	}
 }
 
-/// TODO: remove this later
 void Scheduler::MoveToRDY(Process* process)
 {
 	// get the next processor
@@ -199,7 +197,6 @@ void Scheduler::MoveToRDY(Process* process)
 	processor->AddProcessToList(process);
 }
 
-/// TODO: remove this later
 void Scheduler::MoveFromRun()
 {
 	for (int i = 0; i < processors.GetLength(); i++)

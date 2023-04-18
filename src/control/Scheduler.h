@@ -65,19 +65,12 @@ public:
 	void TerminateProcess(Process* process);
 	void BlockProcess(Process* process);
 
-	/// TODO:  remove this later
+	/// TODO:  remove All later
+
 	void RunProcesses();
-
-	/// TODO:  remove this later
-	void MoveToRDY();
-
-	/// TODO:  remove this later
+	void MoveToRDY(Process* process);
 	void MoveFromRun();
-
-	/// TODO:  remove this later
 	void MoveFromBLK();
-
-	/// TODO:  remove this later
 	void SimulateKill();
 };
 

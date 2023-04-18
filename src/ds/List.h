@@ -28,7 +28,6 @@ public:
 	int GetLength() const;
 	bool Insert(int newPosition, const ItemType& newEntry);
 	bool Remove(int position);
-	bool Search((const ItemType& anEntry) const;
 	void Clear();
 
 	void Print(); // made for ui
@@ -159,12 +158,6 @@ bool List<ItemType>::Remove(int position)
 	} // end if 
 	return ableToRemove;
 } // end remove
-
-template<class ItemType>
-bool List<ItemType>::Search((const ItemType& anEntry) const
-{
-	return (getPointerTo(anEntry));
-}
 
 template<class ItemType>
 void List<ItemType>::Clear()
