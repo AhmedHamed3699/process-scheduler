@@ -16,7 +16,7 @@ private:
 	ProcessStatus status;			//any process created will have NEW as its initial status
 	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_R 
 public:
-	Process(int id, unsigned int ioNum = 0);
+	Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>> outIO);
 
 	int GetID() const;
 	Process* GetDescendant() const;
