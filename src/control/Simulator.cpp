@@ -176,7 +176,7 @@ void Simulator::Simulation()
 		scheduler.RunProcesses();
 		scheduler.MoveFromRun();
 		scheduler.MoveFromBLK();
-		//scheduler.SimulateKill();
+		scheduler.SimulateKill();
 		ui.PrintTimeStamp();
 	}
 }

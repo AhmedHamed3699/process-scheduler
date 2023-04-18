@@ -14,7 +14,7 @@ void ProcessorFCFS::MigratonHandler()
 
 bool ProcessorFCFS::KillProcessHandler(int PID)
 {
-	return true;
+	return (readyList.RemoveById(PID);
 }
 
 void ProcessorFCFS::ForkHandler()
