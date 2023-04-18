@@ -1,5 +1,5 @@
 #include "UI.h"
-
+#include <conio.h>
 
 /// Output Functions
 void UI::WriteWarning(std::string msg)
@@ -121,8 +121,8 @@ void UI::Wait()
 {
 	if (mode == INTERACTIVE)
 	{
-		std::cout << "Press any key to move to next step...";
-		std::cin.get();
+		std::cout << "Press any key to move to next step...\n";
+		_getch();
 	}
 	if (mode == STEP_BY_STEP)
 	{

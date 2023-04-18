@@ -13,7 +13,6 @@ private:
 	Process* descendant;
 	TimeInfo timeInfo;
 	unsigned int IONumOfReq;
-	unsigned int IOCounter;			//keep track of the current IO time and duration (as one process can have many IO)
 	ProcessStatus status;			//any process created will have NEW as its initial status
 public:
 	Process(int id, unsigned int ioNum = 0);
@@ -28,6 +27,7 @@ public:
 	ProcessStatus GetStatus() const;
 	void SetStatus(ProcessStatus outStatus);
 	bool operator== (int id);
+	bool operator< (Process* p);
 
 	//returns true if the process needs IO in this timestep
 	//You may need to change its parameters depending on your implementation (ex: you may want to send the time to it)

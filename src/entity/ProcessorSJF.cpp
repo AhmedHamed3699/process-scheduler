@@ -29,6 +29,10 @@ Process* ProcessorSJF::ExecuteProcess(int CurrentTime)
 	process->SetStatus(RUN);
 	SetStatus(BUSY);
 
+	TimeInfo timeInfo = process->GetTimeInfo();
+	timeInfo.RT = CurrentTime - timeInfo.AT;
+
+	process->SetTimeInfo(timeInfo);
 
 	return nullptr;
 }

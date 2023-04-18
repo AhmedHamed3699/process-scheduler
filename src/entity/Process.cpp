@@ -1,6 +1,6 @@
 #include "Process.h"
 
-Process::Process(int id, unsigned int ioNum) : PID(id), IONumOfReq(ioNum), descendant(nullptr), IOCounter(0), status(NEW)
+Process::Process(int id, unsigned int ioNum) : PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW)
 {
 }
 
@@ -52,6 +52,11 @@ void Process::SetStatus(ProcessStatus outStatus)
 bool Process::operator== (int id)
 {
 	return (PID == id);
+}
+
+bool Process::operator< (Process* p)
+{
+	return (timeInfo.RCT < p->timeInfo.RCT);
 }
 
 bool Process::NeedIO() const
