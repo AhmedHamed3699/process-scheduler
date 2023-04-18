@@ -198,6 +198,7 @@ void Scheduler::BlockProcess(Process* process)
 	{
 		return;
 	}
+
 	process->SetStatus(BLK);
 	BLKList.enqueue(process);
 }
@@ -229,7 +230,7 @@ void Scheduler::MoveToRDY(Process* process)
 	processor->AddProcessToList(process);
 }
 
-void Scheduler::MoveFromRun()
+void Scheduler::MoveFromRun(int CurrentTime)
 {
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
@@ -238,12 +239,21 @@ void Scheduler::MoveFromRun()
 		if (CurrentProcess == nullptr)
 			continue;
 
+		TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
+
+		if(timeInfo.RT + timeInfo.AT == CurrentTime)
+			continue;
+
 		int probability = (rand() % 100) + 1;
 		if (probability <= 15)
 		{
 			processor->SetStatus(IDLE);
 			processor->SetCurrentProcess(nullptr);
 			BlockProcess(CurrentProcess);
+
+			TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
+			timeInfo.BT = CurrentTime;
+			CurrentProcess->SetTimeInfo(timeInfo);
 		}
 		else if (probability >= 20 && probability <= 30)
 		{
@@ -260,17 +270,21 @@ void Scheduler::MoveFromRun()
 	}
 }
 
-void Scheduler::MoveFromBLK()
+void Scheduler::MoveFromBLK(int CurrentTime)
 {
 	int probability = (rand() % 100) + 1;
 	if (BLKList.isEmpty())
 		return;
 
-	Process* BlockesProcess = BLKList.peekFront();
+	Process* BlockedProcess = BLKList.peekFront();
+
+	if (BlockedProcess->GetTimeInfo().BT == CurrentTime)
+		return;
+
 	if (probability < 10)
 	{
 		BLKList.dequeue();
-		MoveToRDY(BlockesProcess);
+		MoveToRDY(BlockedProcess);
 	}
 }
 

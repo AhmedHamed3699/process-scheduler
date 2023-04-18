@@ -87,8 +87,8 @@ public:
 	/// ////////////////////////////////// ///
 	void RunProcesses(int CurrentTime);
 	void MoveToRDY(Process* process);
-	void MoveFromRun();
-	void MoveFromBLK();
+	void MoveFromRun(int CurrentTime);
+	void MoveFromBLK(int CurrentTime);
 	void SimulateKill();
 
 	/// ////////////////////////////////// ///

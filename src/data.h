@@ -78,6 +78,7 @@ struct TimeInfo
 	unsigned int TT;	 //terminationTime
 	unsigned int TRT;	 //turnaroundTime
 	unsigned int WT;	 //waitingTime
+	unsigned int BT;	 //time when first encounter BLK --> to be removed later
 	Queue<unsigned int> IO_R;	// IO RequestTime
 	Queue<unsigned int> IO_D;	// IO Duration
 };
