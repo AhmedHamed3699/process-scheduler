@@ -84,15 +84,15 @@ struct TimeInfo
 
 struct SimulationParameters
 {
-	const unsigned int MAX_WAITING_TIME;
-	const unsigned int RR_TIME_SLICE;
-	const unsigned int N_FCFS;
-	const unsigned int N_SJF;
-	const unsigned int N_RR;
-	const unsigned int FORK_PROBABILITY;
-	const unsigned int STL;
-	const unsigned int RTF;
-	const unsigned int N_PROCESS;
+	unsigned int MAX_WAITING_TIME;
+	unsigned int RR_TIME_SLICE;
+	unsigned int N_FCFS;
+	unsigned int N_SJF;
+	unsigned int N_RR;
+	unsigned int FORK_PROBABILITY;
+	unsigned int STL;
+	unsigned int RTF;
+	unsigned int N_PROCESS;
 
 	SimulationParameters(
 		unsigned int maxWaitingTime,

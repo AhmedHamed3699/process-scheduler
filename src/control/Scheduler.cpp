@@ -10,6 +10,17 @@ Scheduler::Scheduler()
 {
 }
 
+SimulationParameters Scheduler::GetSimulationParameters()
+{
+	return simulationParameters;
+}
+
+void Scheduler::SetSimulationParameters(SimulationParameters sP)
+{
+	simulationParameters = sP;
+}
+
+
 /// ////////////////////////////////// ///
 ///         Creation and setup         ///
 /// ////////////////////////////////// ///
