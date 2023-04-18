@@ -49,8 +49,7 @@ bool Simulator::LoadInpuitFile()
 		int AT, PID, CT, N;
 		InFile >> AT >> PID >> CT >> N;
 
-		scheduler.CreateNewProcess(AT,PID,CT,N);
-
+		Queue<Pair<unsigned int, unsigned int>> IO;		//make a Queue to store IO_R and IO_D values in
 
 		for (int i = 0; i < N; i++)
 		{
@@ -59,7 +58,9 @@ bool Simulator::LoadInpuitFile()
 			int IO_R, IO_D;
 			InFile >> lParenthesis >> IO_R >> comma >> IO_D >> rParenthesis;
 
-			// TODO: add the IO_R and IO_D values to the process
+			//put IO_R and IO_D in a pair and push it in IO queue
+			Pair<unsigned int, unsigned int> tempP(IO_R, IO_D);
+			IO.enqueue(tempP);
 
 			//to read the comma between each pair
 			if (i < N - 1)
@@ -67,6 +68,8 @@ bool Simulator::LoadInpuitFile()
 				InFile >> comma;
 			}
 		}
+
+		scheduler.CreateNewProcess(AT, PID, CT, N, IO);
 	}
 
 
