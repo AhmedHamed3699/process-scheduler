@@ -13,7 +13,6 @@ private:
 	Process* descendant;
 	TimeInfo timeInfo;
 	unsigned int IONumOfReq;
-	unsigned int IOCounter;			//keep track of the current IO time and duration (as one process can have many IO)
 	ProcessStatus status;			//any process created will have NEW as its initial status
 public:
 	Process(int id, unsigned int ioNum = 0);

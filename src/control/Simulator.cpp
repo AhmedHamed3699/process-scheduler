@@ -49,8 +49,8 @@ bool Simulator::LoadInpuitFile()
 		int AT, PID, CT, N;
 		InFile >> AT >> PID >> CT >> N;
 
-		scheduler.CreateNewProcess(AT,PID,CT);
-		// TODO: set N for each process
+		scheduler.CreateNewProcess(AT,PID,CT,N);
+
 
 		for (int i = 0; i < N; i++)
 		{

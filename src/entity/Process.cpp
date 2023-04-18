@@ -1,6 +1,6 @@
 #include "Process.h"
 
-Process::Process(int id, unsigned int ioNum) : PID(id), IONumOfReq(ioNum), descendant(nullptr), IOCounter(0), status(NEW)
+Process::Process(int id, unsigned int ioNum) : PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW)
 {
 }
 

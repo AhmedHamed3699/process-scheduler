@@ -8,7 +8,8 @@ template<class ItemType>
 class List
 {
 private:
-	Node<ItemType>* headPtr;	// Pointer to first node in the chain 
+	Node<ItemType>* headPtr;	// Pointer to first node in the chain
+	Node<ItemType>* tailPtr;	// Pointer to last node in the chain
 	// (contains the first entry in the list) 
 	int itemCount;				// Current count of list items
 
@@ -40,23 +41,23 @@ public:
 };
 
 template<class ItemType>
-List<ItemType>::List() : headPtr(nullptr), itemCount(0)
+List<ItemType>::List() : headPtr(nullptr), tailPtr(nullptr), itemCount(0)
 {
 }
 
 template<class ItemType>
-List<ItemType>::List(const List<ItemType>& aList)
+List<ItemType>::List(const List<ItemType>& aList): headPtr(nullptr), tailPtr(nullptr), itemCount(0)
 {
-	if (!aList.isEmpty())
+	if (!aList.IsEmpty())
 	{
 		Node<ItemType>* outerListPtr = aList.headPtr;
 		//create the first node
 		headPtr = new Node<ItemType>;
 		headPtr->setItem(outerListPtr->getItem());
 		headPtr->setNext(nullptr);
+		tailPtr = headPtr;
 		itemCount++;
 
-		Node<ItemType>* innerListPtr = headPtr;
 		outerListPtr = outerListPtr->getNext();
 
 		while (outerListPtr != nullptr)
@@ -65,9 +66,9 @@ List<ItemType>::List(const List<ItemType>& aList)
 			newNodePtr->setItem(outerListPtr->getItem());
 			newNodePtr->setNext(nullptr);
 
-			innerListPtr->setNext(newNodePtr);
+			tailPtr->setNext(newNodePtr);
 
-			innerListPtr = innerListPtr->getNext();
+			tailPtr = tailPtr->getNext();
 			outerListPtr = outerListPtr->getNext();
 			itemCount++;
 		}
@@ -114,6 +115,17 @@ bool List<ItemType>::Insert(int newPosition,
 			// Insert new node at beginning of chain 
 			newNodePtr->setNext(headPtr);
 			headPtr = newNodePtr;
+			
+			if (IsEmpty())
+			{
+				tailPtr = newNodePtr;
+			}
+		}
+		else if (newPosition == itemCount + 1)
+		{
+			newNodePtr->setNext(tailPtr->getNext());
+			tailPtr->setNext(newNodePtr);
+			tailPtr = newNodePtr;
 		}
 		else
 		{
@@ -141,6 +153,11 @@ bool List<ItemType>::Remove(int position)
 			// Remove the first node in the chain 
 			curPtr = headPtr; // Save pointer to node 
 			headPtr = headPtr->getNext();
+
+			if (itemCount == 1)
+			{
+				tailPtr = nullptr;
+			}
 		}
 		else
 		{
@@ -151,6 +168,11 @@ bool List<ItemType>::Remove(int position)
 			// Disconnect indicated node from chain by connecting the 
 			 // prior node with the one after 
 			prevPtr->setNext(curPtr->getNext());
+
+			if (position == itemCount)
+			{
+				tailPtr = prevPtr;
+			}
 		} // end if 
 	   // Return node to system 
 		curPtr->setNext(nullptr);
@@ -171,20 +193,31 @@ Process* List<ItemType>::RemoveById(int id)
 		if (*(ptr->getItem()) == id)
 		{
 			Node<Process*>* temp = ptr;
-			if (!prv)
+			if (!prv)	//if the NodeToBeDeleted is the first node
 			{
 				headPtr = ptr->getNext();
 				ptr = headPtr;
+
+				if (itemCount == 1)		//only one node exist in the list
+				{
+					tailPtr = nullptr;
+				}
 			}
 			else
 			{
 				prv->setNext(ptr->getNext());
+
+				if (ptr->getNext() == nullptr)		//if the NodeToBeDeleted is the last node
+				{
+					tailPtr = prv;
+				}
+
 				ptr = ptr->getNext();
 			}
 			temp->setNext(nullptr);
 			itemCount--;
 
-			return temp->getItem();;
+			return temp->getItem();
 		}
 		prv = ptr;
 		ptr = ptr->getNext();

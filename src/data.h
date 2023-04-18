@@ -81,6 +81,10 @@ struct TimeInfo
 	unsigned int BT;	 //time when first encounter BLK --> to be removed later
 	Queue<unsigned int> IO_R;	// IO RequestTime
 	Queue<unsigned int> IO_D;	// IO Duration
+
+	TimeInfo() :AT(0), RT(0), CT(0), RCT(0), TT(0), TRT(0), WT(0)
+	{
+	}
 };
 
 struct SimulationParameters
