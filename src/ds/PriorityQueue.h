@@ -1,7 +1,5 @@
 #pragma once
-#include <iostream>
 #include <type_traits>
-using namespace std;
 
 template<class ItemType>
 class PriorityQueue
@@ -28,7 +26,7 @@ public:
 	bool dequeue(ItemType& min);
 	int getSize() const;
 	void clear();
-	void Print(); // for UI
+	std::string ToString(); // for UI and debugging
 	virtual ~PriorityQueue();
 };
 
@@ -91,7 +89,7 @@ int PriorityQueue<ItemType>::parent(int nodeIndex) const
 template<class ItemType>
 bool PriorityQueue<ItemType>::isLower(const ItemType& a, const ItemType& b) const
 {
-	if (is_pointer<ItemType>::value)
+	if (std::is_pointer<ItemType>::value)
 		return (*a < b);
 	return (a < b);
 }
@@ -109,7 +107,7 @@ void PriorityQueue<ItemType>::minHeapify(int nodeIndex)
 		smallest = r;
 	if (smallest != nodeIndex)
 	{
-		swap(items[smallest], items[nodeIndex]);
+		std::swap(items[smallest], items[nodeIndex]);
 		minHeapify(smallest);
 	}
 }
@@ -159,7 +157,7 @@ bool PriorityQueue<ItemType>::enqueue(const ItemType& newData)
 		if (!isLower(items[i], items[p]))
 			break;
 
-		swap(items[i], items[p]);
+		std::swap(items[i], items[p]);
 		i = parent(i);
 	}
 	return true;
@@ -204,19 +202,21 @@ void PriorityQueue<ItemType>::clear()
 }
 
 template<class ItemType>
-inline void PriorityQueue<ItemType>::Print()
+inline std::string PriorityQueue<ItemType>::ToString()
 {
+	std::string str = "";
 	for (int i = 0; i < itemCount; i++)
 	{
-		items[i]->Print();
+		str += items[i]->ToString();
 		if (i != itemCount - 1)
 		{
-			std::cout << ", ";
+			str += ", ";
 		}
 	}
 
 	if (itemCount == 0)
 	{
-		std::cout << "Empty List";
+		str += "Empty List";
 	}
+	return str;
 }

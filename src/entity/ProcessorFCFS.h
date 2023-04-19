@@ -19,6 +19,6 @@ public:
 	Process* ExecuteProcess(int CurrentTime);				//The function responsible for executing a process
 	void AddProcessToList(Process* process);//Adds a Process to the list of a Processor 
 	bool KillProcessHandler(int PID);		//responsible for dealing with SIGKILL and Orphans
-	void Print();
+	std::string ToString();
 };
 

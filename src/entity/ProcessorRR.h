@@ -16,6 +16,6 @@ public:
 	Process* ExecuteProcess(int CurrentTime);					//The function responsible for executing a process
 	void AddProcessToList(Process* process);		//Adds a Process to the list of a Processor 
 
-	void Print();
+	std::string ToString();
 };
 

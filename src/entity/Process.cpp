@@ -1,6 +1,7 @@
 #include "Process.h"
+#include <string>
 
-Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) : 
+Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) :
 	PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO)
 {
 }
@@ -53,7 +54,7 @@ void Process::SetStatus(ProcessStatus outStatus)
 Pair<unsigned int, unsigned int> Process::GetTopIOPair()
 {
 	if (!IO.isEmpty())
-	{	
+	{
 		Pair<unsigned int, unsigned int> topP = IO.peekFront();
 		IO.dequeue();
 		return topP;
@@ -80,9 +81,9 @@ bool Process::NeedIO() const
 	return false;
 }
 
-void Process::Print()
+std::string Process::ToString()
 {
-	std::cout << PID;
+	return std::to_string(PID);
 }
 
 

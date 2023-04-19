@@ -67,19 +67,19 @@ void UI::PrintTimeStamp()
 
 	SetColor(BRIGHT_BLUE);
 	std::cout << "-------------------  RDY PROCESSES  ----------------------" << std::endl;
-	scheduler->PrintRDYLists();
+	std::cout << scheduler->RDYListsToString();
 
 	SetColor(GREY);
 	std::cout << "-------------------  BLK PROCESSES  ----------------------" << std::endl;
-	scheduler->PrintBLKList();
+	std::cout << scheduler->BLKListToString();
 
 	SetColor(BRIGHT_GREEN);
 	std::cout << "-------------------  RUN PROCESSES  ----------------------" << std::endl;
-	scheduler->PrintRUNList();
+	std::cout << scheduler->RUNListToString();
 
 	SetColor(PURPLE);
 	std::cout << "-------------------  TRM PROCESSES  ----------------------" << std::endl;
-	scheduler->PrintTRMList();
+	std::cout << scheduler->TRMListToString();
 
 	SetColor(CYAN);
 	std::cout << "-________________________________________________________-" << std::endl;
