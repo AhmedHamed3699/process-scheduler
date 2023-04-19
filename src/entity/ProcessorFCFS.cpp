@@ -54,7 +54,7 @@ Process* ProcessorFCFS::ExecuteProcess(int CurrentTime)
 
 	TimeInfo timeInfo = process->GetTimeInfo();
 	timeInfo.RT = CurrentTime - timeInfo.AT;
-	
+
 	process->SetTimeInfo(timeInfo);
 
 	return nullptr;
@@ -66,9 +66,10 @@ void ProcessorFCFS::AddProcessToList(Process* process)
 	readyList.Insert(readyList.GetLength() + 1, process);
 }
 
-void ProcessorFCFS::Print()
+std::string ProcessorFCFS::ToString()
 {
-	std::cout << "[FCFS]: " << readyList.GetLength() << " RDY: ";
-	readyList.Print();
-	std::cout << std::endl;
+	std::string str = "[FCFS]: " + std::to_string(readyList.GetLength()) + " RDY: ";
+	str += readyList.ToString();
+	str += "\n";
+	return str;
 }

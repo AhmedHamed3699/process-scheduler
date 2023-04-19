@@ -1,4 +1,5 @@
 #include "ProcessorRR.h"
+#include <string>
 
 void ProcessorRR::IOHandler()
 {
@@ -47,9 +48,10 @@ void ProcessorRR::AddProcessToList(Process* process)
 	readyList.enqueue(process);
 }
 
-void ProcessorRR::Print()
+std::string ProcessorRR::ToString()
 {
-	std::cout << "[ RR ]: " << readyList.getSize() << " RDY: ";
-	readyList.Print();
-	std::cout << std::endl;
+	std::string str = "[RR ]: " + std::to_string(readyList.getSize()) + " RDY: ";
+	str += readyList.ToString();
+	str += "\n";
+	return str;
 }

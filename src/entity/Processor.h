@@ -5,7 +5,7 @@
 ///=////////////////////////////////////////////=///
 #include "Process.h"
 #include "../data.h"
-#include <iostream>
+#include <string>
 
 // Forward class declaration
 class Scheduler;
@@ -42,6 +42,6 @@ public:
 
 	virtual bool KillProcessHandler(int PID);		//responsible for dealing with SIGKILL and Orphans
 
-	virtual void Print() = 0;
+	virtual std::string ToString() = 0;
 };
 

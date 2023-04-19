@@ -21,7 +21,7 @@ Process* ProcessorSJF::ExecuteProcess(int CurrentTime)
 		return nullptr;
 	}
 	Process* process = readyList.peekFront();
-	if(process->GetTimeInfo().AT == CurrentTime)
+	if (process->GetTimeInfo().AT == CurrentTime)
 		return nullptr;
 
 	readyList.dequeue();
@@ -43,9 +43,10 @@ void ProcessorSJF::AddProcessToList(Process* process)
 	readyList.enqueue(process);
 }
 
-void ProcessorSJF::Print()
+std::string ProcessorSJF::ToString()
 {
-	std::cout << "[SJF ]: " << readyList.getSize() << " RDY: ";
-	readyList.Print();
-	std::cout << std::endl;
+	std::string str = "[SJF ]: " + std::to_string(readyList.getSize()) + " RDY: ";
+	str += readyList.ToString();
+	str += "\n";
+	return str;
 }
