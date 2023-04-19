@@ -27,6 +27,7 @@ public:
 	void SetIONumOfReq(unsigned int ioNum);
 	ProcessStatus GetStatus() const;
 	void SetStatus(ProcessStatus outStatus);
+	Pair<unsigned int, unsigned int> GetTopIOPair();	//it dequeues and return the first pair in the queue (if empty return Pair of (0,0)
 	bool operator== (int id);
 	bool operator< (Process* p);
 

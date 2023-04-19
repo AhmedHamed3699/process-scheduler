@@ -50,6 +50,21 @@ void Process::SetStatus(ProcessStatus outStatus)
 	status = outStatus;
 }
 
+Pair<unsigned int, unsigned int> Process::GetTopIOPair()
+{
+	if (!IO.isEmpty())
+	{	
+		Pair<unsigned int, unsigned int> topP = IO.peekFront();
+		IO.dequeue();
+		return topP;
+	}
+	else
+	{
+		Pair<unsigned int, unsigned int> emptyP(0, 0);
+		return emptyP;
+	}
+}
+
 bool Process::operator== (int id)
 {
 	return (PID == id);
