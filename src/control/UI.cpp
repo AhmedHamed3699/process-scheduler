@@ -93,6 +93,13 @@ void UI::PrintSimulationParmas()
 	ResetColor();
 }
 
+void UI::PrintProcessKilled(int PID)
+{
+	SetColor(DARK_YELLOW);
+	std::cout << "Process " << PID << " Received SIGKILL at " << clk->GetTime() << " ...\n";
+	ResetColor();
+}
+
 /// Silent Mode Functions
 void UI::PrintSilentModeStart()
 {
