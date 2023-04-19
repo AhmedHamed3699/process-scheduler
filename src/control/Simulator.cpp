@@ -82,7 +82,8 @@ bool Simulator::LoadInpuitFile()
 	int PID, killTime;
 	while (InFile >> killTime >> PID)	//loop till the end of the file
 	{
-		// TODO: add the killTime and PID to SIGKILL List 
+		Pair<unsigned int, unsigned int> sigkillP(killTime, PID);
+		scheduler.AddToSIGKILL(sigkillP);
 	}
 
 
