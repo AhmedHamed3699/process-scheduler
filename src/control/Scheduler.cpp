@@ -60,7 +60,7 @@ void Scheduler::CreateNewProcess(int id)
 }
 
 void Scheduler::CreateNewProcess(int AT, int PID, int CT, int N,
-	Queue<Pair<unsigned int, unsigned int>> outIO)
+	Queue<Pair<unsigned int, unsigned int>>& outIO)
 {
 	// create new processor
 	Process* newProcess = new Process(PID, N, outIO);
