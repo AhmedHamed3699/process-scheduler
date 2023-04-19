@@ -11,17 +11,17 @@ private:
 public:
 	ArrayList();
 	// Copy constructor and destructor are supplied by compiler 
-	bool isEmpty() const;
-	int getLength() const;
-	bool insert(int newPosition, const ItemType& newEntry);
-	bool remove(int position);
-	void clear();
+	bool IsEmpty() const;
+	int GetLength() const;
+	bool Insert(int newPosition, const ItemType& newEntry);
+	bool Remove(int position);
+	void Clear();
 	/** @throw PrecondViolatedExcep if position < 1 or
 	position > getLength(). */
-	ItemType getEntry(int position) const;
+	ItemType GetEntry(int position) const;
 	/** @throw PrecondViolatedExcep if position < 1 or
     position > getLength(). */
-	void setEntry(int position, const ItemType& newEntry);
+	void SetEntry(int position, const ItemType& newEntry);
 };
 
 template<class ItemType>
@@ -30,19 +30,19 @@ inline ArrayList<ItemType>::ArrayList(): itemCount(0), maxItems(DEFAULT_CAPACITY
 }
 
 template< class ItemType>
-bool ArrayList<ItemType>::isEmpty() const
+bool ArrayList<ItemType>::IsEmpty() const
 {
 	return itemCount == 0;
 } // end isEmpty
 
 template< class ItemType>
-int ArrayList<ItemType>::getLength() const
+int ArrayList<ItemType>::GetLength() const
 {
 	return itemCount;
 } // end getLength
 
 template< class ItemType>
-bool ArrayList<ItemType>::insert(int newPosition,
+bool ArrayList<ItemType>::Insert(int newPosition,
 	const ItemType& newEntry)
 {
 	bool ableToInsert = (newPosition >= 1) &&
@@ -63,7 +63,7 @@ bool ArrayList<ItemType>::insert(int newPosition,
 } // end insert
 
 template< class ItemType>
-bool ArrayList<ItemType>::remove(int position)
+bool ArrayList<ItemType>::Remove(int position)
 {
 	bool ableToRemove = (position >= 1) && (position <= itemCount);
 	if (ableToRemove)
@@ -80,19 +80,19 @@ bool ArrayList<ItemType>::remove(int position)
 } // end remove
 
 template< class ItemType>
-void ArrayList<ItemType>::clear()
+void ArrayList<ItemType>::Clear()
 {
 	itemCount = 0;
 } // end clear 
 
 template<class ItemType>
-inline ItemType ArrayList<ItemType>::getEntry(int position) const
+inline ItemType ArrayList<ItemType>::GetEntry(int position) const
 {
 	return items[position - 1];
 }
 
 template<class ItemType>
-inline void ArrayList<ItemType>::setEntry(int position, const ItemType& newEntry)
+inline void ArrayList<ItemType>::SetEntry(int position, const ItemType& newEntry)
 {
 	items[position - 1] = newEntry;
 }

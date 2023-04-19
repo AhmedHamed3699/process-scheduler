@@ -4,7 +4,7 @@
 ///=///////////////////////////////////////////////////=///
 
 #include "../data.h"
-#include "../ds/List.h"
+#include "../ds/ArrayList.h"
 #include "../ds/Queue.h"
 #include "../entity/Process.h"
 #include "../entity/Processor.h"
@@ -26,7 +26,7 @@ private:
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
 	/// ////////////////////////////////// ///
-	List<Processor*> processors;
+	ArrayList<Processor*> processors;
 	Queue<Process*> NEWList;
 	Queue<Process*> TRMList;
 	Queue<Process*> BLKList;
