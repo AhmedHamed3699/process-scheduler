@@ -13,7 +13,7 @@ private:
 
 public:
 	ProcessorSJF(Scheduler* outScheduler);
-	bool ExecuteProcess(int CurrentTime;		//The function responsible for executing a process
+	bool ExecuteProcess(int CurrentTime);		//The function responsible for executing a process
 	void AddProcessToList(Process* process);	//Adds a Process to the list of a Processor 
 
 	std::string ToString();

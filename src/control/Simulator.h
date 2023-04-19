@@ -10,11 +10,13 @@
 
 class Simulator
 {
-public:
+private:
 
 	Clock clk;
 	Scheduler scheduler{ &clk };
 	UI ui{ &clk, &scheduler };
+
+public:
 
 	Simulator() {};
 	bool LoadInpuitFile();
