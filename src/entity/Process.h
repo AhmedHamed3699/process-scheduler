@@ -36,7 +36,7 @@ public:
 	//You may also remove this method and just get the timeInfo of the process to check for IO time
 	bool NeedIO() const;
 
-	// for printing
-	void Print();
+	// for UI and debugging
+	std::string ToString();
 };
 
