@@ -10,6 +10,21 @@ Scheduler::Scheduler()
 {
 }
 
+Scheduler::~Scheduler()
+{
+	for (int i = 1; i <= processors.GetLength(); i++)
+	{
+		delete processors.GetEntry(i);
+		processors.Remove(i);
+	}
+
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		delete TRMList.peekFront();
+		TRMList.dequeue();
+	}
+}
+
 
 /// ////////////////////////////////// ///
 ///         Creation and setup         ///
