@@ -14,22 +14,22 @@ public:
 };
 
 template<class ItemType>
-FCFSList<ItemType>::FCFSList() : headPtr(nullptr), tailPtr(nullptr), itemCount(0)
+FCFSList<ItemType>::FCFSList() : List()
 {
 }
 
 template<class ItemType>
-FCFSList<ItemType>::FCFSList(const FCFSList<ItemType>& aList) : headPtr(nullptr), tailPtr(nullptr), itemCount(0)
+FCFSList<ItemType>::FCFSList(const FCFSList<ItemType>& aList) : List()
 {
 	if (!aList.IsEmpty())
 	{
 		Node<ItemType>* outerListPtr = aList.headPtr;
 		//create the first node
-		headPtr = new Node<ItemType>;
-		headPtr->setItem(outerListPtr->getItem());
-		headPtr->setNext(nullptr);
-		tailPtr = headPtr;
-		itemCount++;
+		this->headPtr = new Node<ItemType>;
+		this->headPtr->setItem(outerListPtr->getItem());
+		this->headPtr->setNext(nullptr);
+		this->tailPtr = this->headPtr;
+		this->itemCount++;
 
 		outerListPtr = outerListPtr->getNext();
 
@@ -39,11 +39,11 @@ FCFSList<ItemType>::FCFSList(const FCFSList<ItemType>& aList) : headPtr(nullptr)
 			newNodePtr->setItem(outerListPtr->getItem());
 			newNodePtr->setNext(nullptr);
 
-			tailPtr->setNext(newNodePtr);
+			this->tailPtr->setNext(newNodePtr);
 
-			tailPtr = tailPtr->getNext();
+			this->tailPtr = this->tailPtr->getNext();
 			outerListPtr = outerListPtr->getNext();
-			itemCount++;
+			this->itemCount++;
 		}
 	}
 }
@@ -51,7 +51,7 @@ FCFSList<ItemType>::FCFSList(const FCFSList<ItemType>& aList) : headPtr(nullptr)
 template<class ItemType>
 Process* FCFSList<ItemType>::RemoveById(int id)
 {
-	Node<Process*>* ptr = headPtr;
+	Node<Process*>* ptr = this->headPtr;
 	Node<Process*>* prv = nullptr;
 	while (ptr)
 	{
@@ -60,12 +60,12 @@ Process* FCFSList<ItemType>::RemoveById(int id)
 			Node<Process*>* temp = ptr;
 			if (!prv)	//if the NodeToBeDeleted is the first node
 			{
-				headPtr = ptr->getNext();
-				ptr = headPtr;
+				this->headPtr = ptr->getNext();
+				ptr = this->headPtr;
 
-				if (itemCount == 1)		//only one node exist in the list
+				if (this->itemCount == 1)		//only one node exist in the list
 				{
-					tailPtr = nullptr;
+					this->tailPtr = nullptr;
 				}
 			}
 			else
@@ -74,7 +74,7 @@ Process* FCFSList<ItemType>::RemoveById(int id)
 
 				if (ptr->getNext() == nullptr)		//if the NodeToBeDeleted is the last node
 				{
-					tailPtr = prv;
+					this->tailPtr = prv;
 				}
 
 				ptr = ptr->getNext();
@@ -82,7 +82,7 @@ Process* FCFSList<ItemType>::RemoveById(int id)
 			temp->setNext(nullptr);
 			Process* RemovedOne = temp->getItem();
 			delete temp;
-			itemCount--;
+			this->itemCount--;
 
 			return RemovedOne;
 		}
@@ -95,5 +95,5 @@ Process* FCFSList<ItemType>::RemoveById(int id)
 template< class ItemType>
 FCFSList<ItemType>::~FCFSList()
 {
-	Clear();
+	this->Clear();
 }
