@@ -28,7 +28,7 @@ public:
 	bool dequeue(ItemType& min);
 	int getSize() const;
 	void clear();
-	void Print(); // for UI
+	std::string ToString(); // for UI and debugging
 	virtual ~PriorityQueue();
 };
 
@@ -204,19 +204,21 @@ void PriorityQueue<ItemType>::clear()
 }
 
 template<class ItemType>
-inline void PriorityQueue<ItemType>::Print()
+inline std::string PriorityQueue<ItemType>::ToString()
 {
+	std::string str = "";
 	for (int i = 0; i < itemCount; i++)
 	{
-		items[i]->Print();
+		str += items[i]->ToString();
 		if (i != itemCount - 1)
 		{
-			std::cout << ", ";
+			str += ", ";
 		}
 	}
 
 	if (itemCount == 0)
 	{
-		std::cout << "Empty List";
+		str += "Empty List";
 	}
+	return str;
 }
