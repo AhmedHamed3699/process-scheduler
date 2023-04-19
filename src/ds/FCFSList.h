@@ -14,12 +14,12 @@ public:
 };
 
 template<class ItemType>
-FCFSList<ItemType>::FCFSList() : List()
+FCFSList<ItemType>::FCFSList() : List<ItemType>()
 {
 }
 
 template<class ItemType>
-FCFSList<ItemType>::FCFSList(const FCFSList<ItemType>& aList) : List()
+FCFSList<ItemType>::FCFSList(const FCFSList<ItemType>& aList) : List<ItemType>()
 {
 	if (!aList.IsEmpty())
 	{

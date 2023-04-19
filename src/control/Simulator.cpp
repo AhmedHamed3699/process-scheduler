@@ -2,11 +2,6 @@
 #include <cstdlib>
 #include <time.h>
 
-void Simulator::ShowMenu()
-{
-
-}
-
 bool Simulator::LoadInpuitFile()
 {
 	std::ifstream InFile;
