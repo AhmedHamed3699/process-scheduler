@@ -94,6 +94,11 @@ bool Scheduler::isDone()
 	return (simulationParameters.N_PROCESS == TRMList.getSize());
 }
 
+void Scheduler::AddToSIGKILL(Pair<unsigned int, unsigned int> outP)
+{
+	SIGKILL.enqueue(outP);
+}
+
 /// ////////////////////////////////// ///
 ///           UI AID Functions         ///
 /// ////////////////////////////////// ///
