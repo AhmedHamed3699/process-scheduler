@@ -173,6 +173,9 @@
     <ClInclude Include="src\control\UI.h" />
     <ClInclude Include="src\data.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ID.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
