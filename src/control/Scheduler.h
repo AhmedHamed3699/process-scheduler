@@ -3,13 +3,9 @@
 /// Scheduler: Main Class and controller of the program ///
 ///=///////////////////////////////////////////////////=///
 
-#include "../data.h"
-<<<<<<< HEAD
-#include "../ds/ArrayList.h"
-=======
 #include "Clock.h"
-#include "../ds/List.h"
->>>>>>> FCFSList
+#include "../data.h"
+#include "../ds/ArrayList.h"
 #include "../ds/Queue.h"
 #include "../entity/Process.h"
 #include "../entity/Processor.h"
