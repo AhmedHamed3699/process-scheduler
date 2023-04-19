@@ -311,17 +311,18 @@ void Scheduler::MoveFromBLK(int CurrentTime)
 	}
 }
 
-void Scheduler::SimulateKill()
+int Scheduler::SimulateKill(int CurrentTime)
 {
 	int RandID = rand() % 31;
 	for (int i = 0; i < simulationParameters.N_FCFS; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-		bool found = processor->KillProcessHandler(RandID);
+		bool found = processor->ExecuteProcess(CurrentTime, RandID);
 
 		if (found)
-			return;
+			return RandID;
 	}
+	return -1;
 }
 
 /// ////////////////////////////////// ///

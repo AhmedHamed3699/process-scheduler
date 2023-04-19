@@ -18,7 +18,7 @@ ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorRR::ExecuteProcess(int CurrentTime)
+Process* ProcessorRR::ExecuteProcess(int CurrentTime, int ID)
 {
 	//TODO: remove this later
 	if (readyList.isEmpty())

@@ -112,7 +112,7 @@ void Simulator::Simulation()
 		scheduler.RunProcesses(clk.GetTime());
 		scheduler.MoveFromRun(clk.GetTime());
 		scheduler.MoveFromBLK(clk.GetTime());
-		scheduler.SimulateKill();
+		if (scheduler.SimulateKill(clk.GetTime()));
 		ui.PrintTimeStamp();
 		if (scheduler.isDone())
 			return;

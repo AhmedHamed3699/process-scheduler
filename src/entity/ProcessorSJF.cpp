@@ -13,7 +13,7 @@ ProcessorSJF::ProcessorSJF(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorSJF::ExecuteProcess(int CurrentTime)
+Process* ProcessorSJF::ExecuteProcess(int CurrentTime, int ID)
 {
 	//TODO: remove this later
 	if (readyList.isEmpty())

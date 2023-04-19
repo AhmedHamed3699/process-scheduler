@@ -36,9 +36,13 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorFCFS::ExecuteProcess(int CurrentTime)
+ ProcessorFCFS::ExecuteProcess(int CurrentTime, int ID)
 {
 	//TODO: remove this later
+
+	if (ID != -1)
+		return KillProcessHandler(int PID);
+
 	if (readyList.IsEmpty())
 	{
 		return nullptr;

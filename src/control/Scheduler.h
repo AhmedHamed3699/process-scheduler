@@ -90,7 +90,7 @@ public:
 	void MoveToRDY(Process* process);
 	void MoveFromRun(int CurrentTime);
 	void MoveFromBLK(int CurrentTime);
-	void SimulateKill();
+	int SimulateKill(int CurrentTime);
 
 	/// ////////////////////////////////// ///
 	///        Statistics Functions        ///
