@@ -49,7 +49,8 @@ public:
 	// Create a new process with the given id and add it to the NEW list
 	void CreateNewProcess(int id); 
 	// Create a new process with the all params and add it to the NEW list
-	void CreateNewProcess(int AT, int PID, int CT, int N);
+	void CreateNewProcess(int AT, int PID, int CT, int N,
+		Queue<Pair<unsigned int, unsigned int>>& outIO);
 
 	SimulationParameters GetSimulationParameters();
 	void SetSimulationParameters(SimulationParameters sP);

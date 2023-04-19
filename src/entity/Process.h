@@ -14,8 +14,9 @@ private:
 	TimeInfo timeInfo;
 	unsigned int IONumOfReq;
 	ProcessStatus status;			//any process created will have NEW as its initial status
+	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_R 
 public:
-	Process(int id, unsigned int ioNum = 0);
+	Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO);
 
 	int GetID() const;
 	Process* GetDescendant() const;
@@ -26,6 +27,7 @@ public:
 	void SetIONumOfReq(unsigned int ioNum);
 	ProcessStatus GetStatus() const;
 	void SetStatus(ProcessStatus outStatus);
+	Pair<unsigned int, unsigned int> GetTopIOPair();	//it dequeues and return the first pair in the queue (if empty return Pair of (0,0)
 	bool operator== (int id);
 	bool operator< (Process* p);
 

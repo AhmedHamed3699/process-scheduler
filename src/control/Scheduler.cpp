@@ -51,16 +51,19 @@ void Scheduler::CreateProcessor(ProcessorType aType)
 void Scheduler::CreateNewProcess(int id)
 {
 	// create new processor
-	Process* newProcess = new Process(id);
+	int N = 0;			//set NumOfIORequest with 0
+	Queue<Pair<unsigned int, unsigned int>> emptyQ;			//empty Queue to initialize process with
+	Process* newProcess = new Process(id, N, emptyQ);
 	newProcess->SetStatus(NEW);
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
 }
 
-void Scheduler::CreateNewProcess(int AT, int PID, int CT, int N)
+void Scheduler::CreateNewProcess(int AT, int PID, int CT, int N,
+	Queue<Pair<unsigned int, unsigned int>>& outIO)
 {
 	// create new processor
-	Process* newProcess = new Process(PID, N);
+	Process* newProcess = new Process(PID, N, outIO);
 	newProcess->SetStatus(NEW);
 
 	TimeInfo timeInfo;

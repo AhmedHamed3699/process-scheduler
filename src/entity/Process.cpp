@@ -1,6 +1,7 @@
 #include "Process.h"
 
-Process::Process(int id, unsigned int ioNum) : PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW)
+Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) : 
+	PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO)
 {
 }
 
@@ -47,6 +48,21 @@ ProcessStatus Process::GetStatus() const
 void Process::SetStatus(ProcessStatus outStatus)
 {
 	status = outStatus;
+}
+
+Pair<unsigned int, unsigned int> Process::GetTopIOPair()
+{
+	if (!IO.isEmpty())
+	{	
+		Pair<unsigned int, unsigned int> topP = IO.peekFront();
+		IO.dequeue();
+		return topP;
+	}
+	else
+	{
+		Pair<unsigned int, unsigned int> emptyP(0, 0);
+		return emptyP;
+	}
 }
 
 bool Process::operator== (int id)
