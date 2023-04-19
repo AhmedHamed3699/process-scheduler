@@ -33,7 +33,7 @@ public:
 	Process* RemoveById(int id);
 	virtual void Clear();
 
-	virtual void Print(); // made for ui
+	virtual std::string ToString(); // For UI and Debugging
 
 	/** position must be >= 1 && position <= itemCount */
 	virtual ItemType GetEntry(int position) const;
@@ -46,7 +46,7 @@ List<ItemType>::List() : headPtr(nullptr), tailPtr(nullptr), itemCount(0)
 }
 
 template<class ItemType>
-List<ItemType>::List(const List<ItemType>& aList): headPtr(nullptr), tailPtr(nullptr), itemCount(0)
+List<ItemType>::List(const List<ItemType>& aList) : headPtr(nullptr), tailPtr(nullptr), itemCount(0)
 {
 	if (!aList.IsEmpty())
 	{
@@ -115,7 +115,7 @@ bool List<ItemType>::Insert(int newPosition,
 			// Insert new node at beginning of chain 
 			newNodePtr->setNext(headPtr);
 			headPtr = newNodePtr;
-			
+
 			if (IsEmpty())
 			{
 				tailPtr = newNodePtr;
@@ -233,16 +233,17 @@ void List<ItemType>::Clear()
 } // end clear
 
 template<class ItemType>
-inline void List<ItemType>::Print()
+inline std::string List<ItemType>::ToString()
 {
+	std::string str = "";
 	Node<ItemType>* curPtr = headPtr;
 	while (curPtr)
 	{
-		curPtr->getItem()->Print();
+		str += curPtr->getItem()->ToString();
 
 		if (curPtr->getNext())
 		{
-			std::cout << ", ";
+			str += ", ";
 		}
 
 		curPtr = curPtr->getNext();
@@ -250,8 +251,10 @@ inline void List<ItemType>::Print()
 
 	if (itemCount == 0)
 	{
-		std::cout << "Empty List";
+		str += "Empty List";
 	}
+
+	return str;
 }
 
 template<class ItemType>
