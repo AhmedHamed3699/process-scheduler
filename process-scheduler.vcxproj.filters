@@ -45,6 +45,9 @@
     <ClCompile Include="src\entity\ProcessorFCFS.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\ds\FCFSList.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\control\Simulator.h">
@@ -90,9 +93,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\entity\ProcessorFCFS.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="src\ds\Pair.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

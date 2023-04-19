@@ -2,11 +2,6 @@
 #include <cstdlib>
 #include <time.h>
 
-void Simulator::ShowMenu()
-{
-
-}
-
 bool Simulator::LoadInpuitFile()
 {
 	std::ifstream InFile;
@@ -108,6 +103,7 @@ void Simulator::Simulation()
 	scheduler.CreateAllProcessors();
 
 	ui.PrintHeadline();
+	ui.PrintSimulationParmas();
 	ui.PrintUIModeMenu();
 
 	while (true)
@@ -117,8 +113,10 @@ void Simulator::Simulation()
 		scheduler.RunProcesses(clk.GetTime());
 		scheduler.MoveFromRun(clk.GetTime());
 		scheduler.MoveFromBLK(clk.GetTime());
-		scheduler.SimulateKill();
+		int kill = scheduler.SimulateKill(clk.GetTime());
 		ui.PrintTimeStamp();
+		if (kill != -1)
+			ui.PrintProcessKilled(kill);
 		if (scheduler.isDone())
 			return;
 		ui.Wait();

@@ -17,7 +17,6 @@ public:
 	UI ui{ &clk, &scheduler };
 
 	Simulator() {};
-	void ShowMenu();
 	bool LoadInpuitFile();
 	bool CreateOutputFile();
 	void Run();

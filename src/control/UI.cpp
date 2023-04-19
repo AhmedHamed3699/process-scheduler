@@ -96,7 +96,7 @@ void UI::PrintSimulationParmas()
 void UI::PrintProcessKilled(int PID)
 {
 	SetColor(DARK_YELLOW);
-	std::cout << "Process " << PID << " Received SIGKILL at " << clk->GetTime() << " ...\n";
+	std::cout << "Process " << PID << " Received SIGKILL" << " ...\n";
 	ResetColor();
 }
 

@@ -1,6 +1,6 @@
 #include "Processor.h"
 
-Processor::Processor(Scheduler* outScheduler, ProcessorType aType) : scheduler(outScheduler), type(aType),
+Processor::Processor(Scheduler* outScheduler, ProcessorType aType) : scheduler(outScheduler),
 status(IDLE), currentProcess(nullptr), totalBusyTime(0), expectedFinishTime(0), startingTime(0)
 {
 }
@@ -43,11 +43,6 @@ unsigned int Processor::GetExpectedFinishTime() const
 void Processor::SetExpectedFinishTime(unsigned int time)
 {
 	expectedFinishTime = time;
-}
-
-bool Processor::KillProcessHandler(int PID)
-{
-	return true;
 }
 
 Processor::~Processor()
