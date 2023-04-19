@@ -80,7 +80,7 @@ struct TimeInfo
 	unsigned int WT;	 //waitingTime
 	unsigned int BT;	 //time when first encounter BLK --> to be removed later
 
-	TimeInfo() :AT(0), RT(0), CT(0), RCT(0), TT(0), TRT(0), WT(0)
+	TimeInfo() :AT(0), RT(0), CT(0), RCT(0), TT(0), TRT(0), WT(0), BT(0)
 	{
 	}
 };
