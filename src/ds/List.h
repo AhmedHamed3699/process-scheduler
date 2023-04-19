@@ -7,7 +7,7 @@
 template<class ItemType>
 class List
 {
-private:
+protected:
 	Node<ItemType>* headPtr;	// Pointer to first node in the chain
 	Node<ItemType>* tailPtr;	// Pointer to last node in the chain
 	// (contains the first entry in the list) 
