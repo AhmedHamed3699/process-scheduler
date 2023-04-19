@@ -95,5 +95,11 @@
     <ClInclude Include="src\entity\ProcessorFCFS.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\ds\ArrayList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ID.txt" />
   </ItemGroup>
 </Project>
