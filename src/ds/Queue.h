@@ -25,7 +25,7 @@ public:
 	bool dequeue();
 	unsigned int getSize() const;
 	ItemType peekFront() const;
-	void Print();
+	std::string ToString();
 
 	void operator = (const Queue& original);
 };
@@ -124,16 +124,17 @@ inline ItemType Queue<ItemType>::peekFront() const
 }
 
 template<class ItemType>
-inline void Queue<ItemType>::Print()
+inline std::string Queue<ItemType>::ToString()
 {
+	std::string str = "";
 	Node<ItemType>* curPtr = frontPtr;
 	while (curPtr)
 	{
-		curPtr->getItem()->Print();
+		str += curPtr->getItem()->ToString();
 
 		if (curPtr->getNext())
 		{
-			std::cout << ", ";
+			str += ", ";
 		}
 
 		curPtr = curPtr->getNext();
@@ -141,8 +142,9 @@ inline void Queue<ItemType>::Print()
 
 	if (isEmpty())
 	{
-		std::cout << "Empty List";
+		str += "Empty List";
 	}
+	return str;
 }
 
 template<class ItemType>
