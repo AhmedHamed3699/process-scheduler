@@ -3,7 +3,7 @@
 /// QUEUE ADT: provides plain Abstract Data type for managing FIFO data ///
 ///=///////////////////////////////////////////////////////////////////=///
 #include "Node.h"
-#include <iostream>
+#include <string>
 
 template<class ItemType>
 class Queue

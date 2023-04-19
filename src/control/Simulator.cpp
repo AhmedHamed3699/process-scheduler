@@ -9,7 +9,7 @@ void Simulator::ShowMenu()
 
 bool Simulator::LoadInpuitFile()
 {
-	ifstream InFile;
+	std::ifstream InFile;
 
 	InFile.open("test.txt");
 
@@ -74,7 +74,7 @@ bool Simulator::LoadInpuitFile()
 
 
 	///read the line SIGKILL Times (needs to get deleted if this line won't exist in the file)
-	string uslessLine;
+	std::string uslessLine;
 
 	getline(InFile, uslessLine);		//reads the enter key before SIGKILL Times line
 	getline(InFile, uslessLine);		//reads SIGKILL Times line

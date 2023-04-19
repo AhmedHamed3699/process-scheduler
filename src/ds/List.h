@@ -2,7 +2,7 @@
 
 #include "Node.h"
 #include "../entity/Process.h"
-#include <iostream> // for UI Print
+#include <string>
 
 template<class ItemType>
 class List

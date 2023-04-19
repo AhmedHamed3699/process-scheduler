@@ -1,7 +1,5 @@
 #pragma once
-#include <iostream>
 #include <type_traits>
-using namespace std;
 
 template<class ItemType>
 class PriorityQueue
@@ -91,7 +89,7 @@ int PriorityQueue<ItemType>::parent(int nodeIndex) const
 template<class ItemType>
 bool PriorityQueue<ItemType>::isLower(const ItemType& a, const ItemType& b) const
 {
-	if (is_pointer<ItemType>::value)
+	if (std::is_pointer<ItemType>::value)
 		return (*a < b);
 	return (a < b);
 }
@@ -109,7 +107,7 @@ void PriorityQueue<ItemType>::minHeapify(int nodeIndex)
 		smallest = r;
 	if (smallest != nodeIndex)
 	{
-		swap(items[smallest], items[nodeIndex]);
+		std::swap(items[smallest], items[nodeIndex]);
 		minHeapify(smallest);
 	}
 }
@@ -159,7 +157,7 @@ bool PriorityQueue<ItemType>::enqueue(const ItemType& newData)
 		if (!isLower(items[i], items[p]))
 			break;
 
-		swap(items[i], items[p]);
+		std::swap(items[i], items[p]);
 		i = parent(i);
 	}
 	return true;

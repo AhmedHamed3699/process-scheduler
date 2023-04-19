@@ -4,7 +4,6 @@
 /// Created By scheduler maintained by scheduler and processor ///
 ///=//////////////////////////////////////////////////////////=///
 #include "../data.h"
-#include <iostream>
 
 class Process
 {

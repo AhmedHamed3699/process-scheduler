@@ -129,7 +129,7 @@ std::string Scheduler::BLKListToString()
 
 std::string Scheduler::RUNListToString()
 {
-	string* RUNList = new string[processors.GetLength()];
+	std::string* RUNList = new std::string[processors.GetLength()];
 	unsigned int runListSize = 0;
 
 	for (int i = 1; i <= processors.GetLength(); i++)
@@ -137,7 +137,7 @@ std::string Scheduler::RUNListToString()
 		Processor* processor = processors.GetEntry(i);
 		if (processor->GetCurrentProcess() != nullptr)
 		{
-			RUNList[runListSize++] = to_string(processor->GetCurrentProcess()->GetID()) + "(P" + to_string(i) + ")";
+			RUNList[runListSize++] = std::to_string(processor->GetCurrentProcess()->GetID()) + "(P" + std::to_string(i) + ")";
 		}
 	}
 
