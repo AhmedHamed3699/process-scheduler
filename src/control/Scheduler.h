@@ -4,7 +4,12 @@
 ///=///////////////////////////////////////////////////=///
 
 #include "../data.h"
+<<<<<<< HEAD
 #include "../ds/ArrayList.h"
+=======
+#include "Clock.h"
+#include "../ds/List.h"
+>>>>>>> FCFSList
 #include "../ds/Queue.h"
 #include "../entity/Process.h"
 #include "../entity/Processor.h"
@@ -20,6 +25,8 @@ class Scheduler
 	///  Scheduler Data Members and flags  ///
 	/// ////////////////////////////////// ///
 private:
+
+	Clock* clk;
 	SimulationParameters simulationParameters;
 	int nextProcessorIndex = 0; /// TODO: remove this later (Phase 2)
 
@@ -37,7 +44,7 @@ private:
 	///    constructors and destructor     ///
 	/// ////////////////////////////////// ///
 public:
-	Scheduler();
+	Scheduler(Clock* clk);
 	~Scheduler();
 
 
@@ -77,7 +84,7 @@ public:
 	/// ////////////////////////////////// ///
 	// in phase 1 get the next process from the NEW list and add it to the 
 	// first processor then the second and so on
-	void ScheduleNext(int currentTime);
+	void ScheduleNext();
 	void ScheduleNextFCFS(Process* process);
 	void ScheduleNextSJF(Process* process);
 	void ScheduleNextRR(Process* process);
@@ -89,11 +96,11 @@ public:
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///
 	/// ////////////////////////////////// ///
-	void RunProcesses(int CurrentTime);
+	void RunProcesses();
 	void MoveToRDY(Process* process);
-	void MoveFromRun(int CurrentTime);
-	void MoveFromBLK(int CurrentTime);
-	int SimulateKill(int CurrentTime);
+	void MoveFromRun();
+	void MoveFromBLK();
+	int SimulateKill();
 
 	/// ////////////////////////////////// ///
 	///        Statistics Functions        ///
