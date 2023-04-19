@@ -152,6 +152,12 @@ std::string Scheduler::RUNListToString()
 			str += ", ";
 		}
 	}
+
+	if (runListSize == 0)
+	{
+		str += "Empty List";
+	}
+
 	str += "\n";
 	return str;
 }
