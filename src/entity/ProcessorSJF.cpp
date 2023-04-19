@@ -13,16 +13,15 @@ ProcessorSJF::ProcessorSJF(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorSJF::ExecuteProcess(int CurrentTime, int ID)
+bool ProcessorSJF::ExecuteProcess(int CurrentTime, int ID)
 {
 	//TODO: remove this later
 	if (readyList.isEmpty())
-	{
-		return nullptr;
-	}
+		return false;
+
 	Process* process = readyList.peekFront();
 	if (process->GetTimeInfo().AT == CurrentTime)
-		return nullptr;
+		return false;
 
 	readyList.dequeue();
 	currentProcess = process;
@@ -34,7 +33,7 @@ Process* ProcessorSJF::ExecuteProcess(int CurrentTime, int ID)
 
 	process->SetTimeInfo(timeInfo);
 
-	return nullptr;
+	return true;
 }
 
 void ProcessorSJF::AddProcessToList(Process* process)

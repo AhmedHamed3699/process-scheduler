@@ -36,8 +36,8 @@ public:
 	virtual unsigned int GetExpectedFinishTime() const;
 	virtual void SetExpectedFinishTime(unsigned int time);
 
-	virtual Process* ExecuteProcess(int CurrentTime, int ID = -1) = 0;	//The function responsible for executing a process
-	virtual void AddProcessToList(Process* process) = 0;				//Adds a Process to the list of a Processor 
+	virtual bool ExecuteProcess(int CurrentTime, int ID = -1) = 0;	//The function responsible for executing a process
+	virtual void AddProcessToList(Process* process) = 0;			//Adds a Process to the list of a Processor 
 
 	virtual std::string ToString() = 0;
 };

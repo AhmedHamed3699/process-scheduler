@@ -36,20 +36,19 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 {
 }
 
- ProcessorFCFS::ExecuteProcess(int CurrentTime, int ID)
+bool ProcessorFCFS::ExecuteProcess(int CurrentTime, int ID)
 {
 	//TODO: remove this later
 
 	if (ID != -1)
-		return KillProcessHandler(int PID);
+		return KillProcessHandler(ID);
 
 	if (readyList.IsEmpty())
-	{
-		return nullptr;
-	}
+		return false;
+	
 	Process* process = readyList.GetEntry(1);
 	if (process->GetTimeInfo().AT == CurrentTime)
-		return nullptr;
+		return false;
 
 	readyList.Remove(1);
 	currentProcess = process;
@@ -61,7 +60,7 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 
 	process->SetTimeInfo(timeInfo);
 
-	return nullptr;
+	return true;
 }
 
 void ProcessorFCFS::AddProcessToList(Process* process)

@@ -18,16 +18,15 @@ ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 {
 }
 
-Process* ProcessorRR::ExecuteProcess(int CurrentTime, int ID)
+bool ProcessorRR::ExecuteProcess(int CurrentTime, int ID)
 {
 	//TODO: remove this later
 	if (readyList.isEmpty())
-	{
-		return nullptr;
-	}
+		return false;
+
 	Process* process = readyList.peekFront();
 	if (process->GetTimeInfo().AT == CurrentTime)
-		return nullptr;
+		return false;
 
 	readyList.dequeue();
 	currentProcess = process;
@@ -39,7 +38,7 @@ Process* ProcessorRR::ExecuteProcess(int CurrentTime, int ID)
 
 	process->SetTimeInfo(timeInfo);
 
-	return nullptr;
+	return true;
 }
 
 void ProcessorRR::AddProcessToList(Process* process)
