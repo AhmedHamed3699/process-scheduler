@@ -167,6 +167,25 @@ std::string Scheduler::RUNListToString()
 	return str;
 }
 
+std::string Scheduler::SimulationParametersToString()
+{
+	std::string str = "";
+	str += "Simulation Parameters:\n";
+	str += ".-----------------------------------------------------------------------------------------------------------.\n";
+	str += "| NP\t" + std::to_string(simulationParameters.N_PROCESS);
+	str += " | N_FCFS\t" + std::to_string(simulationParameters.N_FCFS);
+	str += " | N_RR\t" + std::to_string(simulationParameters.N_RR);
+	str += " | N_SJF\t" + std::to_string(simulationParameters.N_SJF);
+	str += " | FB\t" + std::to_string(simulationParameters.FORK_PROBABILITY);
+	str += " | MWT\t" + std::to_string(simulationParameters.MAX_WAITING_TIME);
+	str += " | TS\t" + std::to_string(simulationParameters.RR_TIME_SLICE);
+	str += " | RTF\t" + std::to_string(simulationParameters.RTF);
+	str += " | STL\t" + std::to_string(simulationParameters.STL);
+	str += " |\n";
+	str += "'-----------------------------------------------------------------------------------------------------------'\n";
+	return str;
+}
+
 /// ////////////////////////////////// ///
 ///     Process State Management       ///
 /// ////////////////////////////////// ///
