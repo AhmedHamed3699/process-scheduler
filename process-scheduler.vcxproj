@@ -143,6 +143,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\ds\FCFSList.h" />
     <ClCompile Include="src\entity\ProcessorRR.cpp" />
     <ClCompile Include="src\entity\ProcessorFCFS.cpp" />
     <ClCompile Include="src\entity\ProcessorSJF.cpp" />
