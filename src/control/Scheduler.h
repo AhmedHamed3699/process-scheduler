@@ -4,6 +4,7 @@
 ///=///////////////////////////////////////////////////=///
 
 #include "../data.h"
+#include "Clock.h"
 #include "../ds/List.h"
 #include "../ds/Queue.h"
 #include "../entity/Process.h"
@@ -20,6 +21,8 @@ class Scheduler
 	///  Scheduler Data Members and flags  ///
 	/// ////////////////////////////////// ///
 private:
+
+	Clock* clk;
 	SimulationParameters simulationParameters;
 	int nextProcessorIndex = 0; /// TODO: remove this later (Phase 2)
 
@@ -37,7 +40,7 @@ private:
 	///    constructors and destructor     ///
 	/// ////////////////////////////////// ///
 public:
-	Scheduler();
+	Scheduler(Clock* clk);
 	~Scheduler();
 
 
@@ -89,11 +92,11 @@ public:
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///
 	/// ////////////////////////////////// ///
-	void RunProcesses(int CurrentTime);
+	void RunProcesses();
 	void MoveToRDY(Process* process);
-	void MoveFromRun(int CurrentTime);
-	void MoveFromBLK(int CurrentTime);
-	int SimulateKill(int CurrentTime);
+	void MoveFromRun();
+	void MoveFromBLK();
+	int SimulateKill();
 
 	/// ////////////////////////////////// ///
 	///        Statistics Functions        ///

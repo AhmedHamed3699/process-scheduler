@@ -4,10 +4,11 @@
 /// ////////////////////////////////// ///
 ///    constructors and destructor     ///
 /// ////////////////////////////////// ///
-Scheduler::Scheduler()
+Scheduler::Scheduler(Clock* clk)
 	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0),
 	IOProcess(nullptr)
 {
+	this->clk = clk;
 }
 
 Scheduler::~Scheduler()
@@ -204,14 +205,14 @@ std::string Scheduler::SimulationParametersToString()
 /// ////////////////////////////////// ///
 ///     Process State Management       ///
 /// ////////////////////////////////// ///
-void Scheduler::ScheduleNext(int currentTime)
+void Scheduler::ScheduleNext()
 {
 	while (!NEWList.isEmpty())
 	{
 		Process* process = NEWList.peekFront();
 
 		TimeInfo timeInfo = process->GetTimeInfo();
-		if (timeInfo.AT != currentTime)
+		if (timeInfo.AT != clk->GetTime())
 			return;
 
 		NEWList.dequeue();
@@ -264,14 +265,14 @@ void Scheduler::BlockProcess(Process* process)
 ///        Simulation Functions        ///
 /// ////////////////////////////////// ///
 
-void Scheduler::RunProcesses(int CurrentTime)
+void Scheduler::RunProcesses()
 {
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
 		if (processor->GetStatus() == IDLE)
 		{
-			processor->ExecuteProcess(CurrentTime);
+			processor->ExecuteProcess(clk->GetTime());
 		}
 
 	}
@@ -287,7 +288,7 @@ void Scheduler::MoveToRDY(Process* process)
 	processor->AddProcessToList(process);
 }
 
-void Scheduler::MoveFromRun(int CurrentTime)
+void Scheduler::MoveFromRun()
 {
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
@@ -298,7 +299,7 @@ void Scheduler::MoveFromRun(int CurrentTime)
 
 		TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
 
-		if (timeInfo.RT + timeInfo.AT == CurrentTime)
+		if (timeInfo.RT + timeInfo.AT == clk->GetTime())
 			continue;
 
 		int probability = (rand() % 100) + 1;
@@ -309,7 +310,7 @@ void Scheduler::MoveFromRun(int CurrentTime)
 			BlockProcess(CurrentProcess);
 
 			TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
-			timeInfo.BT = CurrentTime;
+			timeInfo.BT = clk->GetTime();
 			CurrentProcess->SetTimeInfo(timeInfo);
 		}
 		else if (probability >= 20 && probability <= 30)
@@ -327,7 +328,7 @@ void Scheduler::MoveFromRun(int CurrentTime)
 	}
 }
 
-void Scheduler::MoveFromBLK(int CurrentTime)
+void Scheduler::MoveFromBLK()
 {
 	int probability = (rand() % 100) + 1;
 	if (BLKList.isEmpty())
@@ -335,7 +336,7 @@ void Scheduler::MoveFromBLK(int CurrentTime)
 
 	Process* BlockedProcess = BLKList.peekFront();
 
-	if (BlockedProcess->GetTimeInfo().BT == CurrentTime)
+	if (BlockedProcess->GetTimeInfo().BT == clk->GetTime())
 		return;
 
 	if (probability < 10)
@@ -345,13 +346,14 @@ void Scheduler::MoveFromBLK(int CurrentTime)
 	}
 }
 
-int Scheduler::SimulateKill(int CurrentTime)
+int Scheduler::SimulateKill()
 {
 	int RandID = rand() % 31;
 	for (int i = 0; i < simulationParameters.N_FCFS; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-		bool found = processor->ExecuteProcess(CurrentTime, RandID);
+		ProcessorFCFS* processorFCFS = dynamic_cast<ProcessorFCFS*>(processor);
+		bool found = processorFCFS->KillProcess(RandID);
 
 		if (found)
 			return RandID;

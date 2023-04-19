@@ -13,7 +13,7 @@ void ProcessorFCFS::MigratonHandler()
 {
 }
 
-bool ProcessorFCFS::KillProcessHandler(int PID)
+bool ProcessorFCFS::KillProcess(int PID)
 {
 	Process* killedProcess = readyList.RemoveById(PID);
 	if (killedProcess == nullptr)
@@ -36,12 +36,9 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 {
 }
 
-bool ProcessorFCFS::ExecuteProcess(int CurrentTime, int ID)
+bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 	//TODO: remove this later
-
-	if (ID != -1)
-		return KillProcessHandler(ID);
 
 	if (readyList.IsEmpty())
 		return false;

@@ -13,7 +13,7 @@ class Simulator
 public:
 
 	Clock clk;
-	Scheduler scheduler;
+	Scheduler scheduler{ &clk };
 	UI ui{ &clk, &scheduler };
 
 	Simulator() {};

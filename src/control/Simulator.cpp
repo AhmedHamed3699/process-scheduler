@@ -109,11 +109,11 @@ void Simulator::Simulation()
 	while (true)
 	{
 		clk.Step();
-		scheduler.ScheduleNext(clk.GetTime());
-		scheduler.RunProcesses(clk.GetTime());
-		scheduler.MoveFromRun(clk.GetTime());
-		scheduler.MoveFromBLK(clk.GetTime());
-		int kill = scheduler.SimulateKill(clk.GetTime());
+		scheduler.ScheduleNext();
+		scheduler.RunProcesses();
+		scheduler.MoveFromRun();
+		scheduler.MoveFromBLK();
+		int kill = scheduler.SimulateKill();
 		ui.PrintTimeStamp();
 		if (kill != -1)
 			ui.PrintProcessKilled(kill);
