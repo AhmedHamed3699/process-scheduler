@@ -31,6 +31,7 @@ private:
 	Queue<Process*> NEWList;
 	Queue<Process*> TRMList;
 	Queue<Process*> BLKList;
+	Queue<Pair<unsigned int, unsigned int>> SIGKILL;	//In each Pair, first is the time and second is the PID
 	Process* IOProcess;
 
 	/// ////////////////////////////////// ///
@@ -55,7 +56,7 @@ public:
 	SimulationParameters GetSimulationParameters();
 	void SetSimulationParameters(SimulationParameters sP);
 	bool isDone(); // to know when to terminate the program
-
+	void AddToSIGKILL(Pair<unsigned int, unsigned int> outP);
 
 	/// ////////////////////////////////// ///
 	///           UI AID Functions         ///
