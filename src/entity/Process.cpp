@@ -1,4 +1,5 @@
 #include "Process.h"
+#include <string>
 
 Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) :
 	PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO)
@@ -82,7 +83,7 @@ bool Process::NeedIO() const
 
 std::string Process::ToString()
 {
-	return std::string(PID);
+	return std::to_string(PID);
 }
 
 

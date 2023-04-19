@@ -47,7 +47,7 @@ public:
 	// Create a new processor of the given type and add it to the list of processors
 	void CreateProcessor(ProcessorType aType);
 	// Create a new process with the given id and add it to the NEW list
-	void CreateNewProcess(int id); 
+	void CreateNewProcess(int id);
 	// Create a new process with the all params and add it to the NEW list
 	void CreateNewProcess(int AT, int PID, int CT, int N,
 		Queue<Pair<unsigned int, unsigned int>>& outIO);
@@ -60,14 +60,14 @@ public:
 	/// ////////////////////////////////// ///
 	///           UI AID Functions         ///
 	/// ////////////////////////////////// ///
-	// Calls Print function for each processor
-	void PrintRDYLists();
-	// Calls Print for the TRM list
-	void PrintTRMList();
-	// Calls Print for the BLK list
-	void PrintBLKList();
-	// Calls Print for the NEW list
-	void PrintRUNList();
+	// Calls toString function for each processor and returns the result as a string
+	std::string RDYListsToString();
+	// Calls toString for the TRM list and returns the result as a string
+	std::string TRMListToString();
+	// Calls toString for the BLK list and returns the result as a string
+	std::string BLKListToString();
+	// Calls toString for the RUN list and returns the result as a string
+	std::string RUNListToString();
 
 	/// ////////////////////////////////// ///
 	///      Process State Management      ///

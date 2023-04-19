@@ -97,31 +97,37 @@ bool Scheduler::isDone()
 /// ////////////////////////////////// ///
 ///           UI AID Functions         ///
 /// ////////////////////////////////// ///
-void Scheduler::PrintRDYLists()
+std::string  Scheduler::RDYListsToString()
 {
+	std::string str = "";
 	for (int i = 1; i <= processors.GetLength(); i++)
 	{
 		Processor* processor = processors.GetEntry(i);
-		std::cout << "Processor " << i << " ";
-		processor->Print();
+		str += "Processor " + std::to_string(i) + " ";
+		str += processor->ToString();
 	}
+	return str;
 }
 
-void Scheduler::PrintTRMList()
+std::string Scheduler::TRMListToString()
 {
-	std::cout << TRMList.getSize() << " TRM: ";
-	TRMList.Print();
-	std::cout << std::endl;
+	std::string str = "";
+	str += std::to_string(TRMList.getSize()) + " TRM: ";
+	str += TRMList.ToString();
+	str += "\n";
+	return str;
 }
 
-void Scheduler::PrintBLKList()
+std::string Scheduler::BLKListToString()
 {
-	std::cout << BLKList.getSize() << " BLK: ";
-	BLKList.Print();
-	std::cout << std::endl;
+	std::string str = "";
+	str += std::to_string(BLKList.getSize()) + " BLK: ";
+	str += BLKList.ToString();
+	str += "\n";
+	return str;
 }
 
-void Scheduler::PrintRUNList()
+std::string Scheduler::RUNListToString()
 {
 	string* RUNList = new string[processors.GetLength()];
 	unsigned int runListSize = 0;
@@ -135,17 +141,19 @@ void Scheduler::PrintRUNList()
 		}
 	}
 
+	std::string str = "";
 
-	std::cout << runListSize << " RUN: ";
+	str += std::to_string(runListSize) + " RUN: ";
 	for (unsigned int i = 0; i < runListSize; i++)
 	{
-		std::cout << RUNList[i];
+		str += RUNList[i];
 		if (i < runListSize - 1)
 		{
-			std::cout << ", ";
+			str += ", ";
 		}
 	}
-	std::cout << std::endl;
+	str += "\n";
+	return str;
 }
 
 /// ////////////////////////////////// ///
@@ -216,11 +224,11 @@ void Scheduler::RunProcesses(int CurrentTime)
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-		if(processor->GetStatus() == IDLE)
+		if (processor->GetStatus() == IDLE)
 		{
 			processor->ExecuteProcess(CurrentTime);
 		}
-		
+
 	}
 }
 
@@ -245,7 +253,7 @@ void Scheduler::MoveFromRun(int CurrentTime)
 
 		TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
 
-		if(timeInfo.RT + timeInfo.AT == CurrentTime)
+		if (timeInfo.RT + timeInfo.AT == CurrentTime)
 			continue;
 
 		int probability = (rand() % 100) + 1;
