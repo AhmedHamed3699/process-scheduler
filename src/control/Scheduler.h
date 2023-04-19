@@ -68,6 +68,8 @@ public:
 	std::string BLKListToString();
 	// Calls toString for the RUN list and returns the result as a string
 	std::string RUNListToString();
+	// turns the simulation parameters into a string and returns it
+	std::string SimulationParametersToString();
 
 	/// ////////////////////////////////// ///
 	///      Process State Management      ///

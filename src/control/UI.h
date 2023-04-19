@@ -31,6 +31,10 @@ public:
 	void PrintUIModeMenu();
 	// prints the current timestamp info into the console (RDY, TRM, BLK, RUN) lists and the time
 	void PrintTimeStamp();
+	// prints the simulation parameters into the console
+	void PrintSimulationParmas();
+	// print a msg indicaiting the a process is killed
+	void PrintProcessKilled(int PID);
 
 	/// ////////////////////////////////// ///
 	///		  Silent Mode functions 	   ///

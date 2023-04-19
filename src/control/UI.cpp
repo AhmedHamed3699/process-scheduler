@@ -86,6 +86,13 @@ void UI::PrintTimeStamp()
 	ResetColor();
 }
 
+void UI::PrintSimulationParmas()
+{
+	SetColor(DARK_YELLOW);
+	std::cout << scheduler->SimulationParametersToString();
+	ResetColor();
+}
+
 /// Silent Mode Functions
 void UI::PrintSilentModeStart()
 {
