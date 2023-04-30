@@ -34,14 +34,9 @@ void UI::PrintUIModeMenu()
 	char aMode;
 	std::cin >> aMode;
 	std::cin.ignore(1000, '\n');
-	// TODO: delete in phase 2
-	WriteWarning("only Interactive mode is available in phase 1");
-
 
 	switch (aMode)
 	{
-		// Enable in Phase 2, in phase 1 only mode is interactive
-		#if 0
 	case 'I':
 		SetMode(INTERACTIVE);
 		break;
@@ -49,9 +44,8 @@ void UI::PrintUIModeMenu()
 		SetMode(STEP_BY_STEP);
 		break;
 	case 'S':
-		SetMode(SILENT)
-			break;
-		#endif
+		SetMode(SILENT);
+		break;
 	default:
 		SetMode(INTERACTIVE);
 		break;
