@@ -162,10 +162,14 @@ void UI::Wait()
 std::string UI::GetInputFileName()
 {
 	SetColor(CYAN);
-	std::cout << "Enter the name of the input file: ";
+	std::cout << "Enter the name of the input file (\'d\' for default): ";
 	ResetColor();
 	std::string fileName;
 	std::cin >> fileName;
+
+	if (fileName == "d")
+		fileName = "test.txt";
+
 	return fileName;
 }
 

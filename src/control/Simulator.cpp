@@ -2,11 +2,11 @@
 #include <cstdlib>
 #include <time.h>
 
-bool Simulator::LoadInpuitFile()
+bool Simulator::LoadInpuitFile(std::string filePath)
 {
 	std::ifstream InFile;
 
-	InFile.open("test.txt");
+	InFile.open(filePath);
 
 	if (!InFile.is_open())
 	{
@@ -95,12 +95,21 @@ void Simulator::Run()
 {
 	/// UI Mode part
 	ui.PrintHeadline();
+
+	std::string filePath = ui.GetInputFileName();
+	if (!LoadInpuitFile(filePath))
+	{
+		ui.WriteError("File Not Found");
+		return;
+	}
+
 	ui.PrintSimulationParmas();
 	ui.PrintUIModeMenu();
 	if (ui.GetMode() == SILENT)
 	{
 		ui.PrintSilentModeStart();
 	}
+
 
 	Simulation();
 
@@ -118,7 +127,6 @@ void Simulator::Simulation()
 	/// this block is only for phase 1 testing
 
 	srand(time(0));
-	LoadInpuitFile();
 	scheduler.CreateAllProcessors();
 
 	while (true)

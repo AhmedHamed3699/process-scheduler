@@ -19,7 +19,7 @@ private:
 public:
 
 	Simulator() {};
-	bool LoadInpuitFile();
+	bool LoadInpuitFile(std::string filePath);
 	bool CreateOutputFile();
 	void Run();
 	void Simulation();
