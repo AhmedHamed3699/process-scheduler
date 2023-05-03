@@ -74,5 +74,8 @@ private:
 	/// ////////////////////////////////// ///
 	// sets the mode of the UI
 	void SetMode(UIMode aMode);
+public:
+	// returns the current mode of the UI
+	UIMode GetMode();
 };
 

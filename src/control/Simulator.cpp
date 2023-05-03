@@ -93,18 +93,33 @@ bool Simulator::CreateOutputFile()
 
 void Simulator::Run()
 {
+	/// UI Mode part
+	ui.PrintHeadline();
+	ui.PrintSimulationParmas();
+	ui.PrintUIModeMenu();
+	if (ui.GetMode() == SILENT)
+	{
+		ui.PrintSilentModeStart();
+	}
+
 	Simulation();
+
+	if (ui.GetMode() == SILENT)
+	{
+		ui.PrintSilentModeEnd();
+		ui.PrintOutputFileMsg(false); /// TODO: change to true if create output file is implemented
+	}
 }
 
 void Simulator::Simulation()
 {
+	/// TODO: Code in this block should be removed
+	/// every functionality here should be re-factored into its appropriate class and/ or method
+	/// this block is only for phase 1 testing
+
 	srand(time(0));
 	LoadInpuitFile();
 	scheduler.CreateAllProcessors();
-
-	ui.PrintHeadline();
-	ui.PrintSimulationParmas();
-	ui.PrintUIModeMenu();
 
 	while (true)
 	{
@@ -114,7 +129,9 @@ void Simulator::Simulation()
 		scheduler.RunProcesses();
 		scheduler.MoveFromRun();
 		scheduler.MoveFromBLK();
+
 		ui.PrintTimeStamp();
+
 		if (kill != -1)
 			ui.PrintProcessKilled(kill);
 		if (scheduler.isDone())

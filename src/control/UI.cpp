@@ -64,6 +64,10 @@ void UI::PrintUIModeMenu()
 
 void UI::PrintTimeStamp()
 {
+	// if the mode is silent, don't print anything
+	if (mode == SILENT)
+		return;
+
 	SetColor(CYAN);
 	std::cout << "_--------------------------------------------------------_" << std::endl;
 
@@ -99,6 +103,9 @@ void UI::PrintSimulationParmas()
 
 void UI::PrintProcessKilled(int PID)
 {
+	if (mode == SILENT) // if the mode is silent, don't print anything
+		return;
+
 	SetColor(DARK_YELLOW);
 	std::cout << "Process " << PID << " Received SIGKILL" << " ...\n";
 	ResetColor();
@@ -182,4 +189,9 @@ void UI::SetColor(Color color)
 void UI::SetMode(UIMode aMode)
 {
 	mode = aMode;
+}
+
+UIMode UI::GetMode()
+{
+	return mode;
 }
