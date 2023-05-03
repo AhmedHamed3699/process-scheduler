@@ -35,7 +35,7 @@ void UI::PrintHeadline()
 void UI::PrintUIModeMenu()
 {
 	std::cout << "Select in what mode your want the simulation to run" << std::endl;
-	std::cout << "\'I\' for Interactive, \'T\' for step by step, \'S\' for silent: ";
+	std::cout << "\'I\' for Interactive, \'T\' for step by step, \'S\' for silent, \'D\' for debug: ";
 
 	char aMode;
 	std::cin >> aMode;
@@ -54,6 +54,10 @@ void UI::PrintUIModeMenu()
 	case 'S':
 	case 's':
 		SetMode(SILENT);
+		break;
+	case 'D':
+	case 'd':
+		SetMode(DEBUG);
 		break;
 	default:
 		WriteWarning("Invalid input, please select one of the interface options");

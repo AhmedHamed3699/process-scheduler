@@ -65,6 +65,7 @@ enum UIMode
 	INTERACTIVE,
 	STEP_BY_STEP,
 	SILENT,
+	DEBUG,
 	// not an actual mode
 	UI_MODE_SIZE
 };
