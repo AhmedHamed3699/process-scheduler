@@ -23,5 +23,12 @@ public:
 	bool CreateOutputFile();
 	void Run();
 	void Simulation();
+
+	/// ////////////////////////////////// ///
+	///         Private Functions          ///
+	/// ////////////////////////////////// ///
+private:
+	// prepares simulation by printing the headline, getting the input file name, and loading the input file
+	void PrepareSimulation();
 };
 

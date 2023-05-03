@@ -93,23 +93,8 @@ bool Simulator::CreateOutputFile()
 
 void Simulator::Run()
 {
-	/// UI Mode part
-	ui.PrintHeadline();
-
-	std::string filePath = ui.GetInputFileName();
-	if (!LoadInpuitFile(filePath))
-	{
-		ui.WriteError("File Not Found");
-		return;
-	}
-
-	ui.PrintSimulationParmas();
-	ui.PrintUIModeMenu();
-	if (ui.GetMode() == SILENT)
-	{
-		ui.PrintSilentModeStart();
-	}
-
+	// prepare simulation by printing the headline, getting the input file name, and loading the input file
+	PrepareSimulation();
 
 	Simulation();
 
@@ -145,5 +130,24 @@ void Simulator::Simulation()
 		if (scheduler.isDone())
 			return;
 		ui.Wait();
+	}
+}
+
+void Simulator::PrepareSimulation()
+{
+	ui.PrintHeadline();
+
+	std::string filePath = ui.GetInputFileName();
+	if (!LoadInpuitFile(filePath))
+	{
+		ui.WriteError("File Not Found");
+		return;
+	}
+
+	ui.PrintSimulationParmas();
+	ui.PrintUIModeMenu();
+	if (ui.GetMode() == SILENT)
+	{
+		ui.PrintSilentModeStart();
 	}
 }
