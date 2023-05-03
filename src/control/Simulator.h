@@ -29,6 +29,6 @@ public:
 	/// ////////////////////////////////// ///
 private:
 	// prepares simulation by printing the headline, getting the input file name, and loading the input file
-	void PrepareSimulation();
+	bool PrepareSimulation();
 };
 

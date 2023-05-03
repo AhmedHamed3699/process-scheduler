@@ -94,7 +94,8 @@ bool Simulator::CreateOutputFile()
 void Simulator::Run()
 {
 	// prepare simulation by printing the headline, getting the input file name, and loading the input file
-	PrepareSimulation();
+	if (!PrepareSimulation())
+		return;
 
 	Simulation();
 
@@ -133,7 +134,7 @@ void Simulator::Simulation()
 	}
 }
 
-void Simulator::PrepareSimulation()
+bool Simulator::PrepareSimulation()
 {
 	ui.PrintHeadline();
 
@@ -141,7 +142,7 @@ void Simulator::PrepareSimulation()
 	if (!LoadInpuitFile(filePath))
 	{
 		ui.WriteError("File Not Found");
-		return;
+		return false;
 	}
 
 	ui.PrintSimulationParmas();
@@ -150,4 +151,6 @@ void Simulator::PrepareSimulation()
 	{
 		ui.PrintSilentModeStart();
 	}
+
+	return true;
 }
