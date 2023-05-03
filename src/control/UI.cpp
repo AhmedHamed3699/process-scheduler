@@ -38,16 +38,20 @@ void UI::PrintUIModeMenu()
 	switch (aMode)
 	{
 	case 'I':
+	case 'i':
 		SetMode(INTERACTIVE);
 		break;
 	case 'T':
+	case 't':
 		SetMode(STEP_BY_STEP);
 		break;
 	case 'S':
+	case 's':
 		SetMode(SILENT);
 		break;
 	default:
-		SetMode(INTERACTIVE);
+		WriteWarning("Invalid input, please select one of the interface options");
+		PrintUIModeMenu();
 		break;
 	}
 }

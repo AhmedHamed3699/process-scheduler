@@ -33,7 +33,7 @@ public:
 	void PrintTimeStamp();
 	// prints the simulation parameters into the console - For Debugging
 	void PrintSimulationParmas();
-	// print a msg indicaiting the a process is killed - For Debugging
+	// print a msg indicating the a process is killed - For Debugging
 	void PrintProcessKilled(int PID);
 
 	/// ////////////////////////////////// ///
