@@ -4,6 +4,10 @@
 ///=////////////////////////////////////////////=///
 #include "ds/Queue.h"
 
+/// CONSTANTS
+#define LINE_LENGTH 96
+#define NUM_PRECISION 3
+
 /// ////////////////// ///
 ///     Enumerators    ///
 /// ////////////////// ///

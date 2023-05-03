@@ -1,5 +1,8 @@
 #include "Scheduler.h"
 #include <cstdlib>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 /// ////////////////////////////////// ///
 ///    constructors and destructor     ///
@@ -185,21 +188,22 @@ std::string Scheduler::RUNListToString()
 
 std::string Scheduler::SimulationParametersToString()
 {
-	std::string str = "";
-	str += "Simulation Parameters:\n";
-	str += ".-----------------------------------------------------------------------------------------------------------.\n";
-	str += "| NP\t" + std::to_string(simulationParameters.N_PROCESS);
-	str += " | N_FCFS\t" + std::to_string(simulationParameters.N_FCFS);
-	str += " | N_RR\t" + std::to_string(simulationParameters.N_RR);
-	str += " | N_SJF\t" + std::to_string(simulationParameters.N_SJF);
-	str += " | FB\t" + std::to_string(simulationParameters.FORK_PROBABILITY);
-	str += " | MWT\t" + std::to_string(simulationParameters.MAX_WAITING_TIME);
-	str += " | TS\t" + std::to_string(simulationParameters.RR_TIME_SLICE);
-	str += " | RTF\t" + std::to_string(simulationParameters.RTF);
-	str += " | STL\t" + std::to_string(simulationParameters.STL);
-	str += " |\n";
-	str += "'-----------------------------------------------------------------------------------------------------------'\n";
-	return str;
+	std::stringstream ss;
+	ss << "Simulation Parameters:\n";
+	ss << ".";
+	ss << std::setfill('-') << std::setw(LINE_LENGTH - 2) << ".\n";
+	ss << "| NP " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.N_PROCESS;
+	ss << " | N_FCFS " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.N_FCFS;
+	ss << " | N_RR " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.N_RR;
+	ss << " | N_SJF " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.N_SJF;
+	ss << " | FB " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.FORK_PROBABILITY;
+	ss << " | MWT " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.MAX_WAITING_TIME;
+	ss << " | TS " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.RR_TIME_SLICE;
+	ss << " | RTF " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.RTF;
+	ss << " | STL " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.STL;
+	ss << " |\n";
+	ss << "'" << std::setfill('-') << std::setw(LINE_LENGTH - 2) << "'\n";
+	return ss.str();
 }
 
 /// ////////////////////////////////// ///

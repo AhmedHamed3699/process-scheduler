@@ -1,5 +1,6 @@
 #include "UI.h"
 #include <conio.h>
+#include <iomanip>
 
 /// Output Functions
 void UI::WriteWarning(std::string msg)
@@ -19,9 +20,14 @@ void UI::WriteError(std::string msg)
 void UI::PrintHeadline()
 {
 	SetColor(CYAN);
-	std::cout << "            .-----------------------------." << std::endl;
-	std::cout << "            | Process Scheduler Simulator |" << std::endl;
-	std::cout << "            '-----------------------------'" << std::endl;
+	const unsigned int HEADLINE_WIDTH = 30;
+
+	std::cout << std::setw((LINE_LENGTH - HEADLINE_WIDTH) / 2) << std::setfill(' ') << "";
+	std::cout << ".-----------------------------." << std::endl;
+	std::cout << std::setw((LINE_LENGTH - HEADLINE_WIDTH) / 2) << std::setfill(' ') << "";
+	std::cout << "| Process Scheduler Simulator |" << std::endl;
+	std::cout << std::setw((LINE_LENGTH - HEADLINE_WIDTH) / 2) << std::setfill(' ') << ""; // centers the headline
+	std::cout << "'-----------------------------'" << std::endl;
 	std::cout << std::endl;
 	ResetColor();
 }
@@ -86,7 +92,7 @@ void UI::PrintTimeStamp()
 
 void UI::PrintSimulationParmas()
 {
-	SetColor(DARK_YELLOW);
+	SetColor(CYAN);
 	std::cout << scheduler->SimulationParametersToString();
 	ResetColor();
 }
