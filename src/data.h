@@ -7,6 +7,8 @@
 /// CONSTANTS
 #define LINE_LENGTH 96
 #define NUM_PRECISION 3
+#define WORK_STEALING true		// true if work stealing is enabled, false otherwise
+#define MAX_STEALING_LIMIT 0.4	// the maximum percentage of STEALING_LIMIT
 
 /// ////////////////// ///
 ///     Enumerators    ///
