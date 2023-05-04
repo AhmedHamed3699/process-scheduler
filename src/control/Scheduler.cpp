@@ -251,6 +251,9 @@ void Scheduler::TerminateProcess(Process* process)
 		return;
 	}
 	process->SetStatus(TRM);
+	process->SetTT(clk->GetTime());
+	process->CalcTRT();
+	process->CalcWT();
 	TRMList.enqueue(process);
 }
 
