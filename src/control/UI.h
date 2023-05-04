@@ -35,6 +35,8 @@ public:
 	void PrintSimulationParmas();
 	// print a msg indicating the a process is killed - For Debugging
 	void PrintProcessKilled(int PID);
+	// Print the Alert of Work Stealing
+	void PrintWorkStealingAlert();
 
 	/// ////////////////////////////////// ///
 	///		  Silent Mode functions 	   ///

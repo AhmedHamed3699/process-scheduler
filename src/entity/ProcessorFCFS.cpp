@@ -87,6 +87,16 @@ void ProcessorFCFS::AddProcessToList(Process* process)
 	readyList.Insert(readyList.GetLength() + 1, process);
 }
 
+Process* ProcessorFCFS::StealProcess()
+{
+	if (readyList.IsEmpty())
+		return nullptr;
+	Process* process = readyList.GetEntry(1);
+	readyList.Remove(1);
+	expectedFinishTime -= process->GetTimeInfo().RCT;
+	return process;
+}
+
 std::string ProcessorFCFS::ToString()
 {
 	std::string str = "[FCFS]: " + std::to_string(readyList.GetLength()) + " RDY: ";

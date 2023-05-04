@@ -86,6 +86,16 @@ void ProcessorRR::AddProcessToList(Process* process)
 	readyList.enqueue(process);
 }
 
+Process* ProcessorRR::StealProcess()
+{
+	if (readyList.isEmpty())
+		return nullptr;
+	Process* process = readyList.peekFront();
+	expectedFinishTime -= process->GetTimeInfo().RCT;
+	readyList.dequeue();
+	return process;
+}
+
 std::string ProcessorRR::ToString()
 {
 	std::string str = "[RR ]: " + std::to_string(readyList.getSize()) + " RDY: ";
