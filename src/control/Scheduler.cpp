@@ -443,7 +443,17 @@ unsigned int Scheduler::CalculateAverageTurnaroundTime()
 
 unsigned int Scheduler::CalculateAverageResponseTime()
 {
-	return 0;
+	unsigned int totalResponseTime = 0;
+
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalResponseTime += process->GetTimeInfo().RT;
+		TRMList.enqueue(process);
+	}
+
+	return totalResponseTime / TRMList.getSize();
 }
 
 unsigned int* Scheduler::CalculateProcessorsUtilization()

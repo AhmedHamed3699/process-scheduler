@@ -107,10 +107,12 @@ bool Simulator::CreateOutputFile()
 	/// Print NUM of processes
 	OutFile << "Processes: " << scheduler.GetSimulationParameters().N_PROCESS << std::endl;
 
-	/// TODO: TIME AVERAGES
-	OutFile << "Average Waiting Time: ";
+	/// TIME AVERAGES
+	OutFile << "Average Waiting Time     (WT): ";
 	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageWaitTime() << std::endl;
 
+	OutFile << "Average Response Time    (RT): ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageResponseTime() << std::endl;
 	/// TODO: MIGRATION STATS
 
 	/// TODO: WORK STEALING STATS
