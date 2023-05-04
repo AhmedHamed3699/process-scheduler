@@ -369,6 +369,59 @@ int Scheduler::SimulateKill()
 ///        Statistics Functions        ///
 /// ////////////////////////////////// ///
 
+std::string Scheduler::TRMListStatsToString()
+{
+	std::stringstream ss;
+
+	unsigned int numOfTrmListProcess = TRMList.getSize();
+
+	for (int i = 0; i < numOfTrmListProcess; i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+
+		// Termination time (TT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().TT;
+		ss << " ";
+
+		// Process ID (PID)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetID();
+		ss << " ";
+
+		// Arrival Time (AT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().AT;
+		ss << " ";
+
+		// CPU Time (CT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().CT;
+		ss << " ";
+
+		// IO Time (BT)
+		/// TODO: do it when IO is implemented
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().BT;
+		ss << "  ";
+
+		// Waiting Time (WT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().WT;
+		ss << " ";
+
+		// Response Time (RT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().RT;
+		ss << " ";
+
+		// Turnaround Time (TRT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().TRT;
+		ss << " ";
+
+		// end line
+		ss << "\n";
+		TRMList.enqueue(process);
+	}
+
+
+	return ss.str();
+}
+
 unsigned int Scheduler::CalculateAverageWaitTime()
 {
 	return 0;
