@@ -327,15 +327,6 @@ void Scheduler::RunProcesses()
 	}
 }
 
-void Scheduler::MoveToRDY(Process* process)
-{
-	// get the next processor
-	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
-	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
-
-	// schedule the process
-	processor->AddProcessToList(process);
-}
 
 void Scheduler::MoveFromRun()
 {
@@ -366,7 +357,7 @@ void Scheduler::MoveFromRun()
 		{
 			processor->SetStatus(IDLE);
 			processor->SetCurrentProcess(nullptr);
-			MoveToRDY(CurrentProcess);
+			Schedule(CurrentProcess, processor);
 		}
 		else if (probability >= 50 && probability <= 60)
 		{
@@ -391,7 +382,7 @@ void Scheduler::MoveFromBLK()
 	if (probability < 10)
 	{
 		BLKList.dequeue();
-		MoveToRDY(BlockedProcess);
+		//	Schedule(BlockedProcess, Processor);
 	}
 }
 
@@ -427,16 +418,15 @@ void Scheduler::WorkStealing()
 	// calculate the stealing limit and check if it is more than the maximum stealing limit
 	while (CalculateStealingLimit(longestProcessor, shortestProcessor) > MAX_STEALING_LIMIT)
 	{
-
-
 		Process* stolenProcess = longestProcessor->StealProcess();
-		if (stolenProcess != nullptr)
-		{
-			MoveToRDY(stolenProcess);		// move the stolen process to the shortest processor
-		}
+		if (!stolenProcess) // No more processes to steal
+			break;
+
+		Schedule(stolenProcess, shortestProcessor);		// move the stolen process to the shortest processor
 	}
 
 }
+
 
 double Scheduler::CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor)
 {
