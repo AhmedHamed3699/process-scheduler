@@ -24,7 +24,6 @@ private:
 
 	Clock* clk;
 	SimulationParameters simulationParameters;
-	int nextProcessorIndex = 0; /// TODO: remove this later (Phase 2)
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
@@ -97,7 +96,6 @@ public:
 	///        Simulation Functions        ///
 	/// ////////////////////////////////// ///
 	void RunProcesses();
-	void MoveToRDY(Process* process);
 	void MoveFromRun();
 	void MoveFromBLK();
 	int SimulateKill();
