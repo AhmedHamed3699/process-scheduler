@@ -30,6 +30,8 @@ public:
 	void DecrementRCT();
 	// Sets the Termination Time of the process, used when terminating the process
 	void SetTT(unsigned int time);
+	// Sets the response time of the process, used when adding a process to a processor
+	void SetRT(unsigned int time);
 	// Calculates adn Sets the turn around time of the process, used when terminating the process
 	void CalcTRT();
 	// Calculates and sets the total waiting time (WT) of the process, used when terminating the process

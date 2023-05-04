@@ -228,6 +228,7 @@ void Scheduler::ScheduleNext()
 		nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
 
 		// schedule the process
+		process->SetRT(clk->GetTime());
 		processor->AddProcessToList(process);
 	}
 }
