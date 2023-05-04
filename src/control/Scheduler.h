@@ -92,6 +92,7 @@ public:
 	Processor* GetShortestRDYProcessor() const;
 	//returns the Processor with the longest time
 	Processor* GetLongestRDYProcessor() const;
+
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///
 	/// ////////////////////////////////// ///
@@ -100,11 +101,14 @@ public:
 	void MoveFromRun();
 	void MoveFromBLK();
 	int SimulateKill();
+	// work stealing algorithm
+	void WorkStealing();
+	// calculates the stealing limit for two given processors
+	double CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor);
 
 	/// ////////////////////////////////// ///
 	///    Statistics & output Functions   ///
 	/// ////////////////////////////////// ///
-
 	std::string TRMListStatsToString();
 	unsigned int CalculateAverageWaitTime();
 	unsigned int CalculateAverageTurnaroundTime();

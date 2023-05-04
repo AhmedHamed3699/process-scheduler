@@ -406,6 +406,48 @@ int Scheduler::SimulateKill()
 	return -1;
 }
 
+void Scheduler::WorkStealing()
+{
+	// get the shortest processor
+	Processor* shortestProcessor = GetShortestRDYProcessor();
+
+	// get the longest processor
+	Processor* longestProcessor = GetLongestRDYProcessor();
+
+	// if no processors are available, return
+	if (shortestProcessor == nullptr || longestProcessor == nullptr)
+	{
+		return;
+	}
+
+	// calculate the stealing limit and check if it is more than the maximum stealing limit
+	while (CalculateStealingLimit(longestProcessor, shortestProcessor) > MAX_STEALING_LIMIT)
+	{
+
+
+		Process* stolenProcess = longestProcessor->StealProcess();
+		if (stolenProcess != nullptr)
+		{
+			MoveToRDY(stolenProcess);		// move the stolen process to the shortest processor
+		}
+	}
+
+}
+
+double Scheduler::CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor)
+{
+	// largest processor expected time
+	double largestProcessorExpectedTime = largestProcessor->GetExpectedFinishTime();
+
+	// smallest processor expected time
+	double smallestProcessorExpectedTime = smallestProcessor->GetExpectedFinishTime();
+
+	// calculate the stealing limit
+	double stealingLimit = (largestProcessorExpectedTime - smallestProcessorExpectedTime) / (double)largestProcessorExpectedTime;
+
+	return stealingLimit;
+}
+
 /// ////////////////////////////////// ///
 ///        Statistics Functions        ///
 /// ////////////////////////////////// ///
