@@ -15,26 +15,40 @@ ProcessorSJF::ProcessorSJF(Scheduler* outScheduler)
 
 bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 {
-	//TODO: when implementing the new ExecuteProcess (for phase 2) don't forget to uncomment this line
-	//expectedFinishTime--;
+	if (currentProcess == nullptr)
+	{
+		if (readyList.isEmpty())
+			return false;
 
-	//TODO: remove this later
-	if (readyList.isEmpty())
-		return false;
+		Process* process = readyList.peekFront();
+		if (process->GetTimeInfo().AT == CurrentTime)
+			return false;
 
-	Process* process = readyList.peekFront();
-	if (process->GetTimeInfo().AT == CurrentTime)
-		return false;
+		readyList.dequeue();
+		currentProcess = process;
+		process->SetStatus(RUN);
+		SetStatus(BUSY);
 
-	readyList.dequeue();
-	currentProcess = process;
-	process->SetStatus(RUN);
-	SetStatus(BUSY);
+		TimeInfo timeInfo = process->GetTimeInfo();
+		timeInfo.RT = CurrentTime - timeInfo.AT;
+		process->SetTimeInfo(timeInfo);
 
-	TimeInfo timeInfo = process->GetTimeInfo();
-	timeInfo.RT = CurrentTime - timeInfo.AT;
+		return true;
 
-	process->SetTimeInfo(timeInfo);
+	}
+
+	//decrement the expected finish time and the RCT by one
+	expectedFinishTime--;
+	currentProcess->DecrementRCT();
+	
+	//if the process finished execution, it should be terminated
+	if (currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		status = IDLE;
+		return true;
+	}
 
 	return true;
 }
