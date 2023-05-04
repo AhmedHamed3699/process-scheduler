@@ -37,6 +37,12 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 
 		readyList.dequeue();
 		currentProcess = process;
+
+		// if the first execution, set the RT
+		// the condition where a process must stay at least stay one step before execution allows this
+		if (currentProcess->GetTimeInfo().RT == 0)
+			currentProcess->SetRT(CurrentTime - currentProcess->GetTimeInfo().AT);
+
 		process->SetStatus(RUN);
 		SetStatus(BUSY);
 		return true;
