@@ -24,7 +24,6 @@ private:
 
 	Clock* clk;
 	SimulationParameters simulationParameters;
-	int nextProcessorIndex = 0; /// TODO: remove this later (Phase 2)
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
@@ -81,6 +80,7 @@ public:
 	// in phase 1 get the next process from the NEW list and add it to the 
 	// first processor then the second and so on
 	void ScheduleNext();
+	void Schedule(Process* process, Processor* procesor);
 	void ScheduleNextFCFS(Process* process);
 	void ScheduleNextSJF(Process* process);
 	void ScheduleNextRR(Process* process);
@@ -97,7 +97,6 @@ public:
 	///        Simulation Functions        ///
 	/// ////////////////////////////////// ///
 	void RunProcesses();
-	void MoveToRDY(Process* process);
 	void MoveFromRun();
 	void MoveFromBLK();
 	int SimulateKill();
@@ -110,11 +109,19 @@ public:
 	///    Statistics & output Functions   ///
 	/// ////////////////////////////////// ///
 	std::string TRMListStatsToString();
+
+	/// TIME STATS
 	unsigned int CalculateAverageWaitTime();
+	unsigned int CalculateTotalTurnaroundTime();
 	unsigned int CalculateAverageTurnaroundTime();
 	unsigned int CalculateAverageResponseTime();
+
+	/// PROCESSOR STATS
 	unsigned int* CalculateProcessorsUtilization();
 	unsigned int* CalculateProcessorsLoad();
 	unsigned int CalculateAverageProcessorsUtilization();
+
+	/// OTHER FUNCTIONS STATS
+	unsigned int CaculateWorkStealPercent();
 };
 

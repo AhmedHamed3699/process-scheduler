@@ -2,7 +2,7 @@
 #include <string>
 
 Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) :
-	PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO)
+	PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
 {
 }
 
@@ -104,6 +104,16 @@ bool Process::operator< (Process* p)
 bool Process::NeedIO() const
 {
 	return false;
+}
+
+bool Process::IsStolen() const
+{
+	return isStolen;
+}
+
+void Process::SetStolen(bool isStolen)
+{
+	this->isStolen = isStolen;
 }
 
 std::string Process::ToString()

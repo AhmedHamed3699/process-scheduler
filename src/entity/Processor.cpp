@@ -35,6 +35,12 @@ void Processor::SetTotalBusyTime(unsigned int time)
 	totalBusyTime = time;
 }
 
+void Processor::IncrementTotalBusyTime()
+{
+	if (status == BUSY)
+		totalBusyTime++;
+}
+
 unsigned int Processor::GetExpectedFinishTime() const
 {
 	return expectedFinishTime;

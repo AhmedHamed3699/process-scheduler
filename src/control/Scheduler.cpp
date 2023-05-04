@@ -229,9 +229,13 @@ void Scheduler::ScheduleNext()
 		}
 
 		// schedule the process
-		process->SetRT(clk->GetTime());
 		processor->AddProcessToList(process);
 	}
+}
+
+void Scheduler::Schedule(Process* process, Processor* processor)
+{
+	processor->AddProcessToList(process);
 }
 
 void Scheduler::ScheduleNextFCFS(Process* process)
@@ -323,15 +327,6 @@ void Scheduler::RunProcesses()
 	}
 }
 
-void Scheduler::MoveToRDY(Process* process)
-{
-	// get the next processor
-	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
-	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
-
-	// schedule the process
-	processor->AddProcessToList(process);
-}
 
 void Scheduler::MoveFromRun()
 {
@@ -362,7 +357,7 @@ void Scheduler::MoveFromRun()
 		{
 			processor->SetStatus(IDLE);
 			processor->SetCurrentProcess(nullptr);
-			MoveToRDY(CurrentProcess);
+			Schedule(CurrentProcess, processor);
 		}
 		else if (probability >= 50 && probability <= 60)
 		{
@@ -387,7 +382,7 @@ void Scheduler::MoveFromBLK()
 	if (probability < 10)
 	{
 		BLKList.dequeue();
-		MoveToRDY(BlockedProcess);
+		//	Schedule(BlockedProcess, Processor);
 	}
 }
 
@@ -423,16 +418,16 @@ void Scheduler::WorkStealing()
 	// calculate the stealing limit and check if it is more than the maximum stealing limit
 	while (CalculateStealingLimit(longestProcessor, shortestProcessor) > MAX_STEALING_LIMIT)
 	{
-
-
 		Process* stolenProcess = longestProcessor->StealProcess();
-		if (stolenProcess != nullptr)
-		{
-			MoveToRDY(stolenProcess);		// move the stolen process to the shortest processor
-		}
+		if (!stolenProcess) // No more processes to steal
+			break;
+
+		stolenProcess->SetStolen(true);					// set the stolen flag to true - (FOR STATS ONLY)
+		Schedule(stolenProcess, shortestProcessor);		// move the stolen process to the shortest processor
 	}
 
 }
+
 
 double Scheduler::CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor)
 {
@@ -507,31 +502,131 @@ std::string Scheduler::TRMListStatsToString()
 
 unsigned int Scheduler::CalculateAverageWaitTime()
 {
-	return 0;
+	unsigned int totalWaitingTime = 0;
+
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalWaitingTime += process->GetTimeInfo().WT;
+		TRMList.enqueue(process);
+	}
+
+	return totalWaitingTime / TRMList.getSize();
+}
+
+unsigned int Scheduler::CalculateTotalTurnaroundTime()
+{
+	unsigned int totalTurnaroundTime = 0;
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalTurnaroundTime += process->GetTimeInfo().TRT;
+		TRMList.enqueue(process);
+	}
+	return totalTurnaroundTime;
 }
 
 unsigned int Scheduler::CalculateAverageTurnaroundTime()
 {
-	return 0;
+	unsigned int totalTurnaroundTime = 0;
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalTurnaroundTime += process->GetTimeInfo().TRT;
+		TRMList.enqueue(process);
+	}
+	return totalTurnaroundTime / TRMList.getSize();
 }
 
 unsigned int Scheduler::CalculateAverageResponseTime()
 {
-	return 0;
+	unsigned int totalResponseTime = 0;
+
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalResponseTime += process->GetTimeInfo().RT;
+		TRMList.enqueue(process);
+	}
+
+	return totalResponseTime / TRMList.getSize();
 }
 
 unsigned int* Scheduler::CalculateProcessorsUtilization()
 {
-	return nullptr;
+	// get total turnaround time
+	unsigned int totalCPUTime = clk->GetTime();
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+
+	// create array of processors utilization
+	unsigned int* processorsUtilization = new unsigned int[numOfProcessors];
+
+	// calculate utilization for each processor
+	for (int i = 0; i < numOfProcessors; i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		processorsUtilization[i] = (processor->GetTotalBusyTime() / (double)totalCPUTime) * 100;
+	}
+
+	return processorsUtilization;
 }
 
 unsigned int* Scheduler::CalculateProcessorsLoad()
 {
-	return nullptr;
+	// get total turnaround time
+	unsigned int totalTurnaroundTime = CalculateTotalTurnaroundTime();
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+
+	// create array of processors load
+	unsigned int* processorsLoad = new unsigned int[numOfProcessors];
+
+	// calculate load for each processor
+	for (int i = 0; i < numOfProcessors; i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		processorsLoad[i] = (processor->GetTotalBusyTime() / (double)totalTurnaroundTime) * 100;
+	}
+
+	return processorsLoad;
 }
 
 unsigned int Scheduler::CalculateAverageProcessorsUtilization()
 {
-	return 0;
+	// get processors utilization
+	unsigned int* processorsUtilization = CalculateProcessorsUtilization();
+
+	// calculate average utilization
+	unsigned int totalUtilization = 0;
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+	for (int i = 0; i < numOfProcessors; i++)
+	{
+		totalUtilization += processorsUtilization[i];
+	}
+
+	delete[] processorsUtilization;
+
+	return totalUtilization / numOfProcessors;
+}
+
+unsigned int Scheduler::CaculateWorkStealPercent()
+{
+	// count stolen processes
+	unsigned int numOfStolenProcesses = 0;
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		if (process->IsStolen())
+		{
+			numOfStolenProcesses++;
+		}
+		TRMList.enqueue(process);
+	}
+
+	return (numOfStolenProcesses / (double)TRMList.getSize()) * 100;
 }
 

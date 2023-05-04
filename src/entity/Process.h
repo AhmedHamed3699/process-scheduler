@@ -13,7 +13,8 @@ private:
 	TimeInfo timeInfo;
 	unsigned int IONumOfReq;
 	ProcessStatus status;			//any process created will have NEW as its initial status
-	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_R 
+	bool isStolen;
+	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_R
 public:
 	Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO);
 
@@ -49,6 +50,9 @@ public:
 	//You may need to change its parameters depending on your implementation (ex: you may want to send the time to it)
 	//You may also remove this method and just get the timeInfo of the process to check for IO time
 	bool NeedIO() const;
+
+	bool IsStolen() const;
+	void SetStolen(bool isStolen);
 
 	// for UI and debugging
 	std::string ToString();

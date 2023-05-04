@@ -1,6 +1,7 @@
 #include "Simulator.h"
 #include <cstdlib>
 #include <time.h>
+#include <iomanip>
 
 bool Simulator::LoadInpuitFile(std::string filePath)
 {
@@ -88,7 +89,7 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 
 bool Simulator::CreateOutputFile()
 {
-	/// TODO: create the output file and validate it
+	/// create the output file and validate it
 	std::ofstream OutFile;
 	OutFile.open("output.txt");
 	if (!OutFile.is_open())
@@ -97,26 +98,76 @@ bool Simulator::CreateOutputFile()
 		return false;
 	}
 
-	/// TODO: Print TRM processes
+	/// Print TRM processes
 	OutFile << "TT  PID AT  CT  IO_D WT  RT  TRT" << std::endl;
 	OutFile << "================================" << std::endl;
 	OutFile << scheduler.TRMListStatsToString();
+	OutFile << "================================" << std::endl << std::endl;
 
-	/// TODO: Print NUM of processes
+	/// Print NUM of processes
+	OutFile << "Processes: " << scheduler.GetSimulationParameters().N_PROCESS << std::endl;
 
-	/// TODO: TIME AVERAGES
+	/// TIME AVERAGES
+	OutFile << "Average Waiting Time     (WT): ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageWaitTime() << std::endl;
+
+	OutFile << "Average Response Time    (RT): ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageResponseTime() << std::endl;
+
+	OutFile << "Average Turnaround Time (TRT): ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageTurnaroundTime() << std::endl;
+
+	OutFile << std::endl;
 
 	/// TODO: MIGRATION STATS
 
-	/// TODO: WORK STEALING STATS
+	/// WORK STEALING STATS
+	OutFile << "Work Steal%: " << scheduler.CaculateWorkStealPercent() << "%" << std::endl;
 
 	/// TODO: FORKING STATS
 
 	/// TODO: KILLING STATS
 
-	/// TODO: CPU LOAD
+	OutFile << std::endl;
 
-	/// TODO: CPU UTILIZATION
+	/// PROCESSOR STATS
+	unsigned int numOfProcesors = scheduler.GetSimulationParameters().N_FCFS
+		+ scheduler.GetSimulationParameters().N_SJF
+		+ scheduler.GetSimulationParameters().N_RR;
+	OutFile << "Processors: " << numOfProcesors;
+	OutFile << " ["
+		<< scheduler.GetSimulationParameters().N_FCFS << " FCFS, "
+		<< scheduler.GetSimulationParameters().N_SJF << " SJF, "
+		<< scheduler.GetSimulationParameters().N_RR << " RR]" << std::endl;
+
+	/// CPU LOAD
+	unsigned int* cpuLoad = scheduler.CalculateProcessorsLoad();
+	OutFile << "Processors Load: \n";
+
+	for (unsigned int i = 0; i < numOfProcesors; i++)
+	{
+		OutFile << "P" << i << ": " << cpuLoad[i] << "%,  ";
+	}
+	OutFile << std::endl << std::endl;
+
+	delete[] cpuLoad;
+
+	/// CPU UTILIZATION
+	unsigned int* cpuUtilization = scheduler.CalculateProcessorsUtilization();
+	OutFile << "Processors Utilization: \n";
+
+	for (unsigned int i = 0; i < numOfProcesors; i++)
+	{
+		OutFile << "P" << i << ": " << cpuUtilization[i] << "%,  ";
+	}
+	OutFile << std::endl;
+
+	delete[] cpuUtilization;
+
+	OutFile << "Average Processor Utilization: " << scheduler.CalculateAverageProcessorsUtilization() << "%\n";
+
+	OutFile << std::endl;
+
 
 	/// OUTPUT MSG && close file
 	OutFile.close();
