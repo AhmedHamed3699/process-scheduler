@@ -115,6 +115,15 @@ void UI::PrintProcessKilled(int PID)
 	ResetColor();
 }
 
+void UI::PrintWorkStealingAlert()
+{
+	SetColor(DARK_YELLOW);
+
+	std::cout << "Work Stealing Is Running....\n";
+
+	ResetColor();
+}
+
 /// Silent Mode Functions
 void UI::PrintSilentModeStart()
 {

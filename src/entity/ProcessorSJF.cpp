@@ -15,6 +15,9 @@ ProcessorSJF::ProcessorSJF(Scheduler* outScheduler)
 
 bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 {
+	//TODO: when implementing the new ExecuteProcess (for phase 2) don't forget to uncomment this line
+	//expectedFinishTime--;
+
 	//TODO: remove this later
 	if (readyList.isEmpty())
 		return false;
@@ -39,7 +42,19 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 void ProcessorSJF::AddProcessToList(Process* process)
 {
 	process->SetStatus(RDY);
+	TimeInfo timeInfo = process->GetTimeInfo();
+	expectedFinishTime += timeInfo.RCT;
 	readyList.enqueue(process);
+}
+
+Process* ProcessorSJF::StealProcess()
+{
+	if (readyList.isEmpty())
+		return nullptr;
+	Process* process = readyList.peekFront();
+	expectedFinishTime -= process->GetTimeInfo().RCT;
+	readyList.dequeue();
+	return process;
 }
 
 std::string ProcessorSJF::ToString()

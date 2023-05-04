@@ -221,11 +221,12 @@ void Scheduler::ScheduleNext()
 
 		NEWList.dequeue();
 
-		/// TODO: implement the scheduling algorithm (Phase 2)
+		Processor* processor = GetShortestRDYProcessor();
 
-		// get the next processor
-		Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
-		nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
+		if (processor == nullptr)
+		{
+			return;
+		}
 
 		// schedule the process
 		processor->AddProcessToList(process);
@@ -266,6 +267,46 @@ void Scheduler::BlockProcess(Process* process)
 
 	process->SetStatus(BLK);
 	BLKList.enqueue(process);
+}
+
+Processor* Scheduler::GetShortestRDYProcessor() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	Processor* shortestProcessor = processors.GetEntry(1);
+
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		if (shortestProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestProcessor = tempProcessor;
+		}
+	}
+
+	return shortestProcessor;
+}
+
+Processor* Scheduler::GetLongestRDYProcessor() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+	Processor* longestProcessor = processors.GetEntry(1);
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+		if (longestProcessor->GetExpectedFinishTime() < tempProcessor->GetExpectedFinishTime())
+		{
+			longestProcessor = tempProcessor;
+		}
+	}
+	return longestProcessor;
 }
 
 /// ////////////////////////////////// ///
@@ -362,6 +403,48 @@ int Scheduler::SimulateKill()
 			return RandID;
 	}
 	return -1;
+}
+
+void Scheduler::WorkStealing()
+{
+	// get the shortest processor
+	Processor* shortestProcessor = GetShortestRDYProcessor();
+
+	// get the longest processor
+	Processor* longestProcessor = GetLongestRDYProcessor();
+
+	// if no processors are available, return
+	if (shortestProcessor == nullptr || longestProcessor == nullptr)
+	{
+		return;
+	}
+
+	// calculate the stealing limit and check if it is more than the maximum stealing limit
+	while (CalculateStealingLimit(longestProcessor, shortestProcessor) > MAX_STEALING_LIMIT)
+	{
+
+
+		Process* stolenProcess = longestProcessor->StealProcess();
+		if (stolenProcess != nullptr)
+		{
+			MoveToRDY(stolenProcess);		// move the stolen process to the shortest processor
+		}
+	}
+
+}
+
+double Scheduler::CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor)
+{
+	// largest processor expected time
+	double largestProcessorExpectedTime = largestProcessor->GetExpectedFinishTime();
+
+	// smallest processor expected time
+	double smallestProcessorExpectedTime = smallestProcessor->GetExpectedFinishTime();
+
+	// calculate the stealing limit
+	double stealingLimit = (largestProcessorExpectedTime - smallestProcessorExpectedTime) / (double)largestProcessorExpectedTime;
+
+	return stealingLimit;
 }
 
 /// ////////////////////////////////// ///

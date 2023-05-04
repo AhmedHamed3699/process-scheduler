@@ -55,6 +55,9 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 	// decrement the quantum counter
 	quantumCounter--;
 
+	// decrement the expected finish time of the processor by one
+	expectedFinishTime--;
+
 	// increment the total busy time
 	IncrementTotalBusyTime();
 
@@ -87,7 +90,19 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 void ProcessorRR::AddProcessToList(Process* process)
 {
 	process->SetStatus(RDY);
+	TimeInfo timeInfo = process->GetTimeInfo();
+	expectedFinishTime += timeInfo.RCT;
 	readyList.enqueue(process);
+}
+
+Process* ProcessorRR::StealProcess()
+{
+	if (readyList.isEmpty())
+		return nullptr;
+	Process* process = readyList.peekFront();
+	expectedFinishTime -= process->GetTimeInfo().RCT;
+	readyList.dequeue();
+	return process;
 }
 
 std::string ProcessorRR::ToString()
