@@ -88,7 +88,7 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 
 bool Simulator::CreateOutputFile()
 {
-	/// TODO: create the output file and validate it
+	/// create the output file and validate it
 	std::ofstream OutFile;
 	OutFile.open("output.txt");
 	if (!OutFile.is_open())
@@ -97,12 +97,14 @@ bool Simulator::CreateOutputFile()
 		return false;
 	}
 
-	/// TODO: Print TRM processes
+	/// Print TRM processes
 	OutFile << "TT  PID AT  CT  IO_D WT  RT  TRT" << std::endl;
 	OutFile << "================================" << std::endl;
 	OutFile << scheduler.TRMListStatsToString();
+	OutFile << "================================" << std::endl << std::endl;
 
-	/// TODO: Print NUM of processes
+	/// Print NUM of processes
+	OutFile << "Processes: " << scheduler.GetSimulationParameters().N_PROCESS << std::endl;
 
 	/// TODO: TIME AVERAGES
 
