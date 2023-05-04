@@ -88,6 +88,8 @@ public:
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state
 	void BlockProcess(Process* process);
+	// checks if there is a process to kill , then kills it
+	bool SIGKILL_Handler(int CurrentTime);
 	//returns the Processor with the shortest time
 	Processor* GetShortestRDYProcessor() const;
 	//returns the Processor with the longest time
@@ -99,7 +101,7 @@ public:
 	void RunProcesses();
 	void MoveFromRun();
 	void MoveFromBLK();
-	int SimulateKill();
+
 	// work stealing algorithm
 	void WorkStealing();
 	// calculates the stealing limit for two given processors

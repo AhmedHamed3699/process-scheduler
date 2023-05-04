@@ -18,9 +18,9 @@ bool ProcessorFCFS::KillProcess(int PID)
 	Process* killedProcess = readyList.RemoveById(PID);
 	if (killedProcess == nullptr)
 		return false;
-	if (killedProcess == GetCurrentProcess())
+	if (killedProcess == currentProcess)
 	{
-		SetCurrentProcess(nullptr);
+		currentProcess = nullptr;
 		SetStatus(IDLE);
 	}
 	scheduler->TerminateProcess(killedProcess);

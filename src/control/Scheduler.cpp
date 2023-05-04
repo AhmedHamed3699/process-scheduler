@@ -386,9 +386,13 @@ void Scheduler::MoveFromBLK()
 	}
 }
 
-int Scheduler::SimulateKill()
+bool Scheduler::SIGKILL_Handler(int CurrentTime)
 {
-	int RandID = rand() % 31;
+	int timeToKill = SIGKILL.peekFront().first;
+	if (timeToKill != CurrentTime)
+		return -1;
+
+	int ID_toKill = SIGKILL.peekFront().second;
 	for (int i = 0; i < simulationParameters.N_FCFS; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
