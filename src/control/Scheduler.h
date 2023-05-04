@@ -104,6 +104,7 @@ public:
 
 	std::string TRMListStatsToString();
 	unsigned int CalculateAverageWaitTime();
+	unsigned int CalculateTotalTurnaroundTime();
 	unsigned int CalculateAverageTurnaroundTime();
 	unsigned int CalculateAverageResponseTime();
 	unsigned int* CalculateProcessorsUtilization();

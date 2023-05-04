@@ -33,7 +33,7 @@ public:
 	virtual void SetCurrentProcess(Process* outProcess);
 	virtual unsigned int GetTotalBusyTime() const;
 	virtual void SetTotalBusyTime(unsigned int time);
-	// increamets totat busy time by 1 if the processor is busy
+	// increments total busy time by 1 if the processor is busy
 	virtual void IncrementTotalBusyTime();
 	virtual unsigned int GetExpectedFinishTime() const;
 	virtual void SetExpectedFinishTime(unsigned int time);

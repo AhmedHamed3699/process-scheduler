@@ -436,6 +436,19 @@ unsigned int Scheduler::CalculateAverageWaitTime()
 	return totalWaitingTime / TRMList.getSize();
 }
 
+unsigned int Scheduler::CalculateTotalTurnaroundTime()
+{
+	unsigned int totalTurnaroundTime = 0;
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalTurnaroundTime += process->GetTimeInfo().TRT;
+		TRMList.enqueue(process);
+	}
+	return totalTurnaroundTime;
+}
+
 unsigned int Scheduler::CalculateAverageTurnaroundTime()
 {
 	unsigned int totalTurnaroundTime = 0;
