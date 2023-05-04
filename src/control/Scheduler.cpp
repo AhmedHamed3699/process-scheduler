@@ -278,8 +278,8 @@ void Scheduler::RunProcesses()
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-			processor->ExecuteProcess(clk->GetTime());
-		}
+		processor->ExecuteProcess(clk->GetTime());
+	}
 }
 
 void Scheduler::MoveToRDY(Process* process)

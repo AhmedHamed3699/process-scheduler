@@ -118,16 +118,18 @@ void Simulator::Simulation()
 	while (true)
 	{
 		clk.Step();
-		int kill = scheduler.SimulateKill();
+		/// TODO: commented the most of the random moving code for testing purposes
+
+		//int kill = scheduler.SimulateKill();
 		scheduler.ScheduleNext();
 		scheduler.RunProcesses();
-		scheduler.MoveFromRun();
-		scheduler.MoveFromBLK();
+		//scheduler.MoveFromRun();
+		//scheduler.MoveFromBLK();
 
 		ui.PrintTimeStamp();
 
-		if (kill != -1)
-			ui.PrintProcessKilled(kill);
+		//if (kill != -1)
+		//	ui.PrintProcessKilled(kill);
 		if (scheduler.isDone())
 			return;
 		ui.Wait();
