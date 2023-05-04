@@ -90,6 +90,8 @@ public:
 	void BlockProcess(Process* process);
 	//returns the Processor with the shortest time
 	Processor* GetShortestRDYProcessor() const;
+	//returns the Processor with the longest time
+	Processor* GetLongestRDYProcessor() const;
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///
 	/// ////////////////////////////////// ///

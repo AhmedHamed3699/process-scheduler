@@ -282,7 +282,7 @@ Processor* Scheduler::GetShortestRDYProcessor() const
 	for (int i = 2; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
-		
+
 		if (shortestProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
 		{
 			shortestProcessor = tempProcessor;
@@ -290,6 +290,24 @@ Processor* Scheduler::GetShortestRDYProcessor() const
 	}
 
 	return shortestProcessor;
+}
+
+Processor* Scheduler::GetLongestRDYProcessor() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+	Processor* longestProcessor = processors.GetEntry(1);
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+		if (longestProcessor->GetExpectedFinishTime() < tempProcessor->GetExpectedFinishTime())
+		{
+			longestProcessor = tempProcessor;
+		}
+	}
+	return longestProcessor;
 }
 
 /// ////////////////////////////////// ///
