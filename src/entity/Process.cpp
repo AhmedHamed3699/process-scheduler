@@ -31,6 +31,26 @@ void Process::SetTimeInfo(TimeInfo tI)
 	timeInfo = tI;
 }
 
+void Process::DecrementRCT()
+{
+	timeInfo.RCT--;
+}
+
+void Process::SetTT(unsigned int time)
+{
+	timeInfo.TT = time;
+}
+
+void Process::CalcTRT()
+{
+	timeInfo.TRT = timeInfo.AT - timeInfo.TT;
+}
+
+void Process::CalcWT()
+{
+	timeInfo.WT = timeInfo.TRT - timeInfo.CT;
+}
+
 unsigned int Process::GetIONumOfReq() const
 {
 	return IONumOfReq;

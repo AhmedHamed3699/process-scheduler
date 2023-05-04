@@ -20,8 +20,21 @@ public:
 	int GetID() const;
 	Process* GetDescendant() const;
 	void SetDescendant(Process* child);
+
+	/// ////////////////////////////////// ///
+	///			  Time Information		   ///
+	/// ////////////////////////////////// ///
 	TimeInfo GetTimeInfo() const;
 	void SetTimeInfo(TimeInfo tI);
+	// Decrement the Remaining CPU Time of the process, used when executing the process
+	void DecrementRCT();
+	// Sets the Termination Time of the process, used when terminating the process
+	void SetTT(unsigned int time);
+	// Calculates adn Sets the turn around time of the process, used when terminating the process
+	void CalcTRT();
+	// Calculates and sets the total waiting time (WT) of the process, used when terminating the process
+	void CalcWT();
+
 	unsigned int GetIONumOfReq() const;			//can be used to know if the process would request IO or not
 	void SetIONumOfReq(unsigned int ioNum);
 	ProcessStatus GetStatus() const;
