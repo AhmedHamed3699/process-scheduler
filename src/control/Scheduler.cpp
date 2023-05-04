@@ -423,7 +423,17 @@ std::string Scheduler::TRMListStatsToString()
 
 unsigned int Scheduler::CalculateAverageWaitTime()
 {
-	return 0;
+	unsigned int totalWaitingTime = 0;
+
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalWaitingTime += process->GetTimeInfo().WT;
+		TRMList.enqueue(process);
+	}
+
+	return totalWaitingTime / TRMList.getSize();
 }
 
 unsigned int Scheduler::CalculateAverageTurnaroundTime()

@@ -1,6 +1,7 @@
 #include "Simulator.h"
 #include <cstdlib>
 #include <time.h>
+#include <iomanip>
 
 bool Simulator::LoadInpuitFile(std::string filePath)
 {
@@ -107,6 +108,8 @@ bool Simulator::CreateOutputFile()
 	OutFile << "Processes: " << scheduler.GetSimulationParameters().N_PROCESS << std::endl;
 
 	/// TODO: TIME AVERAGES
+	OutFile << "Average Waiting Time: ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageWaitTime() << std::endl;
 
 	/// TODO: MIGRATION STATS
 
