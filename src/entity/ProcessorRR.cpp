@@ -49,6 +49,8 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 	// decrement the quantum counter
 	quantumCounter--;
 
+	// decrement the expected finish time of the processor by one
+	expectedFinishTime--;
 
 	/// 3. if the process is finished, terminate it
 	// Check if the process is finished
