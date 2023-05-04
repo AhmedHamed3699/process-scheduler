@@ -38,27 +38,43 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 
 bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
-	//TODO: when implementing the new ExecuteProcess (for phase 2) don't forget to uncomment this line
-	//expectedFinishTime--;
-	
-	//TODO: remove this later
+	//check if there is no process running
+	if (currentProcess == nullptr)
+	{
+		if (readyList.IsEmpty())
+			return false;
+		
+		//get the first process and remove it from the readyList
+		Process* process = readyList.GetEntry(1);
 
-	if (readyList.IsEmpty())
-		return false;
-	
-	Process* process = readyList.GetEntry(1);
-	if (process->GetTimeInfo().AT == CurrentTime)
-		return false;
+		// if the process just arrived, make it wait in the ready list
+		if (process->GetTimeInfo().AT >= CurrentTime)
+			return false;
 
-	readyList.Remove(1);
-	currentProcess = process;
-	process->SetStatus(RUN);
-	SetStatus(BUSY);
+		readyList.Remove(1);
+		currentProcess = process;
+		
+		process->SetStatus(RUN);
+		status = BUSY;
+		startingTime = CurrentTime;
 
-	TimeInfo timeInfo = process->GetTimeInfo();
-	timeInfo.RT = CurrentTime - timeInfo.AT;
+		return true;
+	}
 
-	process->SetTimeInfo(timeInfo);
+	//decrement the expected finish time and the RCT by one
+	expectedFinishTime--;
+	currentProcess->DecrementRCT();
+
+	//if the process finished execution, it should be terminated
+	if (currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		status = IDLE;
+		return true;
+	}
+
+	//TODO: manage IO and other things like forking, migration etc...
 
 	return true;
 }
