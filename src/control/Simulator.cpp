@@ -113,6 +113,10 @@ bool Simulator::CreateOutputFile()
 
 	OutFile << "Average Response Time    (RT): ";
 	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageResponseTime() << std::endl;
+
+	OutFile << "Average Turnaround Time (TRT): ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageTurnaroundTime() << std::endl;
+
 	/// TODO: MIGRATION STATS
 
 	/// TODO: WORK STEALING STATS
