@@ -269,6 +269,28 @@ void Scheduler::BlockProcess(Process* process)
 	BLKList.enqueue(process);
 }
 
+Processor* Scheduler::GetShortestRDYProcessor() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	Processor* shortestProcessor = processors.GetEntry(1);
+
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+		
+		if (shortestProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestProcessor = tempProcessor;
+		}
+	}
+
+	return shortestProcessor;
+}
+
 /// ////////////////////////////////// ///
 ///        Simulation Functions        ///
 /// ////////////////////////////////// ///
