@@ -596,7 +596,20 @@ unsigned int* Scheduler::CalculateProcessorsLoad()
 
 unsigned int Scheduler::CalculateAverageProcessorsUtilization()
 {
-	return 0;
+	// get processors utilization
+	unsigned int* processorsUtilization = CalculateProcessorsUtilization();
+
+	// calculate average utilization
+	unsigned int totalUtilization = 0;
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+	for (int i = 0; i < numOfProcessors; i++)
+	{
+		totalUtilization += processorsUtilization[i];
+	}
+
+	delete[] processorsUtilization;
+
+	return totalUtilization / numOfProcessors;
 }
 
 unsigned int Scheduler::CaculateWorkStealPercent()

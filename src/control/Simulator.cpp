@@ -128,6 +128,8 @@ bool Simulator::CreateOutputFile()
 
 	/// TODO: KILLING STATS
 
+	OutFile << std::endl;
+
 	/// PROCESSOR STATS
 	unsigned int numOfProcesors = scheduler.GetSimulationParameters().N_FCFS
 		+ scheduler.GetSimulationParameters().N_SJF
@@ -158,7 +160,14 @@ bool Simulator::CreateOutputFile()
 	{
 		OutFile << "P" << i << ": " << cpuUtilization[i] << "%,  ";
 	}
-	OutFile << std::endl << std::endl;
+	OutFile << std::endl;
+
+	delete[] cpuUtilization;
+
+	OutFile << "Average Processor Utilization: " << scheduler.CalculateAverageProcessorsUtilization() << "%\n";
+
+	OutFile << std::endl;
+
 
 	/// OUTPUT MSG && close file
 	OutFile.close();
