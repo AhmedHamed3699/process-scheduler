@@ -48,7 +48,7 @@ void Process::SetRT(unsigned int time)
 
 void Process::CalcTRT()
 {
-	timeInfo.TRT = timeInfo.AT - timeInfo.TT;
+	timeInfo.TRT = timeInfo.TT - timeInfo.AT;
 }
 
 void Process::CalcWT()

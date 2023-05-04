@@ -100,8 +100,10 @@ public:
 	int SimulateKill();
 
 	/// ////////////////////////////////// ///
-	///        Statistics Functions        ///
+	///    Statistics & output Functions   ///
 	/// ////////////////////////////////// ///
+
+	std::string TRMListStatsToString();
 	unsigned int CalculateAverageWaitTime();
 	unsigned int CalculateAverageTurnaroundTime();
 	unsigned int CalculateAverageResponseTime();
