@@ -109,12 +109,19 @@ public:
 	///    Statistics & output Functions   ///
 	/// ////////////////////////////////// ///
 	std::string TRMListStatsToString();
+
+	/// TIME STATS
 	unsigned int CalculateAverageWaitTime();
 	unsigned int CalculateTotalTurnaroundTime();
 	unsigned int CalculateAverageTurnaroundTime();
 	unsigned int CalculateAverageResponseTime();
+
+	/// PROCESSOR STATS
 	unsigned int* CalculateProcessorsUtilization();
 	unsigned int* CalculateProcessorsLoad();
 	unsigned int CalculateAverageProcessorsUtilization();
+
+	/// OTHER FUNCTIONS STATS
+	unsigned int CaculateWorkStealPercent();
 };
 

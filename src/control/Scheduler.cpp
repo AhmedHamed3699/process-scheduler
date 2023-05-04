@@ -422,6 +422,7 @@ void Scheduler::WorkStealing()
 		if (!stolenProcess) // No more processes to steal
 			break;
 
+		stolenProcess->SetStolen(true);					// set the stolen flag to true - (FOR STATS ONLY)
 		Schedule(stolenProcess, shortestProcessor);		// move the stolen process to the shortest processor
 	}
 
@@ -596,5 +597,23 @@ unsigned int* Scheduler::CalculateProcessorsLoad()
 unsigned int Scheduler::CalculateAverageProcessorsUtilization()
 {
 	return 0;
+}
+
+unsigned int Scheduler::CaculateWorkStealPercent()
+{
+	// count stolen processes
+	unsigned int numOfStolenProcesses = 0;
+	for (int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		if (process->IsStolen())
+		{
+			numOfStolenProcesses++;
+		}
+		TRMList.enqueue(process);
+	}
+
+	return (numOfStolenProcesses / (double)TRMList.getSize()) * 100;
 }
 
