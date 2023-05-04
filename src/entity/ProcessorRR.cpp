@@ -79,6 +79,8 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 void ProcessorRR::AddProcessToList(Process* process)
 {
 	process->SetStatus(RDY);
+	TimeInfo timeInfo = process->GetTimeInfo();
+	expectedFinishTime += timeInfo.RCT;
 	readyList.enqueue(process);
 }
 

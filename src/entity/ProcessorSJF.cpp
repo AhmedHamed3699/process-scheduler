@@ -39,6 +39,8 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 void ProcessorSJF::AddProcessToList(Process* process)
 {
 	process->SetStatus(RDY);
+	TimeInfo timeInfo = process->GetTimeInfo();
+	expectedFinishTime += timeInfo.RCT;
 	readyList.enqueue(process);
 }
 
