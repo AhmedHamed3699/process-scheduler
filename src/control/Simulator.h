@@ -28,7 +28,9 @@ public:
 	///         Private Functions          ///
 	/// ////////////////////////////////// ///
 private:
-	// prepares simulation by printing the headline, getting the input file name, and loading the input file
+	// prepares simulation by printing the headline, gets the input file name, loads the input file
+	// sets the UI mode, and creates processors, sets the random seed
+	// returns false if the file is not found
 	bool PrepareSimulation();
 };
 
