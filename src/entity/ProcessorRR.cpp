@@ -1,5 +1,6 @@
 #include "ProcessorRR.h"
 #include <string>
+#include "../control/scheduler.h"
 
 void ProcessorRR::IOHandler()
 {
@@ -14,29 +15,63 @@ void ProcessorRR::MigratonHandler()
 }
 
 ProcessorRR::ProcessorRR(Scheduler* outScheduler)
-	:Processor(outScheduler, RR)
+	:Processor(outScheduler, RR), RR_TIME_SLICE(this->scheduler->GetSimulationParameters().RR_TIME_SLICE)
 {
+	quantumCounter = this->scheduler->GetSimulationParameters().RR_TIME_SLICE;
 }
 
 bool ProcessorRR::ExecuteProcess(int CurrentTime)
 {
-	//TODO: remove this later
-	if (readyList.isEmpty())
-		return false;
+	/// 1. if no running process, schedule next process
+	if (this->currentProcess == nullptr)
+	{
+		// schedule next process, unless there is no process in the ready list
+		if (readyList.isEmpty())
+			return false;
 
-	Process* process = readyList.peekFront();
-	if (process->GetTimeInfo().AT == CurrentTime)
-		return false;
+		Process* process = readyList.peekFront();
 
-	readyList.dequeue();
-	currentProcess = process;
-	process->SetStatus(RUN);
-	SetStatus(BUSY);
+		// if the process just arrived, make it wait in the ready list
+		if (process->GetTimeInfo().AT >= CurrentTime)
+			return false;
 
-	TimeInfo timeInfo = process->GetTimeInfo();
-	timeInfo.RT = CurrentTime - timeInfo.AT;
+		readyList.dequeue();
+		currentProcess = process;
+		process->SetStatus(RUN);
+		SetStatus(BUSY);
+		return true;
+	}
 
-	process->SetTimeInfo(timeInfo);
+	/// 2. if there is a running process, execute it
+	// execute the process
+	currentProcess->DecrementRCT(); // decrement the RCT
+
+	// decrement the quantum counter
+	quantumCounter--;
+
+
+	/// 3. if the process is finished, terminate it
+	// Check if the process is finished
+	if (currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		// Set the process as finished
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		SetStatus(IDLE);
+		return true;
+	}
+
+	/// 4. if the process is not finished, check if the quantum is finished
+	// if quantum is finished, add the process to the ready list
+	if (quantumCounter == 0) // add here the quantum counter
+	{
+		readyList.enqueue(currentProcess);
+		currentProcess->SetStatus(RDY);
+		currentProcess = nullptr;
+		SetStatus(IDLE);
+		quantumCounter = RR_TIME_SLICE;
+		return true;
+	}
 
 	return true;
 }

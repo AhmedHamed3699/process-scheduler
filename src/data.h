@@ -4,6 +4,10 @@
 ///=////////////////////////////////////////////=///
 #include "ds/Queue.h"
 
+/// CONSTANTS
+#define LINE_LENGTH 96
+#define NUM_PRECISION 3
+
 /// ////////////////// ///
 ///     Enumerators    ///
 /// ////////////////// ///
@@ -61,6 +65,7 @@ enum UIMode
 	INTERACTIVE,
 	STEP_BY_STEP,
 	SILENT,
+	DEBUG,
 	// not an actual mode
 	UI_MODE_SIZE
 };

@@ -19,9 +19,16 @@ private:
 public:
 
 	Simulator() {};
-	bool LoadInpuitFile();
+	bool LoadInpuitFile(std::string filePath);
 	bool CreateOutputFile();
 	void Run();
 	void Simulation();
+
+	/// ////////////////////////////////// ///
+	///         Private Functions          ///
+	/// ////////////////////////////////// ///
+private:
+	// prepares simulation by printing the headline, getting the input file name, and loading the input file
+	bool PrepareSimulation();
 };
 

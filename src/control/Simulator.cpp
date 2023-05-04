@@ -2,11 +2,11 @@
 #include <cstdlib>
 #include <time.h>
 
-bool Simulator::LoadInpuitFile()
+bool Simulator::LoadInpuitFile(std::string filePath)
 {
 	std::ifstream InFile;
 
-	InFile.open("test.txt");
+	InFile.open(filePath);
 
 	if (!InFile.is_open())
 	{
@@ -93,32 +93,66 @@ bool Simulator::CreateOutputFile()
 
 void Simulator::Run()
 {
+	// prepare simulation by printing the headline, getting the input file name, and loading the input file
+	if (!PrepareSimulation())
+		return;
+
 	Simulation();
+
+	if (ui.GetMode() == SILENT)
+	{
+		ui.PrintSilentModeEnd();
+		ui.PrintOutputFileMsg(false); /// TODO: change to true if create output file is implemented
+	}
 }
 
 void Simulator::Simulation()
 {
-	srand(time(0));
-	LoadInpuitFile();
-	scheduler.CreateAllProcessors();
+	/// TODO: Code in this block should be removed
+	/// every functionality here should be re-factored into its appropriate class and/ or method
+	/// this block is only for phase 1 testing
 
-	ui.PrintHeadline();
-	ui.PrintSimulationParmas();
-	ui.PrintUIModeMenu();
+	srand(time(0));
+	scheduler.CreateAllProcessors();
 
 	while (true)
 	{
 		clk.Step();
-		int kill = scheduler.SimulateKill();
+		/// TODO: commented the most of the random moving code for testing purposes
+
+		//int kill = scheduler.SimulateKill();
 		scheduler.ScheduleNext();
 		scheduler.RunProcesses();
-		scheduler.MoveFromRun();
-		scheduler.MoveFromBLK();
+		//scheduler.MoveFromRun();
+		//scheduler.MoveFromBLK();
+
 		ui.PrintTimeStamp();
-		if (kill != -1)
-			ui.PrintProcessKilled(kill);
+
+		//if (kill != -1)
+		//	ui.PrintProcessKilled(kill);
 		if (scheduler.isDone())
 			return;
 		ui.Wait();
 	}
+}
+
+bool Simulator::PrepareSimulation()
+{
+	ui.PrintHeadline();
+
+	std::string filePath = ui.GetInputFileName();
+	if (!LoadInpuitFile(filePath))
+	{
+		ui.WriteError("File Not Found");
+		return false;
+	}
+
+	ui.PrintSimulationParmas();
+	ui.PrintUIModeMenu();
+	if (ui.GetMode() == SILENT)
+	{
+		ui.PrintSilentModeStart();
+	}
+
+	return true;
 }
