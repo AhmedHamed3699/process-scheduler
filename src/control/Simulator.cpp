@@ -88,6 +88,39 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 
 bool Simulator::CreateOutputFile()
 {
+	/// TODO: create the output file and validate it
+	std::ofstream OutFile;
+	OutFile.open("output.txt");
+	if (!OutFile.is_open())
+	{
+		ui.PrintOutputFileMsg(false);
+		return false;
+	}
+
+	/// TODO: Print TRM processes
+	OutFile << "TT  PID AT  CT  IO_D WT  RT  TRT" << std::endl;
+	OutFile << "================================" << std::endl;
+	OutFile << scheduler.TRMListStatsToString();
+
+	/// TODO: Print NUM of processes
+
+	/// TODO: TIME AVERAGES
+
+	/// TODO: MIGRATION STATS
+
+	/// TODO: WORK STEALING STATS
+
+	/// TODO: FORKING STATS
+
+	/// TODO: KILLING STATS
+
+	/// TODO: CPU LOAD
+
+	/// TODO: CPU UTILIZATION
+
+	/// OUTPUT MSG && close file
+	OutFile.close();
+	ui.PrintOutputFileMsg(true);
 	return true;
 }
 
@@ -102,8 +135,9 @@ void Simulator::Run()
 	if (ui.GetMode() == SILENT)
 	{
 		ui.PrintSilentModeEnd();
-		ui.PrintOutputFileMsg(false); /// TODO: change to true if create output file is implemented
 	}
+
+	CreateOutputFile();
 }
 
 void Simulator::Simulation()
