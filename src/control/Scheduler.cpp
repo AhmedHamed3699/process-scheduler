@@ -278,12 +278,8 @@ void Scheduler::RunProcesses()
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-		if (processor->GetStatus() == IDLE)
-		{
 			processor->ExecuteProcess(clk->GetTime());
 		}
-
-	}
 }
 
 void Scheduler::MoveToRDY(Process* process)
