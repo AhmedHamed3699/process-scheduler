@@ -38,6 +38,9 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 
 bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
+	//TODO: when implementing the new ExecuteProcess (for phase 2) don't forget to uncomment this line
+	//expectedFinishTime--;
+	
 	//TODO: remove this later
 
 	if (readyList.IsEmpty())
@@ -63,6 +66,8 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 void ProcessorFCFS::AddProcessToList(Process* process)
 {
 	process->SetStatus(RDY);
+	TimeInfo timeInfo = process->GetTimeInfo();
+	expectedFinishTime += timeInfo.RCT;
 	readyList.Insert(readyList.GetLength() + 1, process);
 }
 

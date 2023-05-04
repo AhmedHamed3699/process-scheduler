@@ -221,11 +221,12 @@ void Scheduler::ScheduleNext()
 
 		NEWList.dequeue();
 
-		/// TODO: implement the scheduling algorithm (Phase 2)
+		Processor* processor = GetShortestRDYProcessor();
 
-		// get the next processor
-		Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
-		nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
+		if (processor == nullptr)
+		{
+			return;
+		}
 
 		// schedule the process
 		process->SetRT(clk->GetTime());
@@ -267,6 +268,28 @@ void Scheduler::BlockProcess(Process* process)
 
 	process->SetStatus(BLK);
 	BLKList.enqueue(process);
+}
+
+Processor* Scheduler::GetShortestRDYProcessor() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	Processor* shortestProcessor = processors.GetEntry(1);
+
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+		
+		if (shortestProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestProcessor = tempProcessor;
+		}
+	}
+
+	return shortestProcessor;
 }
 
 /// ////////////////////////////////// ///
