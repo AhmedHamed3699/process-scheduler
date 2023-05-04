@@ -117,6 +117,9 @@ void UI::PrintProcessKilled(int PID)
 
 void UI::PrintWorkStealingAlert()
 {
+	if (mode == SILENT) // if the mode is silent, don't print anything
+		return;
+
 	SetColor(DARK_YELLOW);
 
 	std::cout << "Work Stealing Is Running....\n";
