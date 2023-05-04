@@ -140,6 +140,16 @@ void Simulator::Run()
 		// schedule the next process
 		scheduler.ScheduleNext();
 
+		// work stealing
+		#if WORK_STEALING
+		unsigned int STL = scheduler.GetSimulationParameters().STL;
+		if (STL > 0 && clk.GetTime() % STL == 0)
+		{
+			scheduler.WorkStealing();
+			ui.PrintWorkStealingAlert();
+		}
+		#endif
+
 		// run the processes (calls the schedule algorithm for each processor and executes its current running task)
 		scheduler.RunProcesses();
 
