@@ -125,7 +125,27 @@ bool Simulator::CreateOutputFile()
 
 	/// TODO: KILLING STATS
 
+	/// TODO: PROCESSOR STATS
+	unsigned int numOfProcesors = scheduler.GetSimulationParameters().N_FCFS
+		+ scheduler.GetSimulationParameters().N_SJF
+		+ scheduler.GetSimulationParameters().N_RR;
+	OutFile << "Processors: " << numOfProcesors;
+	OutFile << " ["
+		<< scheduler.GetSimulationParameters().N_FCFS << " FCFS, "
+		<< scheduler.GetSimulationParameters().N_SJF << " SJF, "
+		<< scheduler.GetSimulationParameters().N_RR << " RR]" << std::endl;
+
 	/// TODO: CPU LOAD
+	unsigned int* cpuLoad = scheduler.CalculateProcessorsLoad();
+	OutFile << "Processors Load: \n";
+
+	for (unsigned int i = 0; i < numOfProcesors; i++)
+	{
+		OutFile << "P" << i << ": " << cpuLoad[i] << "%,  ";
+	}
+	OutFile << std::endl;
+
+	delete[] cpuLoad;
 
 	/// TODO: CPU UTILIZATION
 

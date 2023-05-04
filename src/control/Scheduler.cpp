@@ -484,7 +484,21 @@ unsigned int* Scheduler::CalculateProcessorsUtilization()
 
 unsigned int* Scheduler::CalculateProcessorsLoad()
 {
-	return nullptr;
+	// get total turnaround time
+	unsigned int totalTurnaroundTime = CalculateTotalTurnaroundTime();
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+
+	// create array of processors load
+	unsigned int* processorsLoad = new unsigned int[numOfProcessors];
+
+	// calculate load for each processor
+	for (int i = 0; i < numOfProcessors; i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		processorsLoad[i] = (processor->GetTotalBusyTime() / (double)totalTurnaroundTime) * 100;
+	}
+
+	return processorsLoad;
 }
 
 unsigned int Scheduler::CalculateAverageProcessorsUtilization()
