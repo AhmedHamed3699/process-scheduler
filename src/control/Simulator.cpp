@@ -121,7 +121,8 @@ bool Simulator::CreateOutputFile()
 
 	/// TODO: MIGRATION STATS
 
-	/// TODO: WORK STEALING STATS
+	/// WORK STEALING STATS
+	OutFile << "Work Steal%: " << scheduler.CaculateWorkStealPercent() << "%" << std::endl;
 
 	/// TODO: FORKING STATS
 
