@@ -40,12 +40,12 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 	//TODO: when implementing the new ExecuteProcess (for phase 2) don't forget to uncomment this line
 	//expectedFinishTime--;
-	
+
 	//TODO: remove this later
 
 	if (readyList.IsEmpty())
 		return false;
-	
+
 	Process* process = readyList.GetEntry(1);
 	if (process->GetTimeInfo().AT == CurrentTime)
 		return false;
@@ -69,6 +69,16 @@ void ProcessorFCFS::AddProcessToList(Process* process)
 	TimeInfo timeInfo = process->GetTimeInfo();
 	expectedFinishTime += timeInfo.RCT;
 	readyList.Insert(readyList.GetLength() + 1, process);
+}
+
+Process* ProcessorFCFS::StealProcess()
+{
+	if (readyList.IsEmpty())
+		return nullptr;
+	Process* process = readyList.GetEntry(1);
+	readyList.Remove(1);
+	expectedFinishTime -= process->GetTimeInfo().RCT;
+	return process;
 }
 
 std::string ProcessorFCFS::ToString()

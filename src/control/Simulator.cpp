@@ -126,17 +126,52 @@ bool Simulator::CreateOutputFile()
 
 void Simulator::Run()
 {
-	// prepare simulation by printing the headline, getting the input file name, and loading the input file
+	/// 1. prepare simulation by printing the headline, getting the input file name, and loading the input file
 	if (!PrepareSimulation())
 		return;
 
-	Simulation();
+	/// 2. Run the simulation
+	// Simulation Loop
+	while (true)
+	{
+		// step the time
+		clk.Step();
 
+		// schedule the next process
+		scheduler.ScheduleNext();
+
+		// work stealing
+		#if WORK_STEALING
+		unsigned int STL = scheduler.GetSimulationParameters().STL;
+		if (STL > 0 && clk.GetTime() % STL == 0)
+		{
+			scheduler.WorkStealing();
+			ui.PrintWorkStealingAlert();
+		}
+		#endif
+
+		// run the processes (calls the schedule algorithm for each processor and executes its current running task)
+		scheduler.RunProcesses();
+
+		// print the time stamp
+		ui.PrintTimeStamp();
+
+		// check if the simulation is done, and return
+		if (scheduler.isDone())
+			break;
+
+		// wait for the user to press enter or wait for a specific time if the mode is STEP-BY-STEp
+		ui.Wait();
+	}
+
+	/// 3. End Simulation
+	// ending msg in silent mode
 	if (ui.GetMode() == SILENT)
 	{
 		ui.PrintSilentModeEnd();
 	}
 
+	// creates the output file
 	CreateOutputFile();
 }
 
@@ -145,9 +180,7 @@ void Simulator::Simulation()
 	/// TODO: Code in this block should be removed
 	/// every functionality here should be re-factored into its appropriate class and/ or method
 	/// this block is only for phase 1 testing
-
-	srand(time(0));
-	scheduler.CreateAllProcessors();
+	/// TODO: CAN BE DELETED NOW, LEFT FOR REFERENCE
 
 	while (true)
 	{
@@ -172,8 +205,10 @@ void Simulator::Simulation()
 
 bool Simulator::PrepareSimulation()
 {
+	/// 1. Print Headline
 	ui.PrintHeadline();
 
+	/// 2. Load Input File 
 	std::string filePath = ui.GetInputFileName();
 	if (!LoadInpuitFile(filePath))
 	{
@@ -181,12 +216,19 @@ bool Simulator::PrepareSimulation()
 		return false;
 	}
 
+	/// 3. Get UI Mode
 	ui.PrintSimulationParmas();
 	ui.PrintUIModeMenu();
 	if (ui.GetMode() == SILENT)
 	{
 		ui.PrintSilentModeStart();
 	}
+
+	/// 4. SET the random seed
+	srand(time(0));
+
+	/// 5. Create the processors
+	scheduler.CreateAllProcessors();
 
 	return true;
 }

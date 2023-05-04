@@ -102,5 +102,6 @@
   <ItemGroup>
     <Text Include="ID.txt" />
     <Text Include="test-rr.txt" />
+    <Text Include="test-ws.txt" />
   </ItemGroup>
 </Project>
