@@ -80,6 +80,7 @@ public:
 	// in phase 1 get the next process from the NEW list and add it to the 
 	// first processor then the second and so on
 	void ScheduleNext();
+	void Schedule(Process* process, Processor* procesor);
 	void ScheduleNextFCFS(Process* process);
 	void ScheduleNextSJF(Process* process);
 	void ScheduleNextRR(Process* process);

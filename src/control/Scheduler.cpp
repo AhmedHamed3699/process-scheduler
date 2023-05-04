@@ -233,6 +233,11 @@ void Scheduler::ScheduleNext()
 	}
 }
 
+void Scheduler::Schedule(Process* process, Processor* processor)
+{
+	processor->AddProcessToList(process);
+}
+
 void Scheduler::ScheduleNextFCFS(Process* process)
 {
 }
