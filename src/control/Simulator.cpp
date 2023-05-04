@@ -117,6 +117,8 @@ bool Simulator::CreateOutputFile()
 	OutFile << "Average Turnaround Time (TRT): ";
 	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageTurnaroundTime() << std::endl;
 
+	OutFile << std::endl;
+
 	/// TODO: MIGRATION STATS
 
 	/// TODO: WORK STEALING STATS
@@ -125,7 +127,7 @@ bool Simulator::CreateOutputFile()
 
 	/// TODO: KILLING STATS
 
-	/// TODO: PROCESSOR STATS
+	/// PROCESSOR STATS
 	unsigned int numOfProcesors = scheduler.GetSimulationParameters().N_FCFS
 		+ scheduler.GetSimulationParameters().N_SJF
 		+ scheduler.GetSimulationParameters().N_RR;
@@ -135,7 +137,7 @@ bool Simulator::CreateOutputFile()
 		<< scheduler.GetSimulationParameters().N_SJF << " SJF, "
 		<< scheduler.GetSimulationParameters().N_RR << " RR]" << std::endl;
 
-	/// TODO: CPU LOAD
+	/// CPU LOAD
 	unsigned int* cpuLoad = scheduler.CalculateProcessorsLoad();
 	OutFile << "Processors Load: \n";
 
@@ -143,11 +145,19 @@ bool Simulator::CreateOutputFile()
 	{
 		OutFile << "P" << i << ": " << cpuLoad[i] << "%,  ";
 	}
-	OutFile << std::endl;
+	OutFile << std::endl << std::endl;
 
 	delete[] cpuLoad;
 
-	/// TODO: CPU UTILIZATION
+	/// CPU UTILIZATION
+	unsigned int* cpuUtilization = scheduler.CalculateProcessorsUtilization();
+	OutFile << "Processors Utilization: \n";
+
+	for (unsigned int i = 0; i < numOfProcesors; i++)
+	{
+		OutFile << "P" << i << ": " << cpuUtilization[i] << "%,  ";
+	}
+	OutFile << std::endl << std::endl;
 
 	/// OUTPUT MSG && close file
 	OutFile.close();
