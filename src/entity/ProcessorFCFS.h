@@ -18,7 +18,7 @@ public:
 	ProcessorFCFS(Scheduler* outScheduler);
 	bool ExecuteProcess(int CurrentTime);		//The function responsible for executing a process
 	void AddProcessToList(Process* process);	//Adds a Process to the list of a Processor 
-
+	Process* StealProcess();					// Steals a Process from the list of a Processor and returns it
 	bool KillProcess(int PID);		//responsible for dealing with SIGKILL and Orphans
 
 	std::string ToString();
