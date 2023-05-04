@@ -22,26 +22,7 @@ ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 
 bool ProcessorRR::ExecuteProcess(int CurrentTime)
 {
-	////TODO: remove this later
-	//if (readyList.isEmpty())
-	//	return false;
-
-	//Process* process = readyList.peekFront();
-	//if (process->GetTimeInfo().AT == CurrentTime)
-	//	return false;
-
-	//readyList.dequeue();
-	//currentProcess = process;
-	//process->SetStatus(RUN);
-	//SetStatus(BUSY);
-
-	//TimeInfo timeInfo = process->GetTimeInfo();
-	//timeInfo.RT = CurrentTime - timeInfo.AT;
-
-	//process->SetTimeInfo(timeInfo);
-
-	//return true;
-	// Check if there is a running process 
+	/// 1. if no running process, schedule next process
 	if (this->currentProcess == nullptr)
 	{
 		// schedule next process, unless there is no process in the ready list
@@ -49,6 +30,11 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 			return false;
 
 		Process* process = readyList.peekFront();
+
+		// if the process just arrived, make it wait in the ready list
+		if (process->GetTimeInfo().AT >= CurrentTime)
+			return false;
+
 		readyList.dequeue();
 		currentProcess = process;
 		process->SetStatus(RUN);
@@ -56,17 +42,26 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		return true;
 	}
 
+	/// 2. if there is a running process, execute it
+	// execute the process
+	currentProcess->DecrementRCT(); // decrement the RCT
+
+	// decrement the quantum counter
+	quantumCounter--;
+
+
+	/// 3. if the process is finished, terminate it
 	// Check if the process is finished
-	if (currentProcess->GetTimeInfo().RCT == 0)
+	if (currentProcess->GetTimeInfo().RCT <= 0)
 	{
 		// Set the process as finished
-		currentProcess->SetStatus(TRM);
 		scheduler->TerminateProcess(currentProcess);
 		currentProcess = nullptr;
 		SetStatus(IDLE);
 		return true;
 	}
 
+	/// 4. if the process is not finished, check if the quantum is finished
 	// if quantum is finished, add the process to the ready list
 	if (quantumCounter == 0) // add here the quantum counter
 	{
@@ -77,12 +72,6 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		quantumCounter = RR_TIME_SLICE;
 		return true;
 	}
-
-	// execute the process
-	currentProcess->DecrementRCT(); // decrement the RCT
-
-	// decrement the quantum counter
-	quantumCounter--;
 
 	return true;
 }
