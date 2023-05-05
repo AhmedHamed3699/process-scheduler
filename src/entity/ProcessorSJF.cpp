@@ -1,4 +1,5 @@
 #include "ProcessorSJF.h"
+#include "../control/Scheduler.h"
 
 void ProcessorSJF::IOHandler()
 {
