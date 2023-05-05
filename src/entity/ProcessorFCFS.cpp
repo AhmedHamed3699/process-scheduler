@@ -13,6 +13,24 @@ void ProcessorFCFS::MigratonHandler()
 {
 }
 
+void ProcessorFCFS::AddToKill(Pair<unsigned int, unsigned int> outP)
+{
+	SIGKILL.enqueue(outP);
+}
+
+void ProcessorFCFS::SIGKILLHandler()
+{
+	if (SIGKILL.isEmpty())
+		return;
+
+	int timeToKill = SIGKILL.peekFront().first;
+	if (timeToKill != this->scheduler->GetCurrentTime())
+		return;
+	int ID_toKill = SIGKILL.peekFront().second;
+
+	KillProcess(ID_toKill);
+}
+
 bool ProcessorFCFS::KillProcess(int PID)
 {
 	Process* killedProcess = readyList.RemoveById(PID);
@@ -23,6 +41,7 @@ bool ProcessorFCFS::KillProcess(int PID)
 		currentProcess = nullptr;
 		SetStatus(IDLE);
 	}
+	SIGKILL.dequeue();
 	scheduler->TerminateProcess(killedProcess);
 	return true;
 }
@@ -38,6 +57,9 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 
 bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
+
+	SIGKILLHandler();
+
 	//check if there is no process running
 	if (currentProcess == nullptr)
 	{

@@ -41,7 +41,7 @@ private:
 public:
 	Scheduler(Clock* clk);
 	~Scheduler();
-
+	int GetCurrentTime();
 
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
@@ -58,7 +58,6 @@ public:
 	SimulationParameters GetSimulationParameters();
 	void SetSimulationParameters(SimulationParameters sP);
 	bool isDone(); // to know when to terminate the program
-	void AddToSIGKILL(Pair<unsigned int, unsigned int> outP);
 
 	/// ////////////////////////////////// ///
 	///           UI AID Functions         ///
@@ -88,8 +87,6 @@ public:
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state
 	void BlockProcess(Process* process);
-	// checks if there is a process to kill , then kills it
-	bool SIGKILL_Handler(int CurrentTime);
 	//returns the Processor with the shortest time
 	Processor* GetShortestRDYProcessor() const;
 	//returns the Processor with the longest time

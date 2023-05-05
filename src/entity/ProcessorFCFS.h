@@ -8,18 +8,21 @@ class ProcessorFCFS : public Processor
 {
 private:
 	FCFSList<Process*> readyList;
+	static Queue<Pair<unsigned int, unsigned int>> SIGKILL;	//In each Pair, first is the time and second is the PID
 
 	void IOHandler();						//it manages how the I/O for a process would happen
 	void WorkStealingHandler();				//it manages how the work stealing between processors would happen
 	void MigratonHandler();					//it manages how the migration between processors would happen
 	void ForkHandler();						//Handles how Forking would be done
+	void SIGKILLHandler();					//it mangaes how and when process would be killed
+	bool KillProcess(int PID);		//responsible for dealing with SIGKILL and Orphans
 
 public:
 	ProcessorFCFS(Scheduler* outScheduler);
 	bool ExecuteProcess(int CurrentTime);		//The function responsible for executing a process
 	void AddProcessToList(Process* process);	//Adds a Process to the list of a Processor 
 	Process* StealProcess();					// Steals a Process from the list of a Processor and returns it
-	bool KillProcess(int PID);		//responsible for dealing with SIGKILL and Orphans
+	static void AddToKill(Pair<unsigned int, unsigned int> outP);	// adds new kill masseges
 
 	std::string ToString();
 };
