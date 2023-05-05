@@ -81,6 +81,7 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 
 void ProcessorFCFS::AddProcessToList(Process* process)
 {
+	process->SetCurrentProcessor(this);
 	process->SetStatus(RDY);
 	TimeInfo timeInfo = process->GetTimeInfo();
 	expectedFinishTime += timeInfo.RCT;

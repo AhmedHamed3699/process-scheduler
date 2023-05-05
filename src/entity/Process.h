@@ -4,11 +4,13 @@
 /// Created By scheduler maintained by scheduler and processor ///
 ///=//////////////////////////////////////////////////////////=///
 #include "../data.h"
+#include "Processor.h"
 
 class Process
 {
 private:
 	const int PID;
+	Processor* currentProcessor;
 	Process* descendant;
 	TimeInfo timeInfo;
 	unsigned int IONumOfReq;
@@ -21,6 +23,8 @@ public:
 	int GetID() const;
 	Process* GetDescendant() const;
 	void SetDescendant(Process* child);
+	Processor* GetCurrentProcessor() const;
+	void SetCurrentProcessor(Processor* CP);
 
 	/// ////////////////////////////////// ///
 	///			  Time Information		   ///

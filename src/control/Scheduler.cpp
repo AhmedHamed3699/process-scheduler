@@ -256,6 +256,7 @@ void Scheduler::TerminateProcess(Process* process)
 	{
 		return;
 	}
+	process->SetCurrentProcessor(nullptr);
 	process->SetStatus(TRM);
 	process->SetTT(clk->GetTime());
 	process->CalcTRT();
@@ -269,7 +270,7 @@ void Scheduler::BlockProcess(Process* process)
 	{
 		return;
 	}
-
+	process->SetCurrentProcessor(nullptr);
 	process->SetStatus(BLK);
 	BLKList.enqueue(process);
 }
@@ -386,21 +387,27 @@ void Scheduler::MoveFromBLK()
 	}
 }
 
-bool Scheduler::SIGKILL_Handler(int CurrentTime)
+int Scheduler::SIGKILL_Handler(int CurrentTime)
 {
+	if (SIGKILL.isEmpty())
+		return -1;
+
 	int timeToKill = SIGKILL.peekFront().first;
 	if (timeToKill != CurrentTime)
 		return -1;
 
 	int ID_toKill = SIGKILL.peekFront().second;
+
+	SIGKILL.dequeue();
+
 	for (int i = 0; i < simulationParameters.N_FCFS; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
 		ProcessorFCFS* processorFCFS = dynamic_cast<ProcessorFCFS*>(processor);
-		bool found = processorFCFS->KillProcess(RandID);
+		bool found = processorFCFS->KillProcess(ID_toKill);
 
 		if (found)
-			return RandID;
+			return ID_toKill;
 	}
 	return -1;
 }
