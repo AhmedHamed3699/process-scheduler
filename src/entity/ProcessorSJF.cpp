@@ -5,10 +5,6 @@ void ProcessorSJF::IOHandler()
 {
 }
 
-void ProcessorSJF::WorkStealingHandler()
-{
-}
-
 ProcessorSJF::ProcessorSJF(Scheduler* outScheduler)
 	:Processor(outScheduler, SJF)
 {
