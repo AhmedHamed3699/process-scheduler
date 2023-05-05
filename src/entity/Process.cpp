@@ -2,7 +2,7 @@
 #include <string>
 
 Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) :
-	PID(id), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
+	PID(id), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
 {
 }
 
@@ -54,16 +54,6 @@ void Process::CalcTRT()
 void Process::CalcWT()
 {
 	timeInfo.WT = timeInfo.TRT - timeInfo.CT;
-}
-
-unsigned int Process::GetIONumOfReq() const
-{
-	return IONumOfReq;
-}
-
-void Process::SetIONumOfReq(unsigned int ioNum)
-{
-	IONumOfReq = ioNum;
 }
 
 ProcessStatus Process::GetStatus() const
