@@ -13,7 +13,7 @@ private:
 	TimeInfo timeInfo;
 	ProcessStatus status;			//any process created will have NEW as its initial status
 	bool isStolen;
-	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_R
+	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_D
 public:
 	Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO);
 
