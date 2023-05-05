@@ -1,4 +1,5 @@
 #include "ProcessorSJF.h"
+#include "../control/Scheduler.h"
 
 void ProcessorSJF::IOHandler()
 {
@@ -46,7 +47,7 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 	{
 		scheduler->TerminateProcess(currentProcess);
 		currentProcess = nullptr;
-		status = IDLE;
+		SetStatus(IDLE);
 		return true;
 	}
 

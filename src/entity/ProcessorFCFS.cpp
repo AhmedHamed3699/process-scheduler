@@ -1,6 +1,8 @@
 #include "ProcessorFCFS.h"
 #include "../control/Scheduler.h"
 
+Queue<Pair<unsigned int, unsigned int>> ProcessorFCFS::SIGKILL;
+
 void ProcessorFCFS::IOHandler()
 {
 }
@@ -24,7 +26,12 @@ void ProcessorFCFS::SIGKILLHandler()
 		return;
 
 	int timeToKill = SIGKILL.peekFront().first;
-	if (timeToKill != this->scheduler->GetCurrentTime())
+	if (timeToKill < this->scheduler->GetCurrentTime())
+	{
+		SIGKILL.dequeue();
+		timeToKill = SIGKILL.peekFront().first;
+	}
+	else if (timeToKill != this->scheduler->GetCurrentTime())
 		return;
 	int ID_toKill = SIGKILL.peekFront().second;
 
@@ -33,14 +40,21 @@ void ProcessorFCFS::SIGKILLHandler()
 
 bool ProcessorFCFS::KillProcess(int PID)
 {
-	Process* killedProcess = readyList.RemoveById(PID);
-	if (killedProcess == nullptr)
-		return false;
-	if (killedProcess == currentProcess)
+	Process* killedProcess = nullptr;
+	if(currentProcess && *(currentProcess) == PID)
 	{
+		killedProcess = currentProcess;
 		currentProcess = nullptr;
 		SetStatus(IDLE);
 	}
+	else
+	{
+		killedProcess = readyList.RemoveById(PID);
+	}
+
+	if (killedProcess == nullptr)
+		return false;
+
 	SIGKILL.dequeue();
 	scheduler->TerminateProcess(killedProcess);
 	return true;

@@ -4,7 +4,8 @@
 /// Created By scheduler maintained by scheduler and processor ///
 ///=//////////////////////////////////////////////////////////=///
 #include "../data.h"
-#include "Processor.h"
+
+class Processor;
 
 class Process
 {
