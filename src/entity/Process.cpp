@@ -63,7 +63,7 @@ void Process::CalcTRT()
 
 void Process::CalcWT()
 {
-	timeInfo.WT = timeInfo.TRT - timeInfo.CT;
+	timeInfo.WT = timeInfo.TRT - (timeInfo.CT - timeInfo.RCT);
 }
 
 unsigned int Process::GetIONumOfReq() const
