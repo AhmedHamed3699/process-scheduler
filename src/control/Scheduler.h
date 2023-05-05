@@ -88,6 +88,8 @@ public:
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state
 	void BlockProcess(Process* process);
+	// it manages the block list and the processes in it
+	void ManageBlock();
 	//returns the Processor with the shortest time
 	Processor* GetShortestRDYProcessor() const;
 	//returns the Processor with the longest time
