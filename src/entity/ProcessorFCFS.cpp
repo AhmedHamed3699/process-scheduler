@@ -5,8 +5,27 @@ void ProcessorFCFS::IOHandler()
 {
 }
 
-void ProcessorFCFS::MigratonHandler()
+bool ProcessorFCFS::MigratonHandler(int currentTime)
 {
+	SimulationParameters sP =  scheduler->GetSimulationParameters();
+
+	while (!readyList.IsEmpty())
+	{
+		Process* process = readyList.GetEntry(1);
+		TimeInfo timeInfo = process->GetTimeInfo();
+		int waitingTime = (currentTime - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
+		
+		if (waitingTime > sP.MAX_WAITING_TIME)
+		{
+			//call function in scheduler
+			readyList.Remove(1);
+		}
+		else
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 bool ProcessorFCFS::KillProcess(int PID)
@@ -40,6 +59,12 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		if (readyList.IsEmpty())
 			return false;
 		
+		//the function would return true if the readyList is empty
+		bool migratedOrNot = MigratonHandler(CurrentTime);
+
+		if (migratedOrNot)
+			return false;
+
 		//get the first process and remove it from the readyList
 		Process* process = readyList.GetEntry(1);
 
@@ -49,7 +74,7 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 
 		readyList.Remove(1);
 		currentProcess = process;
-		
+
 		process->SetStatus(RUN);
 		status = BUSY;
 		startingTime = CurrentTime;
