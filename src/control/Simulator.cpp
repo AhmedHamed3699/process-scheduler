@@ -65,7 +65,7 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 			}
 		}
 
-		scheduler.CreateNewProcess(AT, PID, CT, N, IO);
+		scheduler.CreateNewProcess(AT, PID, CT, IO);
 	}
 
 

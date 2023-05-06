@@ -1,8 +1,8 @@
 #include "Process.h"
 #include <string>
 
-Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) :
-	PID(id), currentProcessor(nullptr), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
+Process::Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO) :
+	PID(id), currentProcessor(nullptr), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
 {
 }
 

@@ -20,7 +20,6 @@ protected:
 	unsigned int expectedFinishTime;	//expected finish time of the current process
 	unsigned int startingTime;			//the time at which the processor started executing the current process
 
-	virtual void IOHandler() = 0;				//it manages how the I/O for a process would happen
 public:
 	Processor(Scheduler* outScheduler, ProcessorType aType);
 	virtual ~Processor();

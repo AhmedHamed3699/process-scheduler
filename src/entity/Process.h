@@ -18,7 +18,7 @@ private:
 	bool isStolen;
 	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_D
 public:
-	Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO);
+	Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO);
 
 	int GetID() const;
 	Process* GetDescendant() const;

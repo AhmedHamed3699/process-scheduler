@@ -60,7 +60,7 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 	IncrementTotalBusyTime();
 
 	scheduler->ManageBlock();
-	bool moveFromRun = scheduler->IO_RequestHandler(CurrentTime);
+	bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
 
 	if (moveFromRun)
 	{
