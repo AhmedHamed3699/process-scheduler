@@ -10,7 +10,7 @@ private:
 	FCFSList<Process*> readyList;
 
 	void IOHandler();						//it manages how the I/O for a process would happen
-	void MigratonHandler();					//it manages how the migration between processors would happen
+	bool MigratonHandler(int currentTime);					//it manages how the migration between processors would happen
 	void ForkHandler();						//Handles how Forking would be done
 
 public:

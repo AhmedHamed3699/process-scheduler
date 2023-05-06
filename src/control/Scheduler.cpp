@@ -246,8 +246,16 @@ void Scheduler::ScheduleNextSJF(Process* process)
 {
 }
 
-void Scheduler::ScheduleNextRR(Process* process)
+bool Scheduler::ScheduleNextRR(Process* process)
 {
+	Processor* processorRR = GetShortestRDYProcessorOfRR();
+
+	//false means that no RR processors in the system
+	if (processorRR == nullptr)
+		return false;
+
+	processorRR->AddProcessToList(process);
+	return true;
 }
 
 void Scheduler::TerminateProcess(Process* process)
@@ -337,6 +345,29 @@ Processor* Scheduler::GetLongestRDYProcessor() const
 		}
 	}
 	return longestProcessor;
+}
+
+Processor* Scheduler::GetShortestRDYProcessorOfRR() const
+{
+	int counter = simulationParameters.N_FCFS + simulationParameters.N_SJF + 1;
+
+	//check if there are any RR Processors
+	if (counter > processors.GetLength())
+		return nullptr;
+
+	Processor* shortestRRProcessor = processors.GetEntry(counter);
+
+	for (int i = counter + 1; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		if (shortestRRProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestRRProcessor = tempProcessor;
+		}
+	}
+
+	return shortestRRProcessor;
 }
 
 /// ////////////////////////////////// ///
