@@ -55,6 +55,8 @@ void ProcessorFCFS::SIGKILLHandler()
 	if (timeToKill < this->scheduler->GetCurrentTime())
 	{
 		SIGKILL.dequeue();
+		if (SIGKILL.isEmpty())
+			return;
 		timeToKill = SIGKILL.peekFront().first;
 	}
 	else if (timeToKill != this->scheduler->GetCurrentTime())
@@ -95,6 +97,17 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 	// we need to re-order callings, so it makes more sense
 
 	SIGKILLHandler();
+	if(currentProcess)
+	{
+		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
+
+		if (moveFromRun)
+		{
+			currentProcess = nullptr;
+			status = IDLE;
+			//return true; // see if you don't want to do IO and running at the same time stamp
+		}
+	}
 
 	//check if there is no process running
 	if (currentProcess == nullptr)
@@ -128,16 +141,6 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 	//decrement the expected finish time and the RCT by one
 	expectedFinishTime--;
 	currentProcess->DecrementRCT();
-
-	scheduler->ManageBlock();
-	bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
-
-	if (moveFromRun)
-	{
-		currentProcess = nullptr;
-		status = IDLE;
-		return true;
-	}
 
 	//if the process finished execution, it should be terminated
 	if (currentProcess->GetTimeInfo().RCT <= 0)

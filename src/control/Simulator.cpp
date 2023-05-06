@@ -201,6 +201,8 @@ void Simulator::Run()
 		}
 		#endif
 
+		// manages process in BLK list
+		scheduler.ManageBlock();
 		// run the processes (calls the schedule algorithm for each processor and executes its current running task)
 		scheduler.RunProcesses();
 

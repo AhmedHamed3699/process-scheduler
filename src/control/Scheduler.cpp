@@ -520,6 +520,10 @@ std::string Scheduler::TRMListStatsToString()
 		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().CT;
 		ss << " ";
 
+		// Total IO_Time Time (IO_D)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().totalIOD;
+		ss << " ";
+
 		// Waiting Time (WT)
 		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().WT;
 		ss << " ";
