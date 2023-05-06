@@ -21,7 +21,6 @@ protected:
 	unsigned int startingTime;			//the time at which the processor started executing the current process
 
 	virtual void IOHandler() = 0;				//it manages how the I/O for a process would happen
-	virtual void WorkStealingHandler() = 0;		//it manages how the work stealing between processors would happen
 public:
 	Processor(Scheduler* outScheduler, ProcessorType aType);
 	virtual ~Processor();

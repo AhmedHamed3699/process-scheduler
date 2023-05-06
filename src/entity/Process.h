@@ -11,10 +11,9 @@ private:
 	const int PID;
 	Process* descendant;
 	TimeInfo timeInfo;
-	unsigned int IONumOfReq;
 	ProcessStatus status;			//any process created will have NEW as its initial status
 	bool isStolen;
-	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_R
+	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_D
 public:
 	Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO);
 
@@ -38,8 +37,6 @@ public:
 	// Calculates and sets the total waiting time (WT) of the process, used when terminating the process
 	void CalcWT();
 
-	unsigned int GetIONumOfReq() const;			//can be used to know if the process would request IO or not
-	void SetIONumOfReq(unsigned int ioNum);
 	ProcessStatus GetStatus() const;
 	void SetStatus(ProcessStatus outStatus);
 	Pair<unsigned int, unsigned int> GetTopIOPair();	//it dequeues and return the first pair in the queue (if empty return Pair of (0,0)

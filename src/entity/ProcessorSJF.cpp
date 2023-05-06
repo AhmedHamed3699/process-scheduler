@@ -1,10 +1,7 @@
 #include "ProcessorSJF.h"
+#include "../control/Scheduler.h"
 
 void ProcessorSJF::IOHandler()
-{
-}
-
-void ProcessorSJF::WorkStealingHandler()
 {
 }
 

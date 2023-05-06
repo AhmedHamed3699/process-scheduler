@@ -9,7 +9,6 @@ private:
 	PriorityQueue<Process*> readyList;
 
 	void IOHandler();				//it manages how the I/O for a process would happen
-	void WorkStealingHandler();		//it manages how the work stealing between processors would happen
 
 public:
 	ProcessorSJF(Scheduler* outScheduler);
