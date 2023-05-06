@@ -101,8 +101,10 @@ bool Process::operator< (Process* p)
 	return (timeInfo.RCT < p->timeInfo.RCT);
 }
 
-bool Process::NeedIO() const
+bool Process::NeedIO(int currentTime) const
 {
+	if (IO.peekFront().first == timeInfo.CT - timeInfo.RCT)
+		return true;
 	return false;
 }
 

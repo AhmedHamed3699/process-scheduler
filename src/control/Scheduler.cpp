@@ -307,6 +307,20 @@ void Scheduler::ManageBlock()
 	//Note: when handling the IO Request we should first call the ManageBlock function then move the processes from the processors to the BLKList
 }
 
+bool Scheduler::IO_RequestHandler(Process* process)
+{
+	TimeInfo timeinfo = process->GetTimeInfo();
+	if (process->NeedIO(clk->GetTime())) // checks if process needs IO this timestamp
+	{
+		timeinfo.currentIOD = process->GetTopIOPair().second;
+		timeinfo.totalIOD += timeinfo.currentIOD;
+		process->SetTimeInfo(timeinfo);
+		BlockProcess(process);
+		return true;
+	}
+	return false;
+}
+
 Processor* Scheduler::GetShortestRDYProcessor() const
 {
 	if (processors.IsEmpty())

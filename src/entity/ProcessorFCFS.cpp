@@ -3,7 +3,8 @@
 
 Queue<Pair<unsigned int, unsigned int>> ProcessorFCFS::SIGKILL;
 
-void ProcessorFCFS::IOHandler()
+ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
+	:Processor(outScheduler, FCFS)
 {
 }
 
@@ -89,11 +90,6 @@ void ProcessorFCFS::ForkHandler()
 {
 }
 
-ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
-	:Processor(outScheduler, FCFS)
-{
-}
-
 bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 
@@ -132,6 +128,16 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 	expectedFinishTime--;
 	currentProcess->DecrementRCT();
 
+	scheduler->ManageBlock();
+	bool moveFromRun = scheduler->IO_RequestHandler(CurrentTime);
+
+	if (moveFromRun)
+	{
+		currentProcess = nullptr;
+		status = IDLE;
+		return true;
+	}
+
 	//if the process finished execution, it should be terminated
 	if (currentProcess->GetTimeInfo().RCT <= 0)
 	{
@@ -140,8 +146,6 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		status = IDLE;
 		return true;
 	}
-
-	//TODO: manage IO and other things like forking, migration etc...
 
 	return true;
 }
