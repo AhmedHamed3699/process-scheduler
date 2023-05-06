@@ -43,7 +43,7 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 	{
 		scheduler->TerminateProcess(currentProcess);
 		currentProcess = nullptr;
-		status = IDLE;
+		SetStatus(IDLE);
 		return true;
 	}
 
@@ -52,6 +52,7 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 
 void ProcessorSJF::AddProcessToList(Process* process)
 {
+	process->SetCurrentProcessor(this);
 	process->SetStatus(RDY);
 	TimeInfo timeInfo = process->GetTimeInfo();
 	expectedFinishTime += timeInfo.RCT;

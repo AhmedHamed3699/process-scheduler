@@ -79,7 +79,7 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 	while (InFile >> killTime >> PID)	//loop till the end of the file
 	{
 		Pair<unsigned int, unsigned int> sigkillP(killTime, PID);
-		scheduler.AddToSIGKILL(sigkillP);
+		ProcessorFCFS::AddToKill(sigkillP);
 	}
 
 

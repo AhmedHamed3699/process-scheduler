@@ -2,7 +2,7 @@
 #include <string>
 
 Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) :
-	PID(id), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
+	PID(id), currentProcessor(nullptr), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
 {
 }
 
@@ -19,6 +19,16 @@ Process* Process::GetDescendant() const
 void Process::SetDescendant(Process* child)
 {
 	descendant = child;
+}
+
+Processor* Process::GetCurrentProcessor() const
+{
+	return currentProcessor;
+}
+
+void Process::SetCurrentProcessor(Processor* CP)
+{
+	currentProcessor = CP;
 }
 
 TimeInfo Process::GetTimeInfo() const
@@ -53,7 +63,7 @@ void Process::CalcTRT()
 
 void Process::CalcWT()
 {
-	timeInfo.WT = timeInfo.TRT - timeInfo.CT;
+	timeInfo.WT = timeInfo.TRT - (timeInfo.CT - timeInfo.RCT);
 }
 
 ProcessStatus Process::GetStatus() const

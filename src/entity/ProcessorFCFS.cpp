@@ -1,6 +1,8 @@
 #include "ProcessorFCFS.h"
 #include "../control/Scheduler.h"
 
+Queue<Pair<unsigned int, unsigned int>> ProcessorFCFS::SIGKILL;
+
 void ProcessorFCFS::IOHandler()
 {
 }
@@ -38,16 +40,47 @@ bool ProcessorFCFS::MigratonHandler(int currentTime)
 	return true;
 }
 
+void ProcessorFCFS::AddToKill(Pair<unsigned int, unsigned int> outP)
+{
+	SIGKILL.enqueue(outP);
+}
+
+void ProcessorFCFS::SIGKILLHandler()
+{
+	if (SIGKILL.isEmpty())
+		return;
+
+	int timeToKill = SIGKILL.peekFront().first;
+	if (timeToKill < this->scheduler->GetCurrentTime())
+	{
+		SIGKILL.dequeue();
+		timeToKill = SIGKILL.peekFront().first;
+	}
+	else if (timeToKill != this->scheduler->GetCurrentTime())
+		return;
+	int ID_toKill = SIGKILL.peekFront().second;
+
+	KillProcess(ID_toKill);
+}
+
 bool ProcessorFCFS::KillProcess(int PID)
 {
-	Process* killedProcess = readyList.RemoveById(PID);
-	if (killedProcess == nullptr)
-		return false;
-	if (killedProcess == GetCurrentProcess())
+	Process* killedProcess = nullptr;
+	if(currentProcess && *(currentProcess) == PID)
 	{
-		SetCurrentProcess(nullptr);
+		killedProcess = currentProcess;
+		currentProcess = nullptr;
 		SetStatus(IDLE);
 	}
+	else
+	{
+		killedProcess = readyList.RemoveById(PID);
+	}
+
+	if (killedProcess == nullptr)
+		return false;
+
+	SIGKILL.dequeue();
 	scheduler->TerminateProcess(killedProcess);
 	return true;
 }
@@ -63,6 +96,9 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 
 bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
+
+	SIGKILLHandler();
+
 	//check if there is no process running
 	if (currentProcess == nullptr)
 	{
@@ -112,6 +148,7 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 
 void ProcessorFCFS::AddProcessToList(Process* process)
 {
+	process->SetCurrentProcessor(this);
 	process->SetStatus(RDY);
 	TimeInfo timeInfo = process->GetTimeInfo();
 	expectedFinishTime += timeInfo.RCT;

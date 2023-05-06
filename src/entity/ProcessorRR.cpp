@@ -85,6 +85,7 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 
 void ProcessorRR::AddProcessToList(Process* process)
 {
+	process->SetCurrentProcessor(this);
 	process->SetStatus(RDY);
 	TimeInfo timeInfo = process->GetTimeInfo();
 	expectedFinishTime += timeInfo.RCT;

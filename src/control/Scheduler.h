@@ -41,7 +41,7 @@ private:
 public:
 	Scheduler(Clock* clk);
 	~Scheduler();
-
+	int GetCurrentTime();
 
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
@@ -58,7 +58,6 @@ public:
 	SimulationParameters GetSimulationParameters();
 	void SetSimulationParameters(SimulationParameters sP);
 	bool isDone(); // to know when to terminate the program
-	void AddToSIGKILL(Pair<unsigned int, unsigned int> outP);
 
 	/// ////////////////////////////////// ///
 	///           UI AID Functions         ///
@@ -103,7 +102,7 @@ public:
 	void RunProcesses();
 	void MoveFromRun();
 	void MoveFromBLK();
-	int SimulateKill();
+
 	// work stealing algorithm
 	void WorkStealing();
 	// calculates the stealing limit for two given processors

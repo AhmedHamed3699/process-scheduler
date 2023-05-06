@@ -5,10 +5,13 @@
 ///=//////////////////////////////////////////////////////////=///
 #include "../data.h"
 
+class Processor;
+
 class Process
 {
 private:
 	const int PID;
+	Processor* currentProcessor;
 	Process* descendant;
 	TimeInfo timeInfo;
 	ProcessStatus status;			//any process created will have NEW as its initial status
@@ -20,6 +23,8 @@ public:
 	int GetID() const;
 	Process* GetDescendant() const;
 	void SetDescendant(Process* child);
+	Processor* GetCurrentProcessor() const;
+	void SetCurrentProcessor(Processor* CP);
 
 	/// ////////////////////////////////// ///
 	///			  Time Information		   ///

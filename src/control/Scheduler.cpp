@@ -29,6 +29,10 @@ Scheduler::~Scheduler()
 	}
 }
 
+int Scheduler::GetCurrentTime()
+{
+	return clk->GetTime();
+}
 
 /// ////////////////////////////////// ///
 ///         Creation and setup         ///
@@ -111,11 +115,6 @@ bool Scheduler::isDone()
 	// this means we must change N_PROCESS when we fork .. or terminate the program in another way
 
 	return (simulationParameters.N_PROCESS == TRMList.getSize());
-}
-
-void Scheduler::AddToSIGKILL(Pair<unsigned int, unsigned int> outP)
-{
-	SIGKILL.enqueue(outP);
 }
 
 /// ////////////////////////////////// ///
@@ -264,6 +263,7 @@ void Scheduler::TerminateProcess(Process* process)
 	{
 		return;
 	}
+	process->SetCurrentProcessor(nullptr);
 	process->SetStatus(TRM);
 	process->SetTT(clk->GetTime());
 	process->CalcTRT();
@@ -277,7 +277,7 @@ void Scheduler::BlockProcess(Process* process)
 	{
 		return;
 	}
-
+	process->SetCurrentProcessor(nullptr);
 	process->SetStatus(BLK);
 	BLKList.enqueue(process);
 }
@@ -440,21 +440,6 @@ void Scheduler::MoveFromBLK()
 		BLKList.dequeue();
 		//	Schedule(BlockedProcess, Processor);
 	}
-}
-
-int Scheduler::SimulateKill()
-{
-	int RandID = rand() % 31;
-	for (int i = 0; i < simulationParameters.N_FCFS; i++)
-	{
-		Processor* processor = processors.GetEntry(i + 1);
-		ProcessorFCFS* processorFCFS = dynamic_cast<ProcessorFCFS*>(processor);
-		bool found = processorFCFS->KillProcess(RandID);
-
-		if (found)
-			return RandID;
-	}
-	return -1;
 }
 
 void Scheduler::WorkStealing()
