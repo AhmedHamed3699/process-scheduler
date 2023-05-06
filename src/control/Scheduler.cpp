@@ -274,6 +274,31 @@ void Scheduler::BlockProcess(Process* process)
 	BLKList.enqueue(process);
 }
 
+void Scheduler::ManageBlock()
+{
+	if (BLKList.isEmpty())
+		return;
+
+	//get the first process in the block list
+	Process* blockedProcess = BLKList.peekFront();
+
+	//decrement the currentIOD by one 
+	TimeInfo timeInfo = blockedProcess->GetTimeInfo();
+	timeInfo.currentIOD--;
+	blockedProcess->SetTimeInfo(timeInfo);
+
+	//check if the process finished its IO duration
+	if (timeInfo.currentIOD <= 0)
+	{
+		//remove the process from the Block List and move it to the shortest RDY Queue
+		BLKList.dequeue();
+		Processor* shortestProcessor = GetShortestRDYProcessor();
+		shortestProcessor->AddProcessToList(blockedProcess);
+	}
+
+	//Note: when handling the IO Request we should first call the ManageBlock function then move the processes from the processors to the BLKList
+}
+
 Processor* Scheduler::GetShortestRDYProcessor() const
 {
 	if (processors.IsEmpty())

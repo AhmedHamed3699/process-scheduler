@@ -11,7 +11,6 @@ private:
 	static Queue<Pair<unsigned int, unsigned int>> SIGKILL;	//In each Pair, first is the time and second is the PID
 
 	void IOHandler();						//it manages how the I/O for a process would happen
-	void WorkStealingHandler();				//it manages how the work stealing between processors would happen
 	void MigratonHandler();					//it manages how the migration between processors would happen
 	void ForkHandler();						//Handles how Forking would be done
 	void SIGKILLHandler();					//it mangaes how and when process would be killed

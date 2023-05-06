@@ -66,16 +66,6 @@ void Process::CalcWT()
 	timeInfo.WT = timeInfo.TRT - (timeInfo.CT - timeInfo.RCT);
 }
 
-unsigned int Process::GetIONumOfReq() const
-{
-	return IONumOfReq;
-}
-
-void Process::SetIONumOfReq(unsigned int ioNum)
-{
-	IONumOfReq = ioNum;
-}
-
 ProcessStatus Process::GetStatus() const
 {
 	return status;

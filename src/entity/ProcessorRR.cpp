@@ -6,10 +6,6 @@ void ProcessorRR::IOHandler()
 {
 }
 
-void ProcessorRR::WorkStealingHandler()
-{
-}
-
 void ProcessorRR::MigratonHandler()
 {
 }

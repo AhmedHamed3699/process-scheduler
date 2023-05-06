@@ -7,10 +7,6 @@ void ProcessorFCFS::IOHandler()
 {
 }
 
-void ProcessorFCFS::WorkStealingHandler()
-{
-}
-
 void ProcessorFCFS::MigratonHandler()
 {
 }

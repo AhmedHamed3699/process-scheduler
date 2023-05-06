@@ -86,8 +86,10 @@ struct TimeInfo
 	unsigned int TRT;	 //turnaroundTime
 	unsigned int WT;	 //waitingTime
 	unsigned int BT;	 //time when first encounter BLK --> to be removed later
+	unsigned int currentIOD;	//IO duration for the current IO request
+	unsigned int totalIOD;		//the total time spent by the process doing IO
 
-	TimeInfo() :AT(0), RT(0), CT(0), RCT(0), TT(0), TRT(0), WT(0), BT(0)
+	TimeInfo() :AT(0), RT(0), CT(0), RCT(0), TT(0), TRT(0), WT(0), BT(0), currentIOD(0), totalIOD(0)
 	{
 	}
 };
