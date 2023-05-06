@@ -18,6 +18,8 @@ ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 
 bool ProcessorRR::ExecuteProcess(int CurrentTime)
 {
+	// we need to re-order callings, so it makes more sense
+
 	/// 1. if no running process, schedule next process
 	if (this->currentProcess == nullptr)
 	{
@@ -56,6 +58,16 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 
 	// increment the total busy time
 	IncrementTotalBusyTime();
+
+	scheduler->ManageBlock();
+	bool moveFromRun = scheduler->IO_RequestHandler(CurrentTime);
+
+	if (moveFromRun)
+	{
+		currentProcess = nullptr;
+		status = IDLE;
+		return true;
+	}
 
 	/// 3. if the process is finished, terminate it
 	// Check if the process is finished

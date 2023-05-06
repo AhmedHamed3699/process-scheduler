@@ -92,6 +92,7 @@ void ProcessorFCFS::ForkHandler()
 
 bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
+	// we need to re-order callings, so it makes more sense
 
 	SIGKILLHandler();
 
