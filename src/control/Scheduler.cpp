@@ -246,8 +246,16 @@ void Scheduler::ScheduleNextSJF(Process* process)
 {
 }
 
-void Scheduler::ScheduleNextRR(Process* process)
-{	
+bool Scheduler::ScheduleNextRR(Process* process)
+{
+	Processor* processorRR = GetShortestRDYProcessorOfRR();
+
+	//false means that no RR processors in the system
+	if (processorRR == nullptr)
+		return false;
+
+	processorRR->AddProcessToList(process);
+	return true;
 }
 
 void Scheduler::TerminateProcess(Process* process)

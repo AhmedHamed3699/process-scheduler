@@ -83,7 +83,7 @@ public:
 	void Schedule(Process* process, Processor* procesor);
 	void ScheduleNextFCFS(Process* process);
 	void ScheduleNextSJF(Process* process);
-	void ScheduleNextRR(Process* process);
+	bool ScheduleNextRR(Process* process);
 	// if process is not terminated then add it to the TRM list and change its state
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state
