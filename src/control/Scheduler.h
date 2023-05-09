@@ -52,7 +52,7 @@ public:
 	// Create a new process with the given id and add it to the NEW list
 	void CreateNewProcess(int id);
 	// Create a new process with the all params and add it to the NEW list
-	void CreateNewProcess(int AT, int PID, int CT, int N,
+	void CreateNewProcess(int AT, int PID, int CT,
 		Queue<Pair<unsigned int, unsigned int>>& outIO);
 
 	SimulationParameters GetSimulationParameters();
@@ -89,6 +89,8 @@ public:
 	void BlockProcess(Process* process);
 	// it manages the block list and the processes in it
 	void ManageBlock();
+	// handles io_requests an move process to BLK list
+	bool IO_RequestHandler(Process* process);
 	//returns the Processor with the shortest time
 	Processor* GetShortestRDYProcessor() const;
 	//returns the Processor with the longest time

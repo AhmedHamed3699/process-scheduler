@@ -73,20 +73,18 @@ void Scheduler::CreateProcessor(ProcessorType aType)
 
 void Scheduler::CreateNewProcess(int id)
 {
-	// create new processor
-	int N = 0;			//set NumOfIORequest with 0
-	Queue<Pair<unsigned int, unsigned int>> emptyQ;			//empty Queue to initialize process with
-	Process* newProcess = new Process(id, N, emptyQ);
+	Queue<Pair<unsigned int, unsigned int>> emptyQ;		//empty Queue to initialize process with
+	Process* newProcess = new Process(id, emptyQ);
 	newProcess->SetStatus(NEW);
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
 }
 
-void Scheduler::CreateNewProcess(int AT, int PID, int CT, int N,
+void Scheduler::CreateNewProcess(int AT, int PID, int CT,
 	Queue<Pair<unsigned int, unsigned int>>& outIO)
 {
 	// create new processor
-	Process* newProcess = new Process(PID, N, outIO);
+	Process* newProcess = new Process(PID, outIO);
 	newProcess->SetStatus(NEW);
 
 	TimeInfo timeInfo;
@@ -315,6 +313,20 @@ void Scheduler::ManageBlock()
 	//Note: when handling the IO Request we should first call the ManageBlock function then move the processes from the processors to the BLKList
 }
 
+bool Scheduler::IO_RequestHandler(Process* process)
+{
+	TimeInfo timeinfo = process->GetTimeInfo();
+	if (process->NeedIO(clk->GetTime())) // checks if process needs IO this timestamp
+	{
+		timeinfo.currentIOD = process->GetTopIOPair().second;
+		timeinfo.totalIOD += timeinfo.currentIOD;
+		process->SetTimeInfo(timeinfo);
+		BlockProcess(process);
+		return true;
+	}
+	return false;
+}
+
 Processor* Scheduler::GetShortestRDYProcessor() const
 {
 	if (processors.IsEmpty())
@@ -438,10 +450,6 @@ void Scheduler::MoveFromRun()
 			processor->SetStatus(IDLE);
 			processor->SetCurrentProcess(nullptr);
 			BlockProcess(CurrentProcess);
-
-			TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
-			timeInfo.BT = clk->GetTime();
-			CurrentProcess->SetTimeInfo(timeInfo);
 		}
 		else if (probability >= 20 && probability <= 30)
 		{
@@ -465,9 +473,6 @@ void Scheduler::MoveFromBLK()
 		return;
 
 	Process* BlockedProcess = BLKList.peekFront();
-
-	if (BlockedProcess->GetTimeInfo().BT == clk->GetTime())
-		return;
 
 	if (probability < 10)
 	{
@@ -549,10 +554,9 @@ std::string Scheduler::TRMListStatsToString()
 		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().CT;
 		ss << " ";
 
-		// IO Time (BT)
-		/// TODO: do it when IO is implemented
-		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().BT;
-		ss << "  ";
+		// Total IO_Time Time (IO_D)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().totalIOD;
+		ss << " ";
 
 		// Waiting Time (WT)
 		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().WT;
