@@ -243,6 +243,14 @@ void Scheduler::ScheduleNextFCFS(Process* process)
 
 void Scheduler::ScheduleNextSJF(Process* process)
 {
+	Processor* processorSJF = GetShortestRDYProcessorOfRR();
+
+	//false means that no SJF processors in the system
+	if (processorSJF == nullptr)
+		return false;
+
+	processorSJF->AddProcessToList(process);
+	return true;
 }
 
 bool Scheduler::ScheduleNextRR(Process* process)
@@ -368,6 +376,32 @@ Processor* Scheduler::GetShortestRDYProcessorOfRR() const
 	}
 
 	return shortestRRProcessor;
+}
+
+Processor* Scheduler::GetShortestRDYProcessorOfSJF() const
+{
+	//check if there are any SJF Processors
+	if (simulationParameters.N_SJF <= 0)
+		return nullptr;
+
+	int counter, size;
+
+	counter = simulationParameters.N_FCFS + 1;
+	size = counter + simulationParameters.N_SJF;
+
+	Processor* shortestSJFProcessor = processors.GetEntry(counter);
+
+	for (int i = counter + 1; i < size; i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		if (shortestSJFProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestSJFProcessor = tempProcessor;
+		}
+	}
+
+	return shortestSJFProcessor;
 }
 
 /// ////////////////////////////////// ///

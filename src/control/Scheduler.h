@@ -95,6 +95,8 @@ public:
 	Processor* GetLongestRDYProcessor() const;
 	//returns the RR Processor with the shortest time 
 	Processor* GetShortestRDYProcessorOfRR() const;
+	//returns the SJF Processor with the shortest time 
+	Processor* GetShortestRDYProcessorOfSJF() const;
 
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///
