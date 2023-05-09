@@ -263,6 +263,23 @@ bool Scheduler::ScheduleNextRR(Process* process)
 	return true;
 }
 
+bool Scheduler::MigrateRR(Process* process)
+{
+	if (process->GetTimeInfo().RCT < simulationParameters.RTF)
+	{
+		//migrate the process to a SJF processor
+		bool isSuccessful = ScheduleNextSJF(process);
+
+		//if the migration failed due to not having any SJF processors
+		if (!isSuccessful)
+			return false;
+
+		return true;
+	}
+
+	return false;
+}
+
 void Scheduler::TerminateProcess(Process* process)
 {
 	if (process->GetStatus() == TRM)

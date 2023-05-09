@@ -83,6 +83,7 @@ public:
 	void ScheduleNextFCFS(Process* process);
 	bool ScheduleNextSJF(Process* process);
 	bool ScheduleNextRR(Process* process);
+	bool MigrateRR(Process* process);
 	// if process is not terminated then add it to the TRM list and change its state
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state

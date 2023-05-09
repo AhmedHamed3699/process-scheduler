@@ -6,39 +6,6 @@ void ProcessorRR::IOHandler()
 {
 }
 
-bool ProcessorRR::MigratonHandler()
-{
-
-	SimulationParameters sP = scheduler->GetSimulationParameters();
-
-	while (!readyList.isEmpty())
-	{
-		//Get the first process in the ready list and calculate its remaining time
-		Process* process = readyList.peekFront();
-		TimeInfo timeInfo = process->GetTimeInfo();
-
-		if (process->GetTimeInfo().RCT < sP.RTF)
-		{
-			//migrate the process to a SJF processor
-			bool isSuccessful = scheduler->ScheduleNextSJF(process);
-
-			//if the migration failed due to not having any SJF processors
-			if (!isSuccessful)
-				return false;
-
-			//if the process migrated, remove it from the ready list
-			readyList.dequeue();
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	//return true if all the processes in the ready list migrated and the ready list became empty
-	return true;
-}
-
 ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 	:Processor(outScheduler, RR), RR_TIME_SLICE(this->scheduler->GetSimulationParameters().RR_TIME_SLICE)
 {
@@ -64,17 +31,24 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 	/// 1. if no running process, schedule next process
 	if (this->currentProcess == nullptr)
 	{
-		// schedule next process, unless there is no process in the ready list
-		if (readyList.isEmpty())
-			return false;
+		Process* process = nullptr;
 
-		Process* process = readyList.peekFront();
+		bool didMigrate = true; // checks if the current process needs migration
+		while (didMigrate)
+		{
+			if (readyList.isEmpty())
+				return false;
 
-		// if the process just arrived, make it wait in the ready list
-		if (process->GetTimeInfo().AT >= CurrentTime)
-			return false;
+			process = readyList.peekFront();
 
-		readyList.dequeue();
+			// if the process just arrived, make it wait in the ready list
+			if (process->GetTimeInfo().AT >= CurrentTime)
+				return false;
+
+			readyList.dequeue();
+			didMigrate = scheduler->MigrateRR(process);
+		}
+
 		currentProcess = process;
 
 		// if the first execution, set the RT
@@ -108,6 +82,7 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		scheduler->TerminateProcess(currentProcess);
 		currentProcess = nullptr;
 		SetStatus(IDLE);
+		quantumCounter = RR_TIME_SLICE;
 		return true;
 	}
 
@@ -115,7 +90,11 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 	// if quantum is finished, add the process to the ready list
 	if (quantumCounter == 0) // add here the quantum counter
 	{
-		readyList.enqueue(currentProcess);
+		//checks if didn't migrate so it can go back to the readylist
+		bool didMigrate = scheduler->MigrateRR(currentProcess); 
+
+		if(!didMigrate)
+			readyList.enqueue(currentProcess);
 		currentProcess->SetStatus(RDY);
 		currentProcess = nullptr;
 		SetStatus(IDLE);
