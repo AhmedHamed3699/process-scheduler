@@ -6,8 +6,37 @@ void ProcessorRR::IOHandler()
 {
 }
 
-void ProcessorRR::MigratonHandler()
+bool ProcessorRR::MigratonHandler()
 {
+
+	SimulationParameters sP = scheduler->GetSimulationParameters();
+
+	while (!readyList.IsEmpty())
+	{
+		//Get the first process in the ready list and calculate its remaining time
+		Process* process = readyList.peekFront();
+		TimeInfo timeInfo = process->GetTimeInfo();
+
+		if (process->GetTimeInfo().RCT < sP.RTF)
+		{
+			//migrate the process to a SJF processor
+			bool isSuccessful = scheduler->ScheduleNextSJF(process);
+
+			//if the migration failed due to not having any SJF processors
+			if (!isSuccessful)
+				return false;
+
+			//if the process migrated, remove it from the ready list
+			readyList.dequeue();
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	//return true if all the processes in the ready list migrated and the ready list became empty
+	return true;
 }
 
 ProcessorRR::ProcessorRR(Scheduler* outScheduler)
