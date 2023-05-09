@@ -18,6 +18,20 @@ ProcessorRR::ProcessorRR(Scheduler* outScheduler)
 
 bool ProcessorRR::ExecuteProcess(int CurrentTime)
 {
+	// we need to re-order callings, so it makes more sense
+
+	if (currentProcess)
+	{
+		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
+
+		if (moveFromRun)
+		{
+			currentProcess = nullptr;
+			status = IDLE;
+			//return true; // see if you don't want to do IO and running at the same time stamp
+		}
+	}
+
 	/// 1. if no running process, schedule next process
 	if (this->currentProcess == nullptr)
 	{

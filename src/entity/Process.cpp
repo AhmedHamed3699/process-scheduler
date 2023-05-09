@@ -1,8 +1,8 @@
 #include "Process.h"
 #include <string>
 
-Process::Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO) :
-	PID(id), currentProcessor(nullptr), IONumOfReq(ioNum), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
+Process::Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO) :
+	PID(id), currentProcessor(nullptr), descendant(nullptr), status(NEW), IO(outIO), isStolen(false)
 {
 }
 
@@ -101,8 +101,13 @@ bool Process::operator< (Process* p)
 	return (timeInfo.RCT < p->timeInfo.RCT);
 }
 
-bool Process::NeedIO() const
+bool Process::NeedIO(int currentTime) const
 {
+	if (IO.isEmpty())
+		return false;
+
+	if (IO.peekFront().first == timeInfo.CT - timeInfo.RCT + 1)
+		return true;
 	return false;
 }
 
