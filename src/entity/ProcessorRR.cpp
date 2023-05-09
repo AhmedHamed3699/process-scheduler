@@ -11,7 +11,7 @@ bool ProcessorRR::MigratonHandler()
 
 	SimulationParameters sP = scheduler->GetSimulationParameters();
 
-	while (!readyList.IsEmpty())
+	while (!readyList.isEmpty())
 	{
 		//Get the first process in the ready list and calculate its remaining time
 		Process* process = readyList.peekFront();

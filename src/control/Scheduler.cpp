@@ -241,9 +241,9 @@ void Scheduler::ScheduleNextFCFS(Process* process)
 {
 }
 
-void Scheduler::ScheduleNextSJF(Process* process)
+bool Scheduler::ScheduleNextSJF(Process* process)
 {
-	Processor* processorSJF = GetShortestRDYProcessorOfRR();
+	Processor* processorSJF = GetShortestRDYProcessorOfSJF();
 
 	//false means that no SJF processors in the system
 	if (processorSJF == nullptr)
