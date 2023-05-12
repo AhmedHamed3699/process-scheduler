@@ -96,7 +96,10 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 	// we need to re-order callings, so it makes more sense
 
+	scheduler->ForkHandler(this);
+
 	SIGKILLHandler();
+
 	if(currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);

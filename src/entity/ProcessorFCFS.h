@@ -10,10 +10,9 @@ private:
 	FCFSList<Process*> readyList;
 	static Queue<Pair<unsigned int, unsigned int>> SIGKILL;	//In each Pair, first is the time and second is the PID
 
-	bool MigratonHandler(int currentTime);					//it manages how the migration between processors would happen
-	void ForkHandler();						//Handles how Forking would be done
+	bool MigratonHandler(int currentTime);	//it manages how the migration between processors would happen
 	void SIGKILLHandler();					//it mangaes how and when process would be killed
-	bool KillProcess(int PID);		//responsible for dealing with SIGKILL and Orphans
+	bool KillProcess(int PID);				//responsible for dealing with SIGKILL and Orphans
 
 public:
 	ProcessorFCFS(Scheduler* outScheduler);

@@ -83,7 +83,7 @@ void Scheduler::CreateNewProcess(int id)
 void Scheduler::CreateNewProcess(int AT, int PID, int CT,
 	Queue<Pair<unsigned int, unsigned int>>& outIO)
 {
-	// create new processor
+	// create new process
 	Process* newProcess = new Process(PID, outIO);
 	newProcess->SetStatus(NEW);
 
@@ -96,6 +96,22 @@ void Scheduler::CreateNewProcess(int AT, int PID, int CT,
 
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
+}
+
+Process* Scheduler::CreateForkedProcess(int PID, int AT, int CT)
+{
+	Queue<Pair<unsigned int, unsigned int>> emptyQ;	 //empty Queue to initialize process with
+	Process* newProcess = new Process(PID, emptyQ);
+	newProcess->SetStatus(NEW);
+
+	TimeInfo timeInfo;
+	timeInfo.AT = AT;
+	timeInfo.CT = CT;
+	timeInfo.RCT = CT;
+
+	newProcess->SetTimeInfo(timeInfo);
+
+	return newProcess;
 }
 
 SimulationParameters Scheduler::GetSimulationParameters()
@@ -237,6 +253,14 @@ void Scheduler::Schedule(Process* process, Processor* processor)
 
 void Scheduler::ScheduleNextFCFS(Process* process)
 {
+	Processor* processorFCFS = GetShortestRDYProcessorOfFCFS();
+
+	//false means that no FCFS processors in the system
+	if (processorSJF == nullptr)
+		return false;
+
+	processorFCFS->AddProcessToList(process);
+	return true;
 }
 
 bool Scheduler::ScheduleNextSJF(Process* process)
@@ -274,6 +298,24 @@ bool Scheduler::MigrateRR(Process* process)
 		if (!isSuccessful)
 			return false;
 
+		return true;
+	}
+
+	return false;
+}
+
+bool Scheduler::ForkHandler(Process* process)
+{
+	if (simulationParameters.N_FCFS == 0)
+		return false;
+	int Rand = rand() % 101;
+	if (Rand <= simulationParameters.FORK_PROBABILITY)
+	{
+		int N = simulationParameters.N_PROCESS;
+		int id = (rand() % N) + N;
+		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
+		ScheduleNextFCFS(ForkedProcess);
+		process->SetDescendant(ForkedProcess);
 		return true;
 	}
 
@@ -431,6 +473,32 @@ Processor* Scheduler::GetShortestRDYProcessorOfSJF() const
 	}
 
 	return shortestSJFProcessor;
+}
+
+Processor* Scheduler::GetShortestRDYProcessorOfFCFS() const
+{
+	//check if there are any FCFS Processors
+	if (simulationParameters.N_FCFS <= 0)
+		return nullptr;
+
+	int counter, size;
+
+	counter = 1;
+	size = counter + simulationParameters.N_FCFS;
+
+	Processor* shortestFCFSProcessor = processors.GetEntry(counter);
+
+	for (int i = counter + 1; i < size; i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		if (shortestFCFSProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestFCFSProcessor = tempProcessor;
+		}
+	}
+
+	return shortestFCFSProcessor;
 }
 
 /// ////////////////////////////////// ///
