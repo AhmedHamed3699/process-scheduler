@@ -53,6 +53,9 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 	expectedFinishTime--;
 	currentProcess->DecrementRCT();
 
+	// increment the total busy time
+	IncrementTotalBusyTime();
+
 	//if the process finished execution, it should be terminated
 	if (currentProcess->GetTimeInfo().RCT <= 0)
 	{

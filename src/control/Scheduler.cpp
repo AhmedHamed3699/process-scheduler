@@ -126,8 +126,6 @@ void Scheduler::SetSimulationParameters(SimulationParameters sP)
 
 bool Scheduler::isDone()
 {
-	// this means we must change N_PROCESS when we fork .. or terminate the program in another way
-
 	return (simulationParameters.N_PROCESS == TRMList.getSize());
 }
 
@@ -251,12 +249,12 @@ void Scheduler::Schedule(Process* process, Processor* processor)
 	processor->AddProcessToList(process);
 }
 
-void Scheduler::ScheduleNextFCFS(Process* process)
+bool Scheduler::ScheduleNextFCFS(Process* process)
 {
 	Processor* processorFCFS = GetShortestRDYProcessorOfFCFS();
 
 	//false means that no FCFS processors in the system
-	if (processorSJF == nullptr)
+	if (processorFCFS == nullptr)
 		return false;
 
 	processorFCFS->AddProcessToList(process);
@@ -304,22 +302,21 @@ bool Scheduler::MigrateRR(Process* process)
 	return false;
 }
 
-bool Scheduler::ForkHandler(Process* process)
+void Scheduler::ForkHandler(Process* process)
 {
-	if (simulationParameters.N_FCFS == 0)
-		return false;
+	// checks if there is no FCFS processors or no running process
+	if (simulationParameters.N_FCFS == 0 || process == nullptr)
+		return;
+
 	int Rand = rand() % 101;
 	if (Rand <= simulationParameters.FORK_PROBABILITY)
 	{
-		int N = simulationParameters.N_PROCESS;
-		int id = (rand() % N) + N;
+		int id = simulationParameters.N_PROCESS + 10;
 		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
 		ScheduleNextFCFS(ForkedProcess);
 		process->SetDescendant(ForkedProcess);
-		return true;
+		simulationParameters.N_PROCESS++;
 	}
-
-	return false;
 }
 
 void Scheduler::TerminateProcess(Process* process)
@@ -724,7 +721,7 @@ unsigned int* Scheduler::CalculateProcessorsUtilization()
 {
 	// get total turnaround time
 	unsigned int totalCPUTime = clk->GetTime();
-	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
 
 	// create array of processors utilization
 	unsigned int* processorsUtilization = new unsigned int[numOfProcessors];
@@ -743,7 +740,7 @@ unsigned int* Scheduler::CalculateProcessorsLoad()
 {
 	// get total turnaround time
 	unsigned int totalTurnaroundTime = CalculateTotalTurnaroundTime();
-	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
 
 	// create array of processors load
 	unsigned int* processorsLoad = new unsigned int[numOfProcessors];
