@@ -7,8 +7,11 @@
 /// CONSTANTS
 #define LINE_LENGTH 106
 #define NUM_PRECISION 3
-#define WORK_STEALING true		// true if work stealing is enabled, false otherwise
-#define MAX_STEALING_LIMIT 0.4	// the maximum percentage of STEALING_LIMIT
+#define WORK_STEALING true				// true if work stealing is enabled, false otherwise
+#define OVER_HEATING true				// true if over heating is enabled, false otherwise
+#define OVER_HEATING_PERCENT 2			// the percentage of which a processor will be over heated
+#define OVER_HEATING_PERCENT_SCALE 1000  // the divider of the percent if 100 than the percent 0.02 
+#define MAX_STEALING_LIMIT 0.4			// the maximum percentage of STEALING_LIMIT
 
 /// ////////////////// ///
 ///     Enumerators    ///
@@ -25,7 +28,8 @@ enum ProcessStatus {
 
 enum ProcessorStatus {
 	IDLE,
-	BUSY
+	BUSY,
+	STOP
 };
 
 // Terminal Output colors codes

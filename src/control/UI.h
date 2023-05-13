@@ -37,6 +37,8 @@ public:
 	void PrintProcessKilled(int PID);
 	// Print the Alert of Work Stealing
 	void PrintWorkStealingAlert();
+	// Print Alert saying that processor overheating happened
+	void PrintOverheatingAlert();
 
 	/// ////////////////////////////////// ///
 	///		  Silent Mode functions 	   ///

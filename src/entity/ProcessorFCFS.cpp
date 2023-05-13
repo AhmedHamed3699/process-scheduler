@@ -62,6 +62,18 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 	// we need to re-order callings, so it makes more sense
 
+	// check if the processor is over heated - OVER HEATING
+	if (this->status == STOP)
+	{
+		overheatCounter--;
+
+		if (overheatCounter <= 0)
+		{
+			status = IDLE;
+		}
+		return false;
+	}
+
 	SIGKILLHandler();
 
 	if (currentProcess)
@@ -171,6 +183,43 @@ Process* ProcessorFCFS::StealProcess()
 	expectedFinishTime -= process->GetTimeInfo().RCT;
 	// return the process
 	return process;
+}
+
+void ProcessorFCFS::OverHeat()
+{
+	// move running process
+	if (currentProcess)
+	{
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+
+		if (currentProcess->IsForked())
+		{
+			scheduler->TerminateProcess(currentProcess);
+		}
+		else {
+			scheduler->Schedule(currentProcess, shortestProcessor);
+		}
+		currentProcess = nullptr;
+	}
+
+	// move ready list processes
+	while (!readyList.IsEmpty())
+	{
+		Process* process = readyList.GetEntry(1);
+		readyList.Remove(1);
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+		if (process->IsForked())
+		{
+			scheduler->TerminateProcess(process);
+		}
+		else
+		{
+			scheduler->Schedule(process, shortestProcessor);
+		}
+	}
+
+	// reset expected finish time
+	expectedFinishTime = 0;
 }
 
 std::string ProcessorFCFS::ToString()

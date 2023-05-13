@@ -14,6 +14,19 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 {
 	// we need to re-order callings, so it makes more sense
 
+	// check if the processor is over heated - OVER HEATING
+	if (this->status == STOP)
+	{
+		overheatCounter--;
+
+		if (overheatCounter <= 0)
+		{
+			status = IDLE;
+		}
+		return false;
+	}
+
+
 	if (currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
@@ -85,6 +98,29 @@ Process* ProcessorSJF::StealProcess()
 	expectedFinishTime -= process->GetTimeInfo().RCT;
 	readyList.dequeue();
 	return process;
+}
+
+void ProcessorSJF::OverHeat()
+{
+	// move running process
+	if (currentProcess)
+	{
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+		scheduler->Schedule(currentProcess, shortestProcessor);
+		currentProcess = nullptr;
+	}
+
+	// move ready list processes
+	while (!readyList.isEmpty())
+	{
+		Process* process = readyList.peekFront();
+		readyList.dequeue();
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+		scheduler->Schedule(process, shortestProcessor);
+	}
+
+	// reset expected finish time
+	expectedFinishTime = 0;
 }
 
 std::string ProcessorSJF::ToString()

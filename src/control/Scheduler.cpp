@@ -422,11 +422,26 @@ Processor* Scheduler::GetShortestRDYProcessor() const
 		return nullptr;
 	}
 
-	Processor* shortestProcessor = processors.GetEntry(1);
+
+	int shortestProcessorIndex = 1;
+	Processor* shortestProcessor = processors.GetEntry(shortestProcessorIndex);
+	while (shortestProcessor && shortestProcessor->GetStatus() == STOP)
+	{
+		shortestProcessor = processors.GetEntry(++shortestProcessorIndex);
+	}
+
+	if (shortestProcessor == nullptr)
+	{
+		return nullptr;
+	}
 
 	for (int i = 2; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
 
 		if (shortestProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
 		{
@@ -443,10 +458,27 @@ Processor* Scheduler::GetLongestRDYProcessor() const
 	{
 		return nullptr;
 	}
-	Processor* longestProcessor = processors.GetEntry(1);
+
+	int longestProcessorIndex = 1;
+	Processor* longestProcessor = processors.GetEntry(longestProcessorIndex);
+	while (longestProcessor && longestProcessor->GetStatus() == STOP)
+	{
+		longestProcessor = processors.GetEntry(++longestProcessorIndex);
+	}
+
+	if (longestProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
 	for (int i = 2; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
+
 		if (longestProcessor->GetExpectedFinishTime() < tempProcessor->GetExpectedFinishTime())
 		{
 			longestProcessor = tempProcessor;
@@ -465,9 +497,24 @@ Processor* Scheduler::GetShortestRDYProcessorOfRR() const
 
 	Processor* shortestRRProcessor = processors.GetEntry(counter);
 
+	/// ADDED for overheating by Amir
+	while (shortestRRProcessor && shortestRRProcessor->GetStatus() == STOP)
+	{
+		shortestRRProcessor = processors.GetEntry(++counter);
+	}
+
+	if (shortestRRProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
 	for (int i = counter + 1; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
 
 		if (shortestRRProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
 		{
@@ -490,10 +537,24 @@ Processor* Scheduler::GetShortestRDYProcessorOfSJF() const
 	size = counter + simulationParameters.N_SJF;
 
 	Processor* shortestSJFProcessor = processors.GetEntry(counter);
+	/// ADDED for overheating by Amir
+	while (shortestSJFProcessor && shortestSJFProcessor->GetStatus() == STOP)
+	{
+		shortestSJFProcessor = processors.GetEntry(++counter);
+	}
+
+	if (shortestSJFProcessor == nullptr)
+	{
+		return nullptr;
+	}
 
 	for (int i = counter + 1; i < size; i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
 
 		if (shortestSJFProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
 		{
@@ -516,10 +577,24 @@ Processor* Scheduler::GetShortestRDYProcessorOfFCFS() const
 	size = counter + simulationParameters.N_FCFS;
 
 	Processor* shortestFCFSProcessor = processors.GetEntry(counter);
+	/// ADDED for overheating by Amir
+	while (shortestFCFSProcessor && shortestFCFSProcessor->GetStatus() == STOP)
+	{
+		shortestFCFSProcessor = processors.GetEntry(++counter);
+	}
+
+	if (shortestFCFSProcessor == nullptr)
+	{
+		return nullptr;
+	}
 
 	for (int i = counter + 1; i < size; i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
 
 		if (shortestFCFSProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
 		{
@@ -537,11 +612,26 @@ Processor* Scheduler::GetShortestProcessorWithoutRUN() const
 		return nullptr;
 	}
 
-	Processor* shortestProcessor = processors.GetEntry(1);
+	int shortestProcessorIndex = 1;
+	Processor* shortestProcessor = processors.GetEntry(shortestProcessorIndex);
+	/// ADDED for overheating by Amir
+	while (shortestProcessor && shortestProcessor->GetStatus() == STOP)
+	{
+		shortestProcessor = processors.GetEntry(++shortestProcessorIndex);
+	}
+
+	if (shortestProcessor == nullptr)
+	{
+		return nullptr;
+	}
 
 	for (int i = 2; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (shortestProcessor->GetStatus() == STOP)
+			continue;
 
 		if (shortestProcessor->GetTotalReadyTime() > tempProcessor->GetTotalReadyTime())
 		{
@@ -558,10 +648,28 @@ Processor* Scheduler::GetLongestProcessorWithoutRUN() const
 	{
 		return nullptr;
 	}
-	Processor* longestProcessor = processors.GetEntry(1);
+
+	int longestProcessorIndex = 1;
+	Processor* longestProcessor = processors.GetEntry(longestProcessorIndex);
+	/// Added for overheating by Amir
+	while (longestProcessor && longestProcessor->GetStatus() == STOP)
+	{
+		longestProcessor = processors.GetEntry(++longestProcessorIndex);
+	}
+
+	if (longestProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
 	for (int i = 2; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for over heating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
+
 		if (longestProcessor->GetTotalReadyTime() < tempProcessor->GetTotalReadyTime())
 		{
 			longestProcessor = tempProcessor;
@@ -660,6 +768,24 @@ void Scheduler::WorkStealing()
 		Schedule(stolenProcess, shortestProcessor);		// move the stolen process to the shortest processor
 	}
 
+}
+
+void Scheduler::OverHeating()
+{
+	// Get a random processor
+	int randomProcessorIndex = (rand() % processors.GetLength()) + 1;
+
+	Processor* randomProcessor = processors.GetEntry(randomProcessorIndex);
+
+	if (randomProcessor->GetStatus() == STOP)
+		return;
+
+	// set the status of the random processor to STOP
+	randomProcessor->SetStatus(STOP);
+	randomProcessor->SetHeatingTime(simulationParameters.OVERHEAT_TIME);
+
+	// Overheat the processor
+	randomProcessor->OverHeat();
 }
 
 

@@ -206,6 +206,16 @@ void Simulator::Run()
 		}
 		#endif
 
+		// Over heating
+		#if OVER_HEATING
+		bool willOverHeat = rand() % OVER_HEATING_PERCENT_SCALE < OVER_HEATING_PERCENT;
+		if (willOverHeat)
+		{
+			scheduler.OverHeating();
+			ui.PrintOverheatingAlert();
+		}
+		#endif
+
 		// manages process in BLK list
 		scheduler.ManageBlock();
 		// run the processes (calls the schedule algorithm for each processor and executes its current running task)
