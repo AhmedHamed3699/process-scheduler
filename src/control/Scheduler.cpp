@@ -310,7 +310,7 @@ bool Scheduler::MigrateFCFS(Process* process)
 	if (waitingTime > simulationParameters.MAX_WAITING_TIME)
 	{
 		//migrate the process to a FCFS processor
-		bool isSuccessful = ScheduleNextFCFS(process);
+		bool isSuccessful = ScheduleNextRR(process);
 
 		//if the migration failed due to not having any FCFS processors
 		if (!isSuccessful)
@@ -329,7 +329,7 @@ void Scheduler::ForkHandler(Process* process)
 		return;
 
 	int Rand = rand() % 101;
-	if (Rand <= simulationParameters.FORK_PROBABILITY)
+	if (Rand < simulationParameters.FORK_PROBABILITY)
 	{
 		int id = simulationParameters.N_PROCESS + 10;
 		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
