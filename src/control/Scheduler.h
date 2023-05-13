@@ -29,6 +29,7 @@ private:
 	///  Stats Data Members and counters   ///
 	unsigned int maxWMigrations;
 	unsigned int rtfMigrations;
+	unsigned int killCount;
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
@@ -129,6 +130,7 @@ public:
 	std::string TRMListStatsToString();
 	void IncrementMaxWMigrations();
 	void IncrementRTFMigrations();
+	void IncrementKillCount();
 
 	/// TIME STATS
 	unsigned int CalculateAverageWaitTime();
@@ -147,5 +149,6 @@ public:
 	unsigned int GetNumberOfMaxWMigrations();
 	unsigned int CalculateMaxWMigrationPercent();
 	unsigned int CalculateRTFMigrationPercent();
+	unsigned int CalculateKillCountPercent();
 };
 
