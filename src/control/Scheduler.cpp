@@ -359,14 +359,16 @@ void Scheduler::ForkHandler(Process* process)
 void Scheduler::KillORPH(Process* process)
 {
 	Process* descendant = process->GetDescendant();
+	process->SetDescendant(nullptr);
 
-	while (descendant)
+	if (process->GetStatus() == TRM)
+		return;
+
+	if (descendant)
 	{
 		ProcessorFCFS* currentProcessor = (ProcessorFCFS*) descendant->GetCurrentProcessor();
 
-		currentProcessor->KillProcess(descendant->GetID());
-
-		descendant = descendant->GetDescendant();
+		currentProcessor->KillORPH(descendant->GetID());
 	}
 }
 

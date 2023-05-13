@@ -13,6 +13,28 @@ void ProcessorFCFS::AddToKill(Pair<unsigned int, unsigned int> outP)
 	SIGKILL.enqueue(outP);
 }
 
+bool ProcessorFCFS::KillORPH(int PID)
+{
+	Process* killedProcess = nullptr;
+
+	if (currentProcess != nullptr && currentProcess->GetID() == PID)
+	{
+		killedProcess = currentProcess;
+		currentProcess = nullptr;
+		SetStatus(IDLE);
+	}
+	else
+	{
+		killedProcess = readyList.RemoveById(PID);
+	}
+
+	if (killedProcess == nullptr)
+		return false;
+
+	scheduler->TerminateProcess(killedProcess);
+	return true;
+}
+
 void ProcessorFCFS::SIGKILLHandler()
 {
 	if (SIGKILL.isEmpty())
