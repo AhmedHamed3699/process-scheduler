@@ -16,6 +16,19 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 {
 	// we need to re-order callings, so it makes more sense
 
+	// check if the processor is over heated - OVER HEATING
+	if (this->status == STOP)
+	{
+		overheatCounter--;
+
+		if (overheatCounter <= 0)
+		{
+			status = IDLE;
+		}
+		return false;
+	}
+
+
 	if (currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
