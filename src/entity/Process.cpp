@@ -2,7 +2,8 @@
 #include <string>
 
 Process::Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO) :
-	PID(id), currentProcessor(nullptr), descendant(nullptr), status(NEW), IO(outIO), isStolen(false), isForked(false)
+	PID(id), currentProcessor(nullptr), firstChild(nullptr), secondChild(nullptr), status(NEW), 
+	IO(outIO), isStolen(false), isForked(false)
 {
 }
 

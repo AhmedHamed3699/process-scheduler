@@ -341,7 +341,11 @@ bool Scheduler::MigrateFCFS(Process* process)
 void Scheduler::ForkHandler(Process* process)
 {
 	// checks if there is no FCFS processors or no running process
-	if (simulationParameters.N_FCFS == 0 || process == nullptr || process->GetDescendant() != nullptr)
+	if (simulationParameters.N_FCFS == 0 || process == nullptr)
+		return;
+
+	// checks if the process can not have any other child
+	if (process->GetFirstChild() != nullptr && process->GetSecondChild() != nullptr)
 		return;
 
 	unsigned int Rand = rand() % 100;
@@ -351,36 +355,56 @@ void Scheduler::ForkHandler(Process* process)
 		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
 		ForkedProcess->SetForked(true);		// set the forked flag to true
 		ScheduleNextFCFS(ForkedProcess);
-		process->SetDescendant(ForkedProcess);
+
+		if (process->GetFirstChild() == nullptr)
+		{
+			process->SetFirstChild(ForkedProcess);
+		}
+		else
+		{
+			process->SetSecondChild(ForkedProcess);
+		}
+		
 		simulationParameters.N_PROCESS++;
 	}
 }
 
 void Scheduler::KillORPH(Process* process)
 {
-	Process* descendant = process->GetDescendant();
-	process->SetDescendant(nullptr);
+	Process* firstChild = process->GetFirstChild();
+	Process* secondChild = process->GetSecondChild();
+	process->SetFirstChild(nullptr);
+	process->SetSecondChild(nullptr);
 
-	if (process->GetStatus() == TRM)
-		return;
 
-	if (descendant)
+	if (firstChild)
 	{
-		ProcessorFCFS* currentProcessor = (ProcessorFCFS*) descendant->GetCurrentProcessor();
+		 ProcessorFCFS* currentProcessor = dynamic_cast<ProcessorFCFS*>(firstChild->GetCurrentProcessor());
 
-		currentProcessor->KillORPH(descendant->GetID());
+		 if (currentProcessor == nullptr) // Error --> How a forked process has been to processor other than FCFS ?
+			 return;
+
+		currentProcessor->KillORPH(firstChild->GetID());
+	}
+
+	if (secondChild)
+	{
+		ProcessorFCFS* currentProcessor = dynamic_cast<ProcessorFCFS*>(secondChild->GetCurrentProcessor());
+
+		if (currentProcessor == nullptr) // Error --> How a forked process has been to processor other than FCFS ?
+			return;
+
+		currentProcessor->KillORPH(secondChild->GetID());
 	}
 }
 
 void Scheduler::TerminateProcess(Process* process)
 {
 	if (process->GetStatus() == TRM)
-	{
 		return;
-	}
 	
 	// check if the process had descendants or not to kill them
-	if (process->GetDescendant() != nullptr)
+	if (process->GetFirstChild() != nullptr || process->GetSecondChild() != nullptr)
 	{
 		KillORPH(process);
 	}
