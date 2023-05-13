@@ -12,6 +12,8 @@ Scheduler::Scheduler(Clock* clk)
 	IOProcess(nullptr)
 {
 	this->clk = clk;
+	maxWMigrations = 0;
+	rtfMigrations = 0;
 }
 
 Scheduler::~Scheduler()
@@ -661,6 +663,16 @@ std::string Scheduler::TRMListStatsToString()
 	return ss.str();
 }
 
+void Scheduler::IncrementMaxWMigrations()
+{
+	maxWMigrations += 1;
+}
+
+void Scheduler::IncrementRTFMigrations()
+{
+	rtfMigrations += 1;
+}
+
 unsigned int Scheduler::CalculateAverageWaitTime()
 {
 	unsigned int totalWaitingTime = 0;
@@ -789,5 +801,25 @@ unsigned int Scheduler::CaculateWorkStealPercent()
 	}
 
 	return (numOfStolenProcesses / (double)TRMList.getSize()) * 100;
+}
+
+unsigned int Scheduler::GetNumberOfRTFMigrations()
+{
+	return rtfMigrations;
+}
+
+unsigned int Scheduler::GetNumberOfMaxWMigrations()
+{
+	return maxWMigrations;
+}
+
+unsigned int Scheduler::CalculateMaxWMigrationPercent()
+{
+	return maxWMigrations * 100.f / simulationParameters.N_PROCESS;
+}
+
+unsigned int Scheduler::CalculateRTFMigrationPercent()
+{
+	return rtfMigrations * 100.f / simulationParameters.N_PROCESS;
 }
 
