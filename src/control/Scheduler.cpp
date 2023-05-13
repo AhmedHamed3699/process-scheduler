@@ -313,6 +313,7 @@ void Scheduler::ForkHandler(Process* process)
 	{
 		int id = simulationParameters.N_PROCESS + 10;
 		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
+		ForkedProcess->SetForked(true);		// set the forked flag to true
 		ScheduleNextFCFS(ForkedProcess);
 		process->SetDescendant(ForkedProcess);
 		simulationParameters.N_PROCESS++;
