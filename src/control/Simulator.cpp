@@ -119,12 +119,15 @@ bool Simulator::CreateOutputFile()
 
 	OutFile << std::endl;
 
-	/// TODO: MIGRATION STATS
+	/// MIGRATION STATS
+	OutFile << "Migration %: RTF%= " << scheduler.CalculateRTFMigrationPercent() << "%, ";
+	OutFile << "MaxW%= " << scheduler.CalculateMaxWMigrationPercent() << "%" << std::endl;
 
 	/// WORK STEALING STATS
 	OutFile << "Work Steal%: " << scheduler.CaculateWorkStealPercent() << "%" << std::endl;
 
-	/// TODO: FORKING STATS
+	/// FORKING STATS
+	OutFile << "Forked processes%: " << scheduler.GetSimulationParameters().FORK_PROBABILITY << "%" << std::endl;
 
 	/// TODO: KILLING STATS
 
