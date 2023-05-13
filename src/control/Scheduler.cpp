@@ -323,6 +323,10 @@ bool Scheduler::MigrateFCFS(Process* process)
 		if (!isSuccessful)
 			return false;
 
+		/// ADDED for stats by Amir
+		this->IncrementMaxWMigrations();
+
+
 		return true;
 	}
 
