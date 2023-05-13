@@ -119,6 +119,8 @@ public:
 
 	// work stealing algorithm
 	void WorkStealing();
+	// Over Heating algorithm
+	void OverHeating();
 	// calculates the stealing limit for two given processors
 	double CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor);
 

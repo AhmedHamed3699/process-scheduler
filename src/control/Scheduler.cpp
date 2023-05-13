@@ -705,6 +705,23 @@ void Scheduler::WorkStealing()
 
 }
 
+void Scheduler::OverHeating()
+{
+	// Get a random processor
+	int randomProcessorIndex = (rand() % processors.GetLength()) + 1;
+
+	Processor* randomProcessor = processors.GetEntry(randomProcessorIndex);
+
+	if (randomProcessor->GetStatus() == STOP)
+		return;
+
+	// set the status of the random processor to STOP
+	randomProcessor->SetStatus(STOP);
+
+	// Overheat the processor
+	randomProcessor->OverHeat();
+}
+
 
 double Scheduler::CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor)
 {
