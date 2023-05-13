@@ -94,6 +94,7 @@ public:
 	bool MigrateRR(Process* process);
 	bool MigrateFCFS(Process* process);
 	void ForkHandler(Process* process);
+	void KillORPH(Process* process);
 	// if process is not terminated then add it to the TRM list and change its state
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state
