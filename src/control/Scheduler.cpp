@@ -309,14 +309,38 @@ bool Scheduler::MigrateRR(Process* process)
 	return false;
 }
 
+bool Scheduler::MigrateFCFS(Process* process)
+{
+	TimeInfo timeInfo = process->GetTimeInfo();
+	int waitingTime = (clk->GetTime() - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
+
+	if (waitingTime > simulationParameters.MAX_WAITING_TIME)
+	{
+		//migrate the process to a FCFS processor
+		bool isSuccessful = ScheduleNextRR(process);
+
+		//if the migration failed due to not having any FCFS processors
+		if (!isSuccessful)
+			return false;
+
+		/// ADDED for stats by Amir
+		this->IncrementMaxWMigrations();
+
+
+		return true;
+	}
+
+	return false;
+}
+
 void Scheduler::ForkHandler(Process* process)
 {
 	// checks if there is no FCFS processors or no running process
 	if (simulationParameters.N_FCFS == 0 || process == nullptr)
 		return;
 
-	int Rand = rand() % 101;
-	if (Rand <= simulationParameters.FORK_PROBABILITY)
+	int Rand = rand() % 100;
+	if (Rand < simulationParameters.FORK_PROBABILITY)
 	{
 		int id = simulationParameters.N_PROCESS + 10;
 		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
