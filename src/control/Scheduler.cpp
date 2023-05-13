@@ -402,6 +402,9 @@ Processor* Scheduler::GetShortestRDYProcessor() const
 
 	if (shortestProcessor == nullptr)
 	{
+		return nullptr;
+	}
+
 	for (int i = 2; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
@@ -749,6 +752,7 @@ void Scheduler::OverHeating()
 
 	// set the status of the random processor to STOP
 	randomProcessor->SetStatus(STOP);
+	randomProcessor->SetHeatingTime(simulationParameters.OVERHEAT_TIME);
 
 	// Overheat the processor
 	randomProcessor->OverHeat();

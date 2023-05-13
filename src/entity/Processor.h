@@ -19,6 +19,7 @@ protected:
 	unsigned int totalBusyTime;			//the total time the processor was busy (executing a process)
 	unsigned int expectedFinishTime;	//expected finish time of the current process
 	unsigned int startingTime;			//the time at which the processor started executing the current process
+	int overheatCounter;				//counts the time the processor will be overheated for
 
 public:
 	Processor(Scheduler* outScheduler, ProcessorType aType);
@@ -31,6 +32,7 @@ public:
 	virtual void SetCurrentProcess(Process* outProcess);
 	virtual unsigned int GetTotalBusyTime() const;
 	virtual void SetTotalBusyTime(unsigned int time);
+	virtual void SetHeatingTime(int time);
 	// increments total busy time by 1 if the processor is busy
 	virtual void IncrementTotalBusyTime();
 	// Gets the time at which the processor will finish executing all processes

@@ -1,7 +1,7 @@
 #include "Processor.h"
 
 Processor::Processor(Scheduler* outScheduler, ProcessorType aType) : scheduler(outScheduler),
-status(IDLE), currentProcess(nullptr), totalBusyTime(0), expectedFinishTime(0), startingTime(0)
+status(IDLE), currentProcess(nullptr), totalBusyTime(0), expectedFinishTime(0), startingTime(0), overheatCounter(0)
 {
 }
 
@@ -33,6 +33,11 @@ unsigned int Processor::GetTotalBusyTime() const
 void Processor::SetTotalBusyTime(unsigned int time)
 {
 	totalBusyTime = time;
+}
+
+void Processor::SetHeatingTime(int time)
+{
+	overheatCounter = time;
 }
 
 void Processor::IncrementTotalBusyTime()
