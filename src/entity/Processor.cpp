@@ -46,6 +46,14 @@ unsigned int Processor::GetExpectedFinishTime() const
 	return expectedFinishTime;
 }
 
+unsigned int Processor::GetTotalReadyTime() const
+{
+	if (currentProcess == nullptr)
+		return expectedFinishTime;
+
+	return expectedFinishTime - currentProcess->GetTimeInfo().RCT;
+}
+
 void Processor::SetExpectedFinishTime(unsigned int time)
 {
 	expectedFinishTime = time;

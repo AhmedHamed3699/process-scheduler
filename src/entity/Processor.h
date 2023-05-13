@@ -33,7 +33,11 @@ public:
 	virtual void SetTotalBusyTime(unsigned int time);
 	// increments total busy time by 1 if the processor is busy
 	virtual void IncrementTotalBusyTime();
+	// Gets the time at which the processor will finish executing all processes
 	virtual unsigned int GetExpectedFinishTime() const;
+	// Gets the total RCT of the ready processes
+	virtual unsigned int GetTotalReadyTime() const;
+
 	virtual void SetExpectedFinishTime(unsigned int time);
 
 	virtual bool ExecuteProcess(int CurrentTime) = 0;		//The function responsible for executing a process

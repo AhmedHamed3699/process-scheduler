@@ -121,6 +121,16 @@ void Process::SetStolen(bool isStolen)
 	this->isStolen = isStolen;
 }
 
+bool Process::IsForked() const
+{
+	return isForked;
+}
+
+void Process::SetForked(bool isForked)
+{
+	this->isForked = isForked;
+}
+
 std::string Process::ToString()
 {
 	return std::to_string(PID);

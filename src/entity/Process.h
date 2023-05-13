@@ -16,6 +16,7 @@ private:
 	TimeInfo timeInfo;
 	ProcessStatus status;			//any process created will have NEW as its initial status
 	bool isStolen;
+	bool isForked;					// used for checking if the process is forked or not
 	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_D
 public:
 	Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO);
@@ -53,6 +54,9 @@ public:
 
 	bool IsStolen() const;
 	void SetStolen(bool isStolen);
+
+	bool IsForked() const;
+	void SetForked(bool isForked);
 
 	// for UI and debugging
 	std::string ToString();
