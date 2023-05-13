@@ -204,11 +204,11 @@ void Simulator::Run()
 
 		// Over heating
 		#if OVER_HEATING
-		bool willOverHeat = rand() * OVER_HEATING_PERCENT_SCALE < OVER_HEATING_PERCENT;
+		bool willOverHeat = rand() % OVER_HEATING_PERCENT_SCALE < OVER_HEATING_PERCENT;
 		if (willOverHeat)
 		{
 			scheduler.OverHeating();
-			//ui.PrintOverHeatingAlert();
+			ui.PrintOverheatingAlert();
 		}
 		#endif
 

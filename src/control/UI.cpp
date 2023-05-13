@@ -127,6 +127,17 @@ void UI::PrintWorkStealingAlert()
 	ResetColor();
 }
 
+void UI::PrintOverheatingAlert()
+{
+	if (mode == SILENT) // if the mode is silent, don't print anything
+		return;
+	SetColor(BRIGHT_RED);
+	std::cout << "=================================\n";
+	std::cout << "         CPU Overheating...\n";
+	std::cout << "=================================\n";
+	ResetColor();
+}
+
 /// Silent Mode Functions
 void UI::PrintSilentModeStart()
 {
