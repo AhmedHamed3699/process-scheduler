@@ -87,6 +87,29 @@ Process* ProcessorSJF::StealProcess()
 	return process;
 }
 
+void ProcessorSJF::OverHeat()
+{
+	// move running process
+	if (currentProcess)
+	{
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+		scheduler->Schedule(currentProcess, shortestProcessor);
+		currentProcess = nullptr;
+	}
+
+	// move ready list processes
+	while (!readyList.isEmpty())
+	{
+		Process* process = readyList.peekFront();
+		readyList.dequeue();
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+		scheduler->Schedule(process, shortestProcessor);
+	}
+
+	// reset expected finish time
+	expectedFinishTime = 0;
+}
+
 std::string ProcessorSJF::ToString()
 {
 	std::string str = "[SJF ]: " + std::to_string(readyList.getSize()) + " RDY: ";

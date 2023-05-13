@@ -91,9 +91,9 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 	if (quantumCounter == 0) // add here the quantum counter
 	{
 		//checks if didn't migrate so it can go back to the readylist
-		bool didMigrate = scheduler->MigrateRR(currentProcess); 
+		bool didMigrate = scheduler->MigrateRR(currentProcess);
 
-		if(!didMigrate)
+		if (!didMigrate)
 			readyList.enqueue(currentProcess);
 		currentProcess->SetStatus(RDY);
 		currentProcess = nullptr;
@@ -122,6 +122,29 @@ Process* ProcessorRR::StealProcess()
 	expectedFinishTime -= process->GetTimeInfo().RCT;
 	readyList.dequeue();
 	return process;
+}
+
+void ProcessorRR::OverHeat()
+{
+	// move running process
+	if (currentProcess)
+	{
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+		scheduler->Schedule(currentProcess, shortestProcessor);
+		currentProcess = nullptr;
+	}
+
+	// move ready list processes
+	while (!readyList.isEmpty())
+	{
+		Process* process = readyList.peekFront();
+		readyList.dequeue();
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+		scheduler->Schedule(process, shortestProcessor);
+	}
+
+	// reset expected finish time
+	expectedFinishTime = 0;
 }
 
 std::string ProcessorRR::ToString()
