@@ -341,7 +341,7 @@ bool Scheduler::MigrateFCFS(Process* process)
 void Scheduler::ForkHandler(Process* process)
 {
 	// checks if there is no FCFS processors or no running process
-	if (simulationParameters.N_FCFS == 0 || process == nullptr)
+	if (simulationParameters.N_FCFS == 0 || process == nullptr || process->GetDescendant() != nullptr)
 		return;
 
 	int Rand = rand() % 100;
