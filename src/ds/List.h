@@ -267,6 +267,8 @@ ItemType List<ItemType>::GetEntry(int position) const
 		Node<ItemType>* nodePtr = GetNodeAt(position);
 		return nodePtr->getItem();
 	}
+
+	return nullptr;
 }
 
 template<class ItemType>
