@@ -86,6 +86,7 @@ public:
 	bool ScheduleNextSJF(Process* process);
 	bool ScheduleNextRR(Process* process);
 	bool MigrateRR(Process* process);
+	bool MigrateFCFS(Process* process);
 	void ForkHandler(Process* process);
 	// if process is not terminated then add it to the TRM list and change its state
 	void TerminateProcess(Process* process);

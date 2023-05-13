@@ -302,6 +302,11 @@ bool Scheduler::MigrateRR(Process* process)
 	return false;
 }
 
+bool Scheduler::MigrateFCFS(Process* process)
+{
+	return false;
+}
+
 void Scheduler::ForkHandler(Process* process)
 {
 	// checks if there is no FCFS processors or no running process
