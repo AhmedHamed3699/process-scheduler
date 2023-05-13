@@ -105,6 +105,10 @@ public:
 	Processor* GetShortestRDYProcessorOfSJF() const;
 	//returns the FCFS Processor with the shortest time 
 	Processor* GetShortestRDYProcessorOfFCFS() const;
+	// returns the processor with the shortest ready list
+	Processor* GetShortestProcessorWithoutRUN() const;
+	// returns the processor with the longest ready list
+	Processor* GetLongestProcessorWithoutRUN() const;
 
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///

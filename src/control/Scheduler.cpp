@@ -498,6 +498,46 @@ Processor* Scheduler::GetShortestRDYProcessorOfFCFS() const
 	return shortestFCFSProcessor;
 }
 
+Processor* Scheduler::GetShortestProcessorWithoutRUN() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	Processor* shortestProcessor = processors.GetEntry(1);
+
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		if (shortestProcessor->GetTotalReadyTime() > tempProcessor->GetTotalReadyTime())
+		{
+			shortestProcessor = tempProcessor;
+		}
+	}
+
+	return shortestProcessor;
+}
+
+Processor* Scheduler::GetLongestProcessorWithoutRUN() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+	Processor* longestProcessor = processors.GetEntry(1);
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+		if (longestProcessor->GetTotalReadyTime() < tempProcessor->GetTotalReadyTime())
+		{
+			longestProcessor = tempProcessor;
+		}
+	}
+	return longestProcessor;
+}
+
 /// ////////////////////////////////// ///
 ///        Simulation Functions        ///
 /// ////////////////////////////////// ///
@@ -566,10 +606,10 @@ void Scheduler::MoveFromBLK()
 void Scheduler::WorkStealing()
 {
 	// get the shortest processor
-	Processor* shortestProcessor = GetShortestRDYProcessor();
+	Processor* shortestProcessor = GetShortestProcessorWithoutRUN();
 
 	// get the longest processor
-	Processor* longestProcessor = GetLongestRDYProcessor();
+	Processor* longestProcessor = GetLongestProcessorWithoutRUN();
 
 	// if no processors are available, return
 	if (shortestProcessor == nullptr || longestProcessor == nullptr)
