@@ -8,39 +8,6 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 {
 }
 
-bool ProcessorFCFS::MigratonHandler(int currentTime)
-{
-	SimulationParameters sP = scheduler->GetSimulationParameters();
-
-	while (!readyList.IsEmpty())
-	{
-		//Get the first process in the ready list and calculate its waiting time
-		Process* process = readyList.GetEntry(1);
-		TimeInfo timeInfo = process->GetTimeInfo();
-		int waitingTime = (currentTime - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
-
-		if (waitingTime > sP.MAX_WAITING_TIME)
-		{
-			//migrate the process to a RR processor
-			bool isSuccessful = scheduler->ScheduleNextRR(process);
-
-			//if the migration failed due to not having any RR processors
-			if (!isSuccessful)
-				return false;
-
-			//if the process migrated, remove it from the ready list
-			readyList.Remove(1);
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	//return true if all the processes in the ready list migrated and the ready list became empty
-	return true;
-}
-
 void ProcessorFCFS::AddToKill(Pair<unsigned int, unsigned int> outP)
 {
 	SIGKILL.enqueue(outP);
