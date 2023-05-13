@@ -88,15 +88,12 @@ bool ProcessorFCFS::KillProcess(int PID)
 	return true;
 }
 
-void ProcessorFCFS::ForkHandler()
-{
-}
-
 bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 	// we need to re-order callings, so it makes more sense
 
 	SIGKILLHandler();
+
 	if(currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
@@ -138,9 +135,15 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		return true;
 	}
 
+	// fork a child if you meet the probability
+	scheduler->ForkHandler(currentProcess);
+
 	//decrement the expected finish time and the RCT by one
 	expectedFinishTime--;
 	currentProcess->DecrementRCT();
+
+	// increment the total busy time
+	IncrementTotalBusyTime();
 
 	//if the process finished execution, it should be terminated
 	if (currentProcess->GetTimeInfo().RCT <= 0)

@@ -83,7 +83,7 @@ void Scheduler::CreateNewProcess(int id)
 void Scheduler::CreateNewProcess(int AT, int PID, int CT,
 	Queue<Pair<unsigned int, unsigned int>>& outIO)
 {
-	// create new processor
+	// create new process
 	Process* newProcess = new Process(PID, outIO);
 	newProcess->SetStatus(NEW);
 
@@ -98,6 +98,22 @@ void Scheduler::CreateNewProcess(int AT, int PID, int CT,
 	NEWList.enqueue(newProcess);
 }
 
+Process* Scheduler::CreateForkedProcess(int PID, int AT, int CT)
+{
+	Queue<Pair<unsigned int, unsigned int>> emptyQ;	 //empty Queue to initialize process with
+	Process* newProcess = new Process(PID, emptyQ);
+	newProcess->SetStatus(NEW);
+
+	TimeInfo timeInfo;
+	timeInfo.AT = AT;
+	timeInfo.CT = CT;
+	timeInfo.RCT = CT;
+
+	newProcess->SetTimeInfo(timeInfo);
+
+	return newProcess;
+}
+
 SimulationParameters Scheduler::GetSimulationParameters()
 {
 	return simulationParameters;
@@ -110,8 +126,6 @@ void Scheduler::SetSimulationParameters(SimulationParameters sP)
 
 bool Scheduler::isDone()
 {
-	// this means we must change N_PROCESS when we fork .. or terminate the program in another way
-
 	return (simulationParameters.N_PROCESS == TRMList.getSize());
 }
 
@@ -235,8 +249,16 @@ void Scheduler::Schedule(Process* process, Processor* processor)
 	processor->AddProcessToList(process);
 }
 
-void Scheduler::ScheduleNextFCFS(Process* process)
+bool Scheduler::ScheduleNextFCFS(Process* process)
 {
+	Processor* processorFCFS = GetShortestRDYProcessorOfFCFS();
+
+	//false means that no FCFS processors in the system
+	if (processorFCFS == nullptr)
+		return false;
+
+	processorFCFS->AddProcessToList(process);
+	return true;
 }
 
 bool Scheduler::ScheduleNextSJF(Process* process)
@@ -278,6 +300,23 @@ bool Scheduler::MigrateRR(Process* process)
 	}
 
 	return false;
+}
+
+void Scheduler::ForkHandler(Process* process)
+{
+	// checks if there is no FCFS processors or no running process
+	if (simulationParameters.N_FCFS == 0 || process == nullptr)
+		return;
+
+	int Rand = rand() % 101;
+	if (Rand <= simulationParameters.FORK_PROBABILITY)
+	{
+		int id = simulationParameters.N_PROCESS + 10;
+		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
+		ScheduleNextFCFS(ForkedProcess);
+		process->SetDescendant(ForkedProcess);
+		simulationParameters.N_PROCESS++;
+	}
 }
 
 void Scheduler::TerminateProcess(Process* process)
@@ -431,6 +470,32 @@ Processor* Scheduler::GetShortestRDYProcessorOfSJF() const
 	}
 
 	return shortestSJFProcessor;
+}
+
+Processor* Scheduler::GetShortestRDYProcessorOfFCFS() const
+{
+	//check if there are any FCFS Processors
+	if (simulationParameters.N_FCFS <= 0)
+		return nullptr;
+
+	int counter, size;
+
+	counter = 1;
+	size = counter + simulationParameters.N_FCFS;
+
+	Processor* shortestFCFSProcessor = processors.GetEntry(counter);
+
+	for (int i = counter + 1; i < size; i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		if (shortestFCFSProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestFCFSProcessor = tempProcessor;
+		}
+	}
+
+	return shortestFCFSProcessor;
 }
 
 /// ////////////////////////////////// ///
@@ -656,7 +721,7 @@ unsigned int* Scheduler::CalculateProcessorsUtilization()
 {
 	// get total turnaround time
 	unsigned int totalCPUTime = clk->GetTime();
-	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
 
 	// create array of processors utilization
 	unsigned int* processorsUtilization = new unsigned int[numOfProcessors];
@@ -675,7 +740,7 @@ unsigned int* Scheduler::CalculateProcessorsLoad()
 {
 	// get total turnaround time
 	unsigned int totalTurnaroundTime = CalculateTotalTurnaroundTime();
-	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
 
 	// create array of processors load
 	unsigned int* processorsLoad = new unsigned int[numOfProcessors];

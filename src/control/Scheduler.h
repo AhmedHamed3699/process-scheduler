@@ -54,6 +54,8 @@ public:
 	// Create a new process with the all params and add it to the NEW list
 	void CreateNewProcess(int AT, int PID, int CT,
 		Queue<Pair<unsigned int, unsigned int>>& outIO);
+	// Create a new forked process process
+	Process* CreateForkedProcess(int PID, int AT, int CT);
 
 	SimulationParameters GetSimulationParameters();
 	void SetSimulationParameters(SimulationParameters sP);
@@ -80,10 +82,11 @@ public:
 	// first processor then the second and so on
 	void ScheduleNext();
 	void Schedule(Process* process, Processor* procesor);
-	void ScheduleNextFCFS(Process* process);
+	bool ScheduleNextFCFS(Process* process);
 	bool ScheduleNextSJF(Process* process);
 	bool ScheduleNextRR(Process* process);
 	bool MigrateRR(Process* process);
+	void ForkHandler(Process* process);
 	// if process is not terminated then add it to the TRM list and change its state
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state
@@ -100,6 +103,8 @@ public:
 	Processor* GetShortestRDYProcessorOfRR() const;
 	//returns the SJF Processor with the shortest time 
 	Processor* GetShortestRDYProcessorOfSJF() const;
+	//returns the FCFS Processor with the shortest time 
+	Processor* GetShortestRDYProcessorOfFCFS() const;
 
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///
