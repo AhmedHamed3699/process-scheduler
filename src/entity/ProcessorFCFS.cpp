@@ -196,6 +196,43 @@ Process* ProcessorFCFS::StealProcess()
 	return process;
 }
 
+void ProcessorFCFS::OverHeat()
+{
+	// move running process
+	if (currentProcess)
+	{
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+
+		if (currentProcess->IsForked())
+		{
+			scheduler->TerminateProcess(currentProcess);
+		}
+		else {
+			scheduler->Schedule(currentProcess, shortestProcessor);
+		}
+		currentProcess = nullptr;
+	}
+
+	// move ready list processes
+	while (!readyList.IsEmpty())
+	{
+		Process* process = readyList.GetEntry(1);
+		readyList.Remove(1);
+		Processor* shortestProcessor = scheduler->GetShortestRDYProcessor();
+		if (process->IsForked())
+		{
+			scheduler->TerminateProcess(process);
+		}
+		else
+		{
+			scheduler->Schedule(process, shortestProcessor);
+		}
+	}
+
+	// reset expected finish time
+	expectedFinishTime = 0;
+}
+
 std::string ProcessorFCFS::ToString()
 {
 	std::string str = "[FCFS]: " + std::to_string(readyList.GetLength()) + " RDY: ";

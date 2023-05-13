@@ -43,6 +43,7 @@ public:
 	virtual bool ExecuteProcess(int CurrentTime) = 0;		//The function responsible for executing a process
 	virtual void AddProcessToList(Process* process) = 0;	//Adds a Process to the list of a Processor
 	virtual Process* StealProcess() = 0;					// Steals a Process from the list of a Processor and returns it
+	virtual void OverHeat() = 0;							//OverHeating function
 
 	virtual std::string ToString() = 0;
 };
