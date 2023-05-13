@@ -25,7 +25,7 @@ Scheduler::~Scheduler()
 		processors.Remove(i);
 	}
 
-	for (int i = 0; i < TRMList.getSize(); i++)
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
 	{
 		delete TRMList.peekFront();
 		TRMList.dequeue();
@@ -42,13 +42,13 @@ int Scheduler::GetCurrentTime()
 /// ////////////////////////////////// ///
 void Scheduler::CreateAllProcessors()
 {
-	for (int i = 0; i < simulationParameters.N_FCFS; i++)
+	for (unsigned int i = 0; i < simulationParameters.N_FCFS; i++)
 		CreateProcessor(FCFS);
 
-	for (int i = 0; i < simulationParameters.N_SJF; i++)
+	for (unsigned int i = 0; i < simulationParameters.N_SJF; i++)
 		CreateProcessor(SJF);
 
-	for (int i = 0; i < simulationParameters.N_RR; i++)
+	for (unsigned int i = 0; i < simulationParameters.N_RR; i++)
 		CreateProcessor(RR);
 }
 
@@ -317,7 +317,7 @@ bool Scheduler::MigrateFCFS(Process* process)
 
 
 	TimeInfo timeInfo = process->GetTimeInfo();
-	int waitingTime = (clk->GetTime() - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
+	unsigned int waitingTime = (clk->GetTime() - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
 
 	if (waitingTime > simulationParameters.MAX_WAITING_TIME)
 	{
@@ -344,7 +344,7 @@ void Scheduler::ForkHandler(Process* process)
 	if (simulationParameters.N_FCFS == 0 || process == nullptr || process->GetDescendant() != nullptr)
 		return;
 
-	int Rand = rand() % 100;
+	unsigned int Rand = rand() % 100;
 	if (Rand < simulationParameters.FORK_PROBABILITY)
 	{
 		int id = simulationParameters.N_PROCESS + 10;
@@ -818,7 +818,7 @@ std::string Scheduler::TRMListStatsToString()
 
 	unsigned int numOfTrmListProcess = TRMList.getSize();
 
-	for (int i = 0; i < numOfTrmListProcess; i++)
+	for (unsigned int i = 0; i < numOfTrmListProcess; i++)
 	{
 		Process* process = TRMList.peekFront();
 		TRMList.dequeue();
@@ -883,7 +883,7 @@ unsigned int Scheduler::CalculateAverageWaitTime()
 {
 	unsigned int totalWaitingTime = 0;
 
-	for (int i = 0; i < TRMList.getSize(); i++)
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
 	{
 		Process* process = TRMList.peekFront();
 		TRMList.dequeue();
@@ -897,7 +897,7 @@ unsigned int Scheduler::CalculateAverageWaitTime()
 unsigned int Scheduler::CalculateTotalTurnaroundTime()
 {
 	unsigned int totalTurnaroundTime = 0;
-	for (int i = 0; i < TRMList.getSize(); i++)
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
 	{
 		Process* process = TRMList.peekFront();
 		TRMList.dequeue();
@@ -910,7 +910,7 @@ unsigned int Scheduler::CalculateTotalTurnaroundTime()
 unsigned int Scheduler::CalculateAverageTurnaroundTime()
 {
 	unsigned int totalTurnaroundTime = 0;
-	for (int i = 0; i < TRMList.getSize(); i++)
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
 	{
 		Process* process = TRMList.peekFront();
 		TRMList.dequeue();
@@ -924,7 +924,7 @@ unsigned int Scheduler::CalculateAverageResponseTime()
 {
 	unsigned int totalResponseTime = 0;
 
-	for (int i = 0; i < TRMList.getSize(); i++)
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
 	{
 		Process* process = TRMList.peekFront();
 		TRMList.dequeue();
@@ -945,10 +945,10 @@ unsigned int* Scheduler::CalculateProcessorsUtilization()
 	unsigned int* processorsUtilization = new unsigned int[numOfProcessors];
 
 	// calculate utilization for each processor
-	for (int i = 0; i < numOfProcessors; i++)
+	for (unsigned int i = 0; i < numOfProcessors; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-		processorsUtilization[i] = (processor->GetTotalBusyTime() / (double)totalCPUTime) * 100;
+		processorsUtilization[i] = (unsigned int)((processor->GetTotalBusyTime() / (double)totalCPUTime) * 100);
 	}
 
 	return processorsUtilization;
@@ -964,10 +964,10 @@ unsigned int* Scheduler::CalculateProcessorsLoad()
 	unsigned int* processorsLoad = new unsigned int[numOfProcessors];
 
 	// calculate load for each processor
-	for (int i = 0; i < numOfProcessors; i++)
+	for (unsigned int i = 0; i < numOfProcessors; i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-		processorsLoad[i] = (processor->GetTotalBusyTime() / (double)totalTurnaroundTime) * 100;
+		processorsLoad[i] = (unsigned int)((processor->GetTotalBusyTime() / (double)totalTurnaroundTime) * 100);
 	}
 
 	return processorsLoad;
@@ -981,7 +981,7 @@ unsigned int Scheduler::CalculateAverageProcessorsUtilization()
 	// calculate average utilization
 	unsigned int totalUtilization = 0;
 	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_SJF + simulationParameters.N_RR;
-	for (int i = 0; i < numOfProcessors; i++)
+	for (unsigned int i = 0; i < numOfProcessors; i++)
 	{
 		totalUtilization += processorsUtilization[i];
 	}
@@ -995,7 +995,7 @@ unsigned int Scheduler::CaculateWorkStealPercent()
 {
 	// count stolen processes
 	unsigned int numOfStolenProcesses = 0;
-	for (int i = 0; i < TRMList.getSize(); i++)
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
 	{
 		Process* process = TRMList.peekFront();
 		TRMList.dequeue();
@@ -1006,7 +1006,7 @@ unsigned int Scheduler::CaculateWorkStealPercent()
 		TRMList.enqueue(process);
 	}
 
-	return (numOfStolenProcesses / (double)TRMList.getSize()) * 100;
+	return (unsigned int)((numOfStolenProcesses / (double)TRMList.getSize()) * 100);
 }
 
 unsigned int Scheduler::GetNumberOfRTFMigrations()
@@ -1021,16 +1021,16 @@ unsigned int Scheduler::GetNumberOfMaxWMigrations()
 
 unsigned int Scheduler::CalculateMaxWMigrationPercent()
 {
-	return maxWMigrations * 100.f / simulationParameters.N_PROCESS;
+	return (unsigned int)(maxWMigrations * 100.f / simulationParameters.N_PROCESS);
 }
 
 unsigned int Scheduler::CalculateRTFMigrationPercent()
 {
-	return rtfMigrations * 100.f / simulationParameters.N_PROCESS;
+	return (unsigned int)(rtfMigrations * 100.f / simulationParameters.N_PROCESS);
 }
 
 unsigned int Scheduler::CalculateKillCountPercent()
 {
-	return killCount * 100.f / simulationParameters.N_PROCESS;
+	return (unsigned int)(killCount * 100.f / simulationParameters.N_PROCESS);
 }
 
