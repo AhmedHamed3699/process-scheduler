@@ -8,7 +8,7 @@
 ///    constructors and destructor     ///
 /// ////////////////////////////////// ///
 Scheduler::Scheduler(Clock* clk)
-	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0),
+	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 	IOProcess(nullptr)
 {
 	this->clk = clk;
@@ -212,6 +212,7 @@ std::string Scheduler::SimulationParametersToString()
 	ss << " | TS " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.RR_TIME_SLICE;
 	ss << " | RTF " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.RTF;
 	ss << " | STL " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.STL;
+	ss << " | OHT " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.OVERHEAT_TIME;
 	ss << " |\n";
 	ss << "'" << std::setfill('-') << std::setw(LINE_LENGTH - 2) << "'\n";
 	return ss.str();

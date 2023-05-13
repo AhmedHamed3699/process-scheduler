@@ -17,11 +17,11 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 
 	/// read the main data of the project & assign it to the simulator parameter in scheduler
 	unsigned int maxWaitingTime, RRTimeSlice, nFCFS, nSJF,
-		nRR, forkProbability, stl, rtf, nProcess;
+		nRR, forkProbability, stl, rtf, nProcess, overheat_time;
 
 	InFile >> nFCFS >> nSJF >> nRR;
 	InFile >> RRTimeSlice;
-	InFile >> rtf >> maxWaitingTime >> stl >> forkProbability;
+	InFile >> rtf >> maxWaitingTime >> stl >> forkProbability >> overheat_time;
 	InFile >> nProcess;
 
 	SimulationParameters sP = scheduler.GetSimulationParameters();
@@ -35,6 +35,7 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 	sP.STL = stl;
 	sP.RTF = rtf;
 	sP.N_PROCESS = nProcess;
+	sP.OVERHEAT_TIME = overheat_time;
 
 	scheduler.SetSimulationParameters(sP);
 
