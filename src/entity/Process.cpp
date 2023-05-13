@@ -11,14 +11,24 @@ int Process::GetID() const
 	return PID;
 }
 
-Process* Process::GetDescendant() const
+Process* Process::GetFirstChild() const
 {
-	return descendant;
+	return firstChild;
 }
 
-void Process::SetDescendant(Process* child)
+Process* Process::GetSecondChild() const
 {
-	descendant = child;
+	return secondChild;
+}
+
+void Process::SetFirstChild(Process* child)
+{
+	firstChild = child;
+}
+
+void Process::SetSecondChild(Process* child)
+{
+	secondChild = child;
 }
 
 Processor* Process::GetCurrentProcessor() const

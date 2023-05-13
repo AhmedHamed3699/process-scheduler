@@ -48,8 +48,10 @@ void ProcessorFCFS::SIGKILLHandler()
 			return;
 		timeToKill = SIGKILL.peekFront().first;
 	}
-	else if (timeToKill != this->scheduler->GetCurrentTime())
+
+	if (timeToKill != this->scheduler->GetCurrentTime())
 		return;
+
 	int ID_toKill = SIGKILL.peekFront().second;
 
 	KillProcess(ID_toKill);
