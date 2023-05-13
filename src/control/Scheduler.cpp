@@ -304,6 +304,21 @@ bool Scheduler::MigrateRR(Process* process)
 
 bool Scheduler::MigrateFCFS(Process* process)
 {
+	TimeInfo timeInfo = process->GetTimeInfo();
+	int waitingTime = (clk->GetTime() - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
+
+	if (waitingTime > simulationParameters.MAX_WAITING_TIME)
+	{
+		//migrate the process to a FCFS processor
+		bool isSuccessful = ScheduleNextFCFS(process);
+
+		//if the migration failed due to not having any FCFS processors
+		if (!isSuccessful)
+			return false;
+
+		return true;
+	}
+
 	return false;
 }
 
