@@ -311,6 +311,11 @@ bool Scheduler::MigrateRR(Process* process)
 
 bool Scheduler::MigrateFCFS(Process* process)
 {
+	//if the process is forked, it can't be migrated
+	if (process->IsForked())
+		return false;
+
+
 	TimeInfo timeInfo = process->GetTimeInfo();
 	int waitingTime = (clk->GetTime() - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
 
