@@ -129,7 +129,8 @@ bool Simulator::CreateOutputFile()
 	/// FORKING STATS
 	OutFile << "Forked processes%: " << scheduler.GetSimulationParameters().FORK_PROBABILITY << "%" << std::endl;
 
-	/// TODO: KILLING STATS
+	/// KILLING STATS
+	OutFile << "Killed processes%: " << scheduler.CalculateKillCountPercent() << "%" << std::endl;
 
 	OutFile << std::endl;
 
