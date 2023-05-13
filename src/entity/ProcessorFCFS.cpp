@@ -10,7 +10,7 @@ ProcessorFCFS::ProcessorFCFS(Scheduler* outScheduler)
 
 bool ProcessorFCFS::MigratonHandler(int currentTime)
 {
-	SimulationParameters sP =  scheduler->GetSimulationParameters();
+	SimulationParameters sP = scheduler->GetSimulationParameters();
 
 	while (!readyList.IsEmpty())
 	{
@@ -18,15 +18,18 @@ bool ProcessorFCFS::MigratonHandler(int currentTime)
 		Process* process = readyList.GetEntry(1);
 		TimeInfo timeInfo = process->GetTimeInfo();
 		int waitingTime = (currentTime - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
-		
+
 		if (waitingTime > sP.MAX_WAITING_TIME)
 		{
 			//migrate the process to a RR processor
 			bool isSuccessful = scheduler->ScheduleNextRR(process);
-			
+
 			//if the migration failed due to not having any RR processors
 			if (!isSuccessful)
 				return false;
+
+			/// ADDED for stats by Amir
+			scheduler->IncrementMaxWMigrations();
 
 			//if the process migrated, remove it from the ready list
 			readyList.Remove(1);
@@ -69,7 +72,7 @@ void ProcessorFCFS::SIGKILLHandler()
 bool ProcessorFCFS::KillProcess(int PID)
 {
 	Process* killedProcess = nullptr;
-	if(currentProcess && *(currentProcess) == PID)
+	if (currentProcess && *(currentProcess) == PID)
 	{
 		killedProcess = currentProcess;
 		currentProcess = nullptr;
@@ -94,7 +97,7 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 
 	SIGKILLHandler();
 
-	if(currentProcess)
+	if (currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
 
@@ -111,7 +114,7 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 	{
 		if (readyList.IsEmpty())
 			return false;
-		
+
 		//the function would return true if the readyList is empty and false if the migration didn't continue
 		bool migratedOrNot = MigratonHandler(CurrentTime);
 

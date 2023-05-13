@@ -298,6 +298,9 @@ bool Scheduler::MigrateRR(Process* process)
 		if (!isSuccessful)
 			return false;
 
+		/// ADDED for statistics by Amir
+		this->IncrementRTFMigrations();
+
 		return true;
 	}
 
