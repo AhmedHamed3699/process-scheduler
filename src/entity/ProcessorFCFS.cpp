@@ -28,6 +28,9 @@ bool ProcessorFCFS::MigratonHandler(int currentTime)
 			if (!isSuccessful)
 				return false;
 
+			/// ADDED for stats by Amir
+			scheduler->IncrementMaxWMigrations();
+
 			//if the process migrated, remove it from the ready list
 			readyList.Remove(1);
 		}
@@ -82,6 +85,9 @@ bool ProcessorFCFS::KillProcess(int PID)
 
 	if (killedProcess == nullptr)
 		return false;
+
+	/// ADDED for stats by Amir
+	scheduler->IncrementKillCount();
 
 	SIGKILL.dequeue();
 	scheduler->TerminateProcess(killedProcess);
