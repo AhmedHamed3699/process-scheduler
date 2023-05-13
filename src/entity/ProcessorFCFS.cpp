@@ -86,6 +86,9 @@ bool ProcessorFCFS::KillProcess(int PID)
 	if (killedProcess == nullptr)
 		return false;
 
+	/// ADDED for stats by Amir
+	scheduler->IncrementKillCount();
+
 	SIGKILL.dequeue();
 	scheduler->TerminateProcess(killedProcess);
 	return true;
