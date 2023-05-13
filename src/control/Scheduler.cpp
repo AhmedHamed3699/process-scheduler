@@ -328,7 +328,7 @@ void Scheduler::ForkHandler(Process* process)
 	if (simulationParameters.N_FCFS == 0 || process == nullptr)
 		return;
 
-	int Rand = rand() % 101;
+	int Rand = rand() % 100;
 	if (Rand < simulationParameters.FORK_PROBABILITY)
 	{
 		int id = simulationParameters.N_PROCESS + 10;
