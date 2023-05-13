@@ -376,6 +376,13 @@ void Scheduler::TerminateProcess(Process* process)
 	{
 		return;
 	}
+	
+	// check if the process had descendants or not to kill them
+	if (process->GetDescendant() != nullptr)
+	{
+		KillORPH(process);
+	}
+
 	process->SetCurrentProcessor(nullptr);
 	process->SetStatus(TRM);
 	process->SetTT(clk->GetTime());
