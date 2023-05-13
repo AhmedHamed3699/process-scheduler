@@ -400,6 +400,8 @@ Processor* Scheduler::GetShortestRDYProcessor() const
 		shortestProcessor = processors.GetEntry(++shortestProcessorIndex);
 	}
 
+	if (shortestProcessor == nullptr)
+	{
 	for (int i = 2; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
@@ -429,6 +431,11 @@ Processor* Scheduler::GetLongestRDYProcessor() const
 	while (longestProcessor && longestProcessor->GetStatus() == STOP)
 	{
 		longestProcessor = processors.GetEntry(++longestProcessorIndex);
+	}
+
+	if (longestProcessor == nullptr)
+	{
+		return nullptr;
 	}
 
 	for (int i = 2; i <= processors.GetLength(); i++)
@@ -461,6 +468,11 @@ Processor* Scheduler::GetShortestRDYProcessorOfRR() const
 	while (shortestRRProcessor && shortestRRProcessor->GetStatus() == STOP)
 	{
 		shortestRRProcessor = processors.GetEntry(++counter);
+	}
+
+	if (shortestRRProcessor == nullptr)
+	{
+		return nullptr;
 	}
 
 	for (int i = counter + 1; i <= processors.GetLength(); i++)
@@ -498,6 +510,11 @@ Processor* Scheduler::GetShortestRDYProcessorOfSJF() const
 		shortestSJFProcessor = processors.GetEntry(++counter);
 	}
 
+	if (shortestSJFProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
 	for (int i = counter + 1; i < size; i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
@@ -533,6 +550,11 @@ Processor* Scheduler::GetShortestRDYProcessorOfFCFS() const
 		shortestFCFSProcessor = processors.GetEntry(++counter);
 	}
 
+	if (shortestFCFSProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
 	for (int i = counter + 1; i < size; i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
@@ -565,6 +587,11 @@ Processor* Scheduler::GetShortestProcessorWithoutRUN() const
 		shortestProcessor = processors.GetEntry(++shortestProcessorIndex);
 	}
 
+	if (shortestProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
 	for (int i = 2; i <= processors.GetLength(); i++)
 	{
 		Processor* tempProcessor = processors.GetEntry(i);
@@ -595,6 +622,11 @@ Processor* Scheduler::GetLongestProcessorWithoutRUN() const
 	while (longestProcessor && longestProcessor->GetStatus() == STOP)
 	{
 		longestProcessor = processors.GetEntry(++longestProcessorIndex);
+	}
+
+	if (longestProcessor == nullptr)
+	{
+		return nullptr;
 	}
 
 	for (int i = 2; i <= processors.GetLength(); i++)
