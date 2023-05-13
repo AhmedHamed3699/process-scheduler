@@ -26,6 +26,12 @@ private:
 	SimulationParameters simulationParameters;
 
 	/// ////////////////////////////////// ///
+	///  Stats Data Members and counters   ///
+	unsigned int maxWMigrations;
+	unsigned int rtfMigrations;
+	unsigned int killCount;
+
+	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
 	/// ////////////////////////////////// ///
 	ArrayList<Processor*> processors;
@@ -127,6 +133,9 @@ public:
 	///    Statistics & output Functions   ///
 	/// ////////////////////////////////// ///
 	std::string TRMListStatsToString();
+	void IncrementMaxWMigrations();
+	void IncrementRTFMigrations();
+	void IncrementKillCount();
 
 	/// TIME STATS
 	unsigned int CalculateAverageWaitTime();
@@ -141,5 +150,10 @@ public:
 
 	/// OTHER FUNCTIONS STATS
 	unsigned int CaculateWorkStealPercent();
+	unsigned int GetNumberOfRTFMigrations();
+	unsigned int GetNumberOfMaxWMigrations();
+	unsigned int CalculateMaxWMigrationPercent();
+	unsigned int CalculateRTFMigrationPercent();
+	unsigned int CalculateKillCountPercent();
 };
 

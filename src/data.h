@@ -5,7 +5,7 @@
 #include "ds/Queue.h"
 
 /// CONSTANTS
-#define LINE_LENGTH 96
+#define LINE_LENGTH 106
 #define NUM_PRECISION 3
 #define WORK_STEALING true		// true if work stealing is enabled, false otherwise
 #define MAX_STEALING_LIMIT 0.4	// the maximum percentage of STEALING_LIMIT
@@ -104,6 +104,7 @@ struct SimulationParameters
 	unsigned int STL;
 	unsigned int RTF;
 	unsigned int N_PROCESS;
+	unsigned int OVERHEAT_TIME;
 
 	SimulationParameters(
 		unsigned int maxWaitingTime,
@@ -114,7 +115,8 @@ struct SimulationParameters
 		unsigned int forkProbability,
 		unsigned int stl,
 		unsigned int rtf,
-		unsigned int nProcess
+		unsigned int nProcess,
+		unsigned int overheatTime
 	)
 		:MAX_WAITING_TIME(maxWaitingTime),
 		RR_TIME_SLICE(RRTimeSlice),
@@ -124,7 +126,8 @@ struct SimulationParameters
 		FORK_PROBABILITY(forkProbability),
 		STL(stl),
 		RTF(rtf),
-		N_PROCESS(nProcess)
+		N_PROCESS(nProcess),
+		OVERHEAT_TIME(overheatTime)
 	{}
 };
 

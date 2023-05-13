@@ -8,10 +8,13 @@
 ///    constructors and destructor     ///
 /// ////////////////////////////////// ///
 Scheduler::Scheduler(Clock* clk)
-	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0),
+	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 	IOProcess(nullptr)
 {
 	this->clk = clk;
+	maxWMigrations = 0;
+	rtfMigrations = 0;
+	killCount = 0;
 }
 
 Scheduler::~Scheduler()
@@ -212,6 +215,7 @@ std::string Scheduler::SimulationParametersToString()
 	ss << " | TS " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.RR_TIME_SLICE;
 	ss << " | RTF " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.RTF;
 	ss << " | STL " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.STL;
+	ss << " | OHT " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.OVERHEAT_TIME;
 	ss << " |\n";
 	ss << "'" << std::setfill('-') << std::setw(LINE_LENGTH - 2) << "'\n";
 	return ss.str();
@@ -295,6 +299,9 @@ bool Scheduler::MigrateRR(Process* process)
 		//if the migration failed due to not having any SJF processors
 		if (!isSuccessful)
 			return false;
+
+		/// ADDED for statistics by Amir
+		this->IncrementRTFMigrations();
 
 		return true;
 	}
@@ -722,6 +729,21 @@ std::string Scheduler::TRMListStatsToString()
 	return ss.str();
 }
 
+void Scheduler::IncrementMaxWMigrations()
+{
+	maxWMigrations += 1;
+}
+
+void Scheduler::IncrementRTFMigrations()
+{
+	rtfMigrations += 1;
+}
+
+void Scheduler::IncrementKillCount()
+{
+	killCount += 1;
+}
+
 unsigned int Scheduler::CalculateAverageWaitTime()
 {
 	unsigned int totalWaitingTime = 0;
@@ -823,7 +845,7 @@ unsigned int Scheduler::CalculateAverageProcessorsUtilization()
 
 	// calculate average utilization
 	unsigned int totalUtilization = 0;
-	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_SJF + simulationParameters.N_RR;
 	for (int i = 0; i < numOfProcessors; i++)
 	{
 		totalUtilization += processorsUtilization[i];
@@ -850,5 +872,30 @@ unsigned int Scheduler::CaculateWorkStealPercent()
 	}
 
 	return (numOfStolenProcesses / (double)TRMList.getSize()) * 100;
+}
+
+unsigned int Scheduler::GetNumberOfRTFMigrations()
+{
+	return rtfMigrations;
+}
+
+unsigned int Scheduler::GetNumberOfMaxWMigrations()
+{
+	return maxWMigrations;
+}
+
+unsigned int Scheduler::CalculateMaxWMigrationPercent()
+{
+	return maxWMigrations * 100.f / simulationParameters.N_PROCESS;
+}
+
+unsigned int Scheduler::CalculateRTFMigrationPercent()
+{
+	return rtfMigrations * 100.f / simulationParameters.N_PROCESS;
+}
+
+unsigned int Scheduler::CalculateKillCountPercent()
+{
+	return killCount * 100.f / simulationParameters.N_PROCESS;
 }
 

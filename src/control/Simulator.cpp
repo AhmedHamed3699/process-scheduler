@@ -17,11 +17,11 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 
 	/// read the main data of the project & assign it to the simulator parameter in scheduler
 	unsigned int maxWaitingTime, RRTimeSlice, nFCFS, nSJF,
-		nRR, forkProbability, stl, rtf, nProcess;
+		nRR, forkProbability, stl, rtf, nProcess, overheat_time;
 
 	InFile >> nFCFS >> nSJF >> nRR;
 	InFile >> RRTimeSlice;
-	InFile >> rtf >> maxWaitingTime >> stl >> forkProbability;
+	InFile >> rtf >> maxWaitingTime >> stl >> forkProbability >> overheat_time;
 	InFile >> nProcess;
 
 	SimulationParameters sP = scheduler.GetSimulationParameters();
@@ -35,6 +35,7 @@ bool Simulator::LoadInpuitFile(std::string filePath)
 	sP.STL = stl;
 	sP.RTF = rtf;
 	sP.N_PROCESS = nProcess;
+	sP.OVERHEAT_TIME = overheat_time;
 
 	scheduler.SetSimulationParameters(sP);
 
@@ -119,14 +120,18 @@ bool Simulator::CreateOutputFile()
 
 	OutFile << std::endl;
 
-	/// TODO: MIGRATION STATS
+	/// MIGRATION STATS
+	OutFile << "Migration %: RTF%= " << scheduler.CalculateRTFMigrationPercent() << "%, ";
+	OutFile << "MaxW%= " << scheduler.CalculateMaxWMigrationPercent() << "%" << std::endl;
 
 	/// WORK STEALING STATS
 	OutFile << "Work Steal%: " << scheduler.CaculateWorkStealPercent() << "%" << std::endl;
 
-	/// TODO: FORKING STATS
+	/// FORKING STATS
+	OutFile << "Forked processes%: " << scheduler.GetSimulationParameters().FORK_PROBABILITY << "%" << std::endl;
 
-	/// TODO: KILLING STATS
+	/// KILLING STATS
+	OutFile << "Killed processes%: " << scheduler.CalculateKillCountPercent() << "%" << std::endl;
 
 	OutFile << std::endl;
 
