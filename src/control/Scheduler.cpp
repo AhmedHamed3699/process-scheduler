@@ -356,12 +356,35 @@ void Scheduler::ForkHandler(Process* process)
 	}
 }
 
+void Scheduler::KillORPH(Process* process)
+{
+	Process* descendant = process->GetDescendant();
+	process->SetDescendant(nullptr);
+
+	if (process->GetStatus() == TRM)
+		return;
+
+	if (descendant)
+	{
+		ProcessorFCFS* currentProcessor = (ProcessorFCFS*) descendant->GetCurrentProcessor();
+
+		currentProcessor->KillORPH(descendant->GetID());
+	}
+}
+
 void Scheduler::TerminateProcess(Process* process)
 {
 	if (process->GetStatus() == TRM)
 	{
 		return;
 	}
+	
+	// check if the process had descendants or not to kill them
+	if (process->GetDescendant() != nullptr)
+	{
+		KillORPH(process);
+	}
+
 	process->SetCurrentProcessor(nullptr);
 	process->SetStatus(TRM);
 	process->SetTT(clk->GetTime());

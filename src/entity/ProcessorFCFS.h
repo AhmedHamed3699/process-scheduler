@@ -20,6 +20,7 @@ public:
 	Process* StealProcess();					// Steals a Process from the list of a Processor and returns it
 	void OverHeat();							//OverHeating function
 	static void AddToKill(Pair<unsigned int, unsigned int> outP);	// adds new kill masseges
+	bool KillORPH(int PID);							//Function to handle killing the Orphans in the Processor
 
 	std::string ToString();
 };
