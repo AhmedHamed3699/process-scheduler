@@ -11,7 +11,6 @@ private:
 	static Queue<Pair<unsigned int, unsigned int>> SIGKILL;	//In each Pair, first is the time and second is the PID
 
 	void SIGKILLHandler();					//it mangaes how and when process would be killed
-	bool KillProcess(int PID);				//responsible for dealing with SIGKILL and Orphans
 
 public:
 	ProcessorFCFS(Scheduler* outScheduler);
@@ -20,6 +19,7 @@ public:
 	Process* StealProcess();					// Steals a Process from the list of a Processor and returns it
 	void OverHeat();							//OverHeating function
 	static void AddToKill(Pair<unsigned int, unsigned int> outP);	// adds new kill masseges
+	bool KillProcess(int PID);				//responsible for dealing with SIGKILL and Orphans
 
 	std::string ToString();
 };
