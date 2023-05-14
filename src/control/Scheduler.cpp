@@ -447,6 +447,9 @@ void Scheduler::ManageBlock()
 		//remove the process from the Block List and move it to the shortest RDY Queue
 		BLKList.dequeue();
 		Processor* shortestProcessor = GetShortestRDYProcessor();
+		TimeInfo timeInfo = blockedProcess->GetTimeInfo();
+		timeInfo.RCT--;
+		blockedProcess->SetTimeInfo(timeInfo);
 		shortestProcessor->AddProcessToList(blockedProcess);
 	}
 
