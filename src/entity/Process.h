@@ -12,7 +12,8 @@ class Process
 private:
 	const int PID;
 	Processor* currentProcessor;
-	Process* descendant;
+	Process* firstChild;
+	Process* secondChild;
 	TimeInfo timeInfo;
 	ProcessStatus status;			//any process created will have NEW as its initial status
 	bool isStolen;
@@ -22,8 +23,10 @@ public:
 	Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO);
 
 	int GetID() const;
-	Process* GetDescendant() const;
-	void SetDescendant(Process* child);
+	Process* GetFirstChild() const;
+	Process* GetSecondChild() const;
+	void SetFirstChild(Process* child);
+	void SetSecondChild(Process* child);
 	Processor* GetCurrentProcessor() const;
 	void SetCurrentProcessor(Processor* CP);
 

@@ -35,7 +35,6 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 		{
 			currentProcess = nullptr;
 			status = IDLE;
-			//return true; // see if you don't want to do IO and running at the same time stamp
 		}
 	}
 

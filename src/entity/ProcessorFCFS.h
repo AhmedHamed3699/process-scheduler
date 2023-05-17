@@ -11,7 +11,7 @@ private:
 	static Queue<Pair<unsigned int, unsigned int>> SIGKILL;	//In each Pair, first is the time and second is the PID
 
 	void SIGKILLHandler();					//it mangaes how and when process would be killed
-	bool KillProcess(int PID);				//responsible for dealing with SIGKILL and Orphans
+	bool KillProcess(int PID);				//responsible for dealing with SIGKILL
 
 public:
 	ProcessorFCFS(Scheduler* outScheduler);

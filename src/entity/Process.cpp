@@ -2,7 +2,8 @@
 #include <string>
 
 Process::Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO) :
-	PID(id), currentProcessor(nullptr), descendant(nullptr), status(NEW), IO(outIO), isStolen(false), isForked(false)
+	PID(id), currentProcessor(nullptr), firstChild(nullptr), secondChild(nullptr), status(NEW), 
+	IO(outIO), isStolen(false), isForked(false)
 {
 }
 
@@ -11,14 +12,24 @@ int Process::GetID() const
 	return PID;
 }
 
-Process* Process::GetDescendant() const
+Process* Process::GetFirstChild() const
 {
-	return descendant;
+	return firstChild;
 }
 
-void Process::SetDescendant(Process* child)
+Process* Process::GetSecondChild() const
 {
-	descendant = child;
+	return secondChild;
+}
+
+void Process::SetFirstChild(Process* child)
+{
+	firstChild = child;
+}
+
+void Process::SetSecondChild(Process* child)
+{
+	secondChild = child;
 }
 
 Processor* Process::GetCurrentProcessor() const

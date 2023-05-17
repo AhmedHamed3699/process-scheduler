@@ -48,8 +48,10 @@ void ProcessorFCFS::SIGKILLHandler()
 			return;
 		timeToKill = SIGKILL.peekFront().first;
 	}
-	else if (timeToKill != this->scheduler->GetCurrentTime())
+
+	if (timeToKill != this->scheduler->GetCurrentTime())
 		return;
+
 	int ID_toKill = SIGKILL.peekFront().second;
 
 	KillProcess(ID_toKill);
@@ -106,7 +108,6 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		{
 			currentProcess = nullptr;
 			status = IDLE;
-			//return true; // see if you don't want to do IO and running at the same time stamp
 		}
 	}
 
