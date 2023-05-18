@@ -369,10 +369,10 @@ void Scheduler::KillORPH(Process* process)
 
 	if (firstChild)
 	{
-		 ProcessorFCFS* currentProcessor = dynamic_cast<ProcessorFCFS*>(firstChild->GetCurrentProcessor());
+		ProcessorFCFS* currentProcessor = dynamic_cast<ProcessorFCFS*>(firstChild->GetCurrentProcessor());
 
-		 if (currentProcessor == nullptr) // Error --> How a forked process has been to processor other than FCFS ?
-			 return;
+		if (currentProcessor == nullptr) // Error --> How a forked process has been to processor other than FCFS ?
+			return;
 
 		currentProcessor->KillORPH(firstChild->GetID());
 	}
@@ -392,7 +392,7 @@ void Scheduler::TerminateProcess(Process* process)
 {
 	if (process->GetStatus() == TRM)
 		return;
-	
+
 	// check if the process had descendants or not to kill them
 	if (process->GetFirstChild() != nullptr || process->GetSecondChild() != nullptr)
 	{
@@ -730,58 +730,6 @@ void Scheduler::RunProcesses()
 	{
 		Processor* processor = processors.GetEntry(i + 1);
 		processor->ExecuteProcess(clk->GetTime());
-	}
-}
-
-
-void Scheduler::MoveFromRun()
-{
-	for (int i = 0; i < processors.GetLength(); i++)
-	{
-		Processor* processor = processors.GetEntry(i + 1);
-		Process* CurrentProcess = processor->GetCurrentProcess();
-		if (CurrentProcess == nullptr)
-			continue;
-
-		TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
-
-		if (timeInfo.RT + timeInfo.AT == clk->GetTime())
-			continue;
-
-		int probability = (rand() % 100) + 1;
-		if (probability <= 15)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			BlockProcess(CurrentProcess);
-		}
-		else if (probability >= 20 && probability <= 30)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			Schedule(CurrentProcess, processor);
-		}
-		else if (probability >= 50 && probability <= 60)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			TerminateProcess(CurrentProcess);
-		}
-	}
-}
-
-void Scheduler::MoveFromBLK()
-{
-	int probability = (rand() % 100) + 1;
-	if (BLKList.isEmpty())
-		return;
-
-	Process* BlockedProcess = BLKList.peekFront();
-
-	if (probability < 10)
-	{
-		BLKList.dequeue();
-		//	Schedule(BlockedProcess, Processor);
 	}
 }
 

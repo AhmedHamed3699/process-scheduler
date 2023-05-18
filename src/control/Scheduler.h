@@ -27,6 +27,7 @@ private:
 
 	/// ////////////////////////////////// ///
 	///  Stats Data Members and counters   ///
+	/// ////////////////////////////////// ///
 	unsigned int maxWMigrations;
 	unsigned int rtfMigrations;
 	unsigned int killCount;
@@ -47,7 +48,6 @@ private:
 public:
 	Scheduler(Clock* clk);
 	~Scheduler();
-	int GetCurrentTime();
 
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
@@ -58,11 +58,13 @@ public:
 	// Create a new process with the given id and add it to the NEW list
 	void CreateNewProcess(int id);
 	// Create a new process with the all params and add it to the NEW list
-	void CreateNewProcess(int AT, int PID, int CT,
-		Queue<Pair<unsigned int, unsigned int>>& outIO);
-	// Create a new forked process process
+	void CreateNewProcess(int AT, int PID, int CT, Queue<Pair<unsigned int, unsigned int>>& outIO);
+	// Create a new forked process
 	Process* CreateForkedProcess(int PID, int AT, int CT);
 
+	/// ////////////////////////////////// ///
+	///         SIMULARION PARAMS          ///
+	/// ////////////////////////////////// ///
 	SimulationParameters GetSimulationParameters();
 	void SetSimulationParameters(SimulationParameters sP);
 	bool isDone(); // to know when to terminate the program
@@ -84,8 +86,6 @@ public:
 	/// ////////////////////////////////// ///
 	///      Process State Management      ///
 	/// ////////////////////////////////// ///
-	// in phase 1 get the next process from the NEW list and add it to the 
-	// first processor then the second and so on
 	void ScheduleNext();
 	void Schedule(Process* process, Processor* procesor);
 	bool ScheduleNextFCFS(Process* process);
@@ -121,20 +121,19 @@ public:
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///
 	/// ////////////////////////////////// ///
+	// Runs Execute() for each processor
 	void RunProcesses();
-	void MoveFromRun();
-	void MoveFromBLK();
-
+	// calculates the stealing limit for two given processors
+	double CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor);
 	// work stealing algorithm
 	void WorkStealing();
 	// Over Heating algorithm
 	void OverHeating();
-	// calculates the stealing limit for two given processors
-	double CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor);
 
 	/// ////////////////////////////////// ///
 	///    Statistics & output Functions   ///
 	/// ////////////////////////////////// ///
+	int GetCurrentTime();
 	std::string TRMListStatsToString();
 	void IncrementMaxWMigrations();
 	void IncrementRTFMigrations();
