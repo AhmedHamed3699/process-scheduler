@@ -18,6 +18,7 @@ private:
 	ProcessStatus status;			//any process created will have NEW as its initial status
 	bool isStolen;
 	bool isForked;					// used for checking if the process is forked or not
+	int numberOfForking;            // number of times a process has forked, it ranges from 0 to 2
 	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_D
 public:
 	Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO);
@@ -25,8 +26,7 @@ public:
 	int GetID() const;
 	Process* GetFirstChild() const;
 	Process* GetSecondChild() const;
-	void SetFirstChild(Process* child);
-	void SetSecondChild(Process* child);
+	void SetChild(Process* child);
 	Processor* GetCurrentProcessor() const;
 	void SetCurrentProcessor(Processor* CP);
 
@@ -60,6 +60,8 @@ public:
 
 	bool IsForked() const;
 	void SetForked(bool isForked);
+	bool CanFork() const;
+	void killchildren();
 
 	// for UI and debugging
 	std::string ToString();

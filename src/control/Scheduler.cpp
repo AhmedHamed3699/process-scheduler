@@ -345,27 +345,18 @@ void Scheduler::ForkHandler(Process* process)
 		return;
 
 	// checks if the process can not have any other child
-	if (process->GetFirstChild() != nullptr && process->GetSecondChild() != nullptr)
+	if (!process->CanFork())
 		return;
 
 	unsigned int Rand = rand() % 100;
 	if (Rand < simulationParameters.FORK_PROBABILITY)
 	{
-		int id = simulationParameters.N_PROCESS + 10;
+		int id = simulationParameters.N_PROCESS + 10; // create id for new process
 		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
 		ForkedProcess->SetForked(true);		// set the forked flag to true
-		ScheduleNextFCFS(ForkedProcess);
-
-		if (process->GetFirstChild() == nullptr)
-		{
-			process->SetFirstChild(ForkedProcess);
-		}
-		else
-		{
-			process->SetSecondChild(ForkedProcess);
-		}
-		
-		simulationParameters.N_PROCESS++;
+		ScheduleNextFCFS(ForkedProcess);    // move the new process to shortest FCFS
+		process->SetChild(ForkedProcess);   // link child to parent
+		simulationParameters.N_PROCESS++;   // increase number of processes in the system
 	}
 }
 
@@ -373,8 +364,7 @@ void Scheduler::KillORPH(Process* process)
 {
 	Process* firstChild = process->GetFirstChild();
 	Process* secondChild = process->GetSecondChild();
-	process->SetFirstChild(nullptr);
-	process->SetSecondChild(nullptr);
+	process->killchildren();
 
 
 	if (firstChild)
