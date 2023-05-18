@@ -101,7 +101,7 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 	}
 
 	//if the process finished execution, it should be terminated
-	if (currentProcess->GetTimeInfo().RCT <= 0)
+	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
 	{
 		scheduler->TerminateProcess(currentProcess);
 		currentProcess = nullptr;
