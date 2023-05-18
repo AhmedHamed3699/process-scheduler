@@ -86,6 +86,8 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
 	// we need to re-order callings, so it makes more sense
 
+	SIGKILLHandler();
+
 	// check if the processor is over heated - OVER HEATING
 	if (this->status == STOP)
 	{
@@ -98,8 +100,15 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		return false;
 	}
 
-	SIGKILLHandler();
+	//if the process finished execution, it should be terminated
+	if (currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		status = IDLE;
+	}
 
+	//checks if the current process needs IO
 	if (currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
@@ -156,15 +165,6 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 
 	// increment the total busy time
 	IncrementTotalBusyTime();
-
-	//if the process finished execution, it should be terminated
-	if (currentProcess->GetTimeInfo().RCT <= 0)
-	{
-		scheduler->TerminateProcess(currentProcess);
-		currentProcess = nullptr;
-		status = IDLE;
-		return true;
-	}
 
 	return true;
 }
