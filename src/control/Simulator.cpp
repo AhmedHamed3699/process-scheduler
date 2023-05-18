@@ -250,7 +250,7 @@ void Simulator::Run()
 	}
 
 	/// 3. End Simulation
-	// ending msg in silent mode
+	// ending message in silent mode
 	if (ui.GetMode() == SILENT)
 	{
 		ui.PrintSilentModeEnd();
@@ -285,7 +285,7 @@ bool Simulator::PrepareSimulation()
 	}
 
 	/// 4. SET the random seed
-	srand(time(0));
+	srand((unsigned int)time(0));
 
 	/// 5. Create the processors
 	scheduler.CreateAllProcessors();
