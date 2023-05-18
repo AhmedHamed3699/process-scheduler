@@ -3,7 +3,7 @@
 
 Process::Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO) :
 	PID(id), currentProcessor(nullptr), firstChild(nullptr), secondChild(nullptr), status(NEW), 
-	IO(outIO), isStolen(false), isForked(false)
+	IO(outIO), isStolen(false), isForked(false), numberOfForking(0)
 {
 }
 
@@ -22,14 +22,17 @@ Process* Process::GetSecondChild() const
 	return secondChild;
 }
 
-void Process::SetFirstChild(Process* child)
+void Process::SetChild(Process* child)
 {
-	firstChild = child;
-}
+	if (numberOfForking >= 2)
+		return;
 
-void Process::SetSecondChild(Process* child)
-{
-	secondChild = child;
+	if (numberOfForking == 0)
+		firstChild = child;
+	else
+		secondChild = child;
+
+	numberOfForking++;
 }
 
 Processor* Process::GetCurrentProcessor() const
@@ -140,6 +143,17 @@ bool Process::IsForked() const
 void Process::SetForked(bool isForked)
 {
 	this->isForked = isForked;
+}
+
+bool Process::CanFork() const
+{
+	return (numberOfForking < 2);
+}
+
+void Process::killchildren()
+{
+	firstChild = nullptr;
+	secondChild = nullptr;
 }
 
 std::string Process::ToString()

@@ -26,6 +26,13 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 		return false;
 	}
 
+	//if the process finished execution, it should be terminated
+	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		SetStatus(IDLE);
+	}
 
 	if (currentProcess)
 	{
@@ -53,9 +60,10 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 		process->SetStatus(RUN);
 		SetStatus(BUSY);
 
-		TimeInfo timeInfo = process->GetTimeInfo();
-		timeInfo.RT = CurrentTime - timeInfo.AT;
-		process->SetTimeInfo(timeInfo);
+		// if the first execution, set the RT
+		// the condition where a process must stay at least stay one step before execution allows this
+		if (currentProcess->GetTimeInfo().RT == 0)
+			currentProcess->SetRT(CurrentTime - currentProcess->GetTimeInfo().AT);
 
 		return true;
 
@@ -67,15 +75,6 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 
 	// increment the total busy time
 	IncrementTotalBusyTime();
-
-	//if the process finished execution, it should be terminated
-	if (currentProcess->GetTimeInfo().RCT <= 0)
-	{
-		scheduler->TerminateProcess(currentProcess);
-		currentProcess = nullptr;
-		SetStatus(IDLE);
-		return true;
-	}
 
 	return true;
 }

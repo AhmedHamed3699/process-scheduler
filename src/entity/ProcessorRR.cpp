@@ -28,7 +28,18 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		return false;
 	}
 
+	/// 1. if the process is finished, terminate it
+	// Check if the process is finished
+	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		// Set the process as finished
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		SetStatus(IDLE);
+		quantumCounter = RR_TIME_SLICE;
+	}
 
+	/// 2. checks if the current process needs IO
 	if (currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
@@ -40,7 +51,7 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		}
 	}
 
-	/// 1. if no running process, schedule next process
+	/// 3. if no running process, schedule next process
 	if (this->currentProcess == nullptr)
 	{
 		Process* process = nullptr;
@@ -73,31 +84,6 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		return true;
 	}
 
-	/// 2. if there is a running process, execute it
-	// execute the process
-	currentProcess->DecrementRCT(); // decrement the RCT
-
-	// decrement the quantum counter
-	quantumCounter--;
-
-	// decrement the expected finish time of the processor by one
-	expectedFinishTime--;
-
-	// increment the total busy time
-	IncrementTotalBusyTime();
-
-	/// 3. if the process is finished, terminate it
-	// Check if the process is finished
-	if (currentProcess->GetTimeInfo().RCT <= 0)
-	{
-		// Set the process as finished
-		scheduler->TerminateProcess(currentProcess);
-		currentProcess = nullptr;
-		SetStatus(IDLE);
-		quantumCounter = RR_TIME_SLICE;
-		return true;
-	}
-
 	/// 4. if the process is not finished, check if the quantum is finished
 	// if quantum is finished, add the process to the ready list
 	if (quantumCounter == 0) // add here the quantum counter
@@ -113,6 +99,19 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		quantumCounter = RR_TIME_SLICE;
 		return true;
 	}
+
+	/// 5. if there is a running process, execute it
+	// execute the process
+	currentProcess->DecrementRCT(); // decrement the RCT
+
+	// decrement the quantum counter
+	quantumCounter--;
+
+	// decrement the expected finish time of the processor by one
+	expectedFinishTime--;
+
+	// increment the total busy time
+	IncrementTotalBusyTime();
 
 	return true;
 }
