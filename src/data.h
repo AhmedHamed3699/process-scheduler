@@ -4,6 +4,15 @@
 ///=////////////////////////////////////////////=///
 #include "ds/Queue.h"
 
+/// CONSTANTS and SETTINGS ///
+#define LINE_LENGTH 106
+#define NUM_PRECISION 3
+#define WORK_STEALING true				// true if work stealing is enabled, false otherwise
+#define OVER_HEATING true				// true if over heating is enabled, false otherwise
+#define OVER_HEATING_PERCENT 2			// the percentage of which a processor will be over heated
+#define OVER_HEATING_PERCENT_SCALE 1000  // the divider of the percent if 100 than the percent 0.02 
+#define MAX_STEALING_LIMIT 0.4			// the maximum percentage of STEALING_LIMIT
+
 /// ////////////////// ///
 ///     Enumerators    ///
 /// ////////////////// ///
@@ -19,7 +28,8 @@ enum ProcessStatus {
 
 enum ProcessorStatus {
 	IDLE,
-	BUSY
+	BUSY,
+	STOP
 };
 
 // Terminal Output colors codes
@@ -61,6 +71,7 @@ enum UIMode
 	INTERACTIVE,
 	STEP_BY_STEP,
 	SILENT,
+	DEBUG,
 	// not an actual mode
 	UI_MODE_SIZE
 };
@@ -78,9 +89,10 @@ struct TimeInfo
 	unsigned int TT;	 //terminationTime
 	unsigned int TRT;	 //turnaroundTime
 	unsigned int WT;	 //waitingTime
-	unsigned int BT;	 //time when first encounter BLK --> to be removed later
+	unsigned int currentIOD;	//IO duration for the current IO request
+	unsigned int totalIOD;		//the total time spent by the process doing IO
 
-	TimeInfo() :AT(0), RT(0), CT(0), RCT(0), TT(0), TRT(0), WT(0), BT(0)
+	TimeInfo() :AT(0), RT(0), CT(0), RCT(0), TT(0), TRT(0), WT(0), currentIOD(0), totalIOD(0)
 	{
 	}
 };
@@ -96,6 +108,7 @@ struct SimulationParameters
 	unsigned int STL;
 	unsigned int RTF;
 	unsigned int N_PROCESS;
+	unsigned int OVERHEAT_TIME;
 
 	SimulationParameters(
 		unsigned int maxWaitingTime,
@@ -106,7 +119,8 @@ struct SimulationParameters
 		unsigned int forkProbability,
 		unsigned int stl,
 		unsigned int rtf,
-		unsigned int nProcess
+		unsigned int nProcess,
+		unsigned int overheatTime
 	)
 		:MAX_WAITING_TIME(maxWaitingTime),
 		RR_TIME_SLICE(RRTimeSlice),
@@ -116,7 +130,8 @@ struct SimulationParameters
 		FORK_PROBABILITY(forkProbability),
 		STL(stl),
 		RTF(rtf),
-		N_PROCESS(nProcess)
+		N_PROCESS(nProcess),
+		OVERHEAT_TIME(overheatTime)
 	{}
 };
 

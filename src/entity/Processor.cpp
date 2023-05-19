@@ -1,7 +1,7 @@
 #include "Processor.h"
 
 Processor::Processor(Scheduler* outScheduler, ProcessorType aType) : scheduler(outScheduler),
-status(IDLE), currentProcess(nullptr), totalBusyTime(0), expectedFinishTime(0), startingTime(0)
+status(IDLE), currentProcess(nullptr), totalBusyTime(0), expectedFinishTime(0), startingTime(0), overheatCounter(0)
 {
 }
 
@@ -20,19 +20,20 @@ Process* Processor::GetCurrentProcess() const
 	return currentProcess;
 }
 
-void Processor::SetCurrentProcess(Process* outProcess)
-{
-	currentProcess = outProcess;
-}
-
 unsigned int Processor::GetTotalBusyTime() const
 {
 	return totalBusyTime;
 }
 
-void Processor::SetTotalBusyTime(unsigned int time)
+void Processor::SetHeatingTime(int time)
 {
-	totalBusyTime = time;
+	overheatCounter = time;
+}
+
+void Processor::IncrementTotalBusyTime()
+{
+	if (status == BUSY)
+		totalBusyTime++;
 }
 
 unsigned int Processor::GetExpectedFinishTime() const
@@ -40,9 +41,12 @@ unsigned int Processor::GetExpectedFinishTime() const
 	return expectedFinishTime;
 }
 
-void Processor::SetExpectedFinishTime(unsigned int time)
+unsigned int Processor::GetTotalReadyTime() const
 {
-	expectedFinishTime = time;
+	if (currentProcess == nullptr)
+		return expectedFinishTime;
+
+	return expectedFinishTime - currentProcess->GetTimeInfo().RCT;
 }
 
 Processor::~Processor()

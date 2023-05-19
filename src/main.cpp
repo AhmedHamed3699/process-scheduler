@@ -5,7 +5,7 @@
 
 int main()
 {
-	// Runs the simulation
+	// Creates the simulator object and runs the simulation
 	Simulator simulation;
 	simulation.Run();
 

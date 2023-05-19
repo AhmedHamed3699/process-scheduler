@@ -5,35 +5,77 @@
 ///=//////////////////////////////////////////////////////////=///
 #include "../data.h"
 
+class Processor;
+
 class Process
 {
 private:
+	/// ////////////////////////////////// ///
+	///			  Data Members			   ///
+	/// ////////////////////////////////// ///
 	const int PID;
-	Process* descendant;
+	Processor* currentProcessor;
+	Process* firstChild;
+	Process* secondChild;
 	TimeInfo timeInfo;
-	unsigned int IONumOfReq;
 	ProcessStatus status;			//any process created will have NEW as its initial status
-	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_R 
+	bool isStolen;
+	bool isForked;					// used for checking if the process is forked or not
+	int numberOfForking;            // number of times a process has forked, it ranges from 0 to 2
+	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_D
 public:
-	Process(int id, unsigned int ioNum, Queue<Pair<unsigned int, unsigned int>>& outIO);
+	/// ////////////////////////////////// ///
+	///	     Constructors & Destructor	   ///
+	/// ////////////////////////////////// ///
+	Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO);
 
+	/// ////////////////////////////////// ///
+	/// 		 Process Interface		   ///
+	/// ////////////////////////////////// ///
 	int GetID() const;
-	Process* GetDescendant() const;
-	void SetDescendant(Process* child);
+	Process* GetFirstChild() const;
+	Process* GetSecondChild() const;
+	void SetChild(Process* child);
+	Processor* GetCurrentProcessor() const;
+	void SetCurrentProcessor(Processor* CP);
+
+	/// ////////////////////////////////// ///
+	///			  Time Information		   ///
+	/// ////////////////////////////////// ///
 	TimeInfo GetTimeInfo() const;
 	void SetTimeInfo(TimeInfo tI);
-	unsigned int GetIONumOfReq() const;			//can be used to know if the process would request IO or not
-	void SetIONumOfReq(unsigned int ioNum);
+	// Decrement the Remaining CPU Time of the process, used when executing the process
+	void DecrementRCT();
+	// Sets the Termination Time of the process, used when terminating the process
+	void SetTT(unsigned int time);
+	// Sets the response time of the process, used when adding a process to a processor
+	void SetRT(unsigned int time);
+	// Calculates adn Sets the turn around time of the process, used when terminating the process
+	void CalcTRT();
+	// Calculates and sets the total waiting time (WT) of the process, used when terminating the process
+	void CalcWT();
+
+
 	ProcessStatus GetStatus() const;
 	void SetStatus(ProcessStatus outStatus);
-	Pair<unsigned int, unsigned int> GetTopIOPair();	//it dequeues and return the first pair in the queue (if empty return Pair of (0,0)
+	//it dequeues and return the first pair in the queue (if empty return Pair of (0,0)
+	Pair<unsigned int, unsigned int> GetTopIOPair();
+
+	//returns true if the process needs IO in this timestep
+	bool NeedIO(int currentTime) const;
+	bool IsStolen() const;
+	void SetStolen(bool isStolen);
+	bool IsForked() const;
+	void SetForked(bool isForked);
+	bool CanFork() const;
+	void killchildren();
+
+	/// ////////////////////////////////// ///
+	/// 		 Overloaded Operators	   ///
+	/// ////////////////////////////////// ///
 	bool operator== (int id);
 	bool operator< (Process* p);
 
-	//returns true if the process needs IO in this timestep
-	//You may need to change its parameters depending on your implementation (ex: you may want to send the time to it)
-	//You may also remove this method and just get the timeInfo of the process to check for IO time
-	bool NeedIO() const;
 
 	// for UI and debugging
 	std::string ToString();

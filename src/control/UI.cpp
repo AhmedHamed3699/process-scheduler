@@ -1,5 +1,6 @@
 #include "UI.h"
 #include <conio.h>
+#include <iomanip>
 
 /// Output Functions
 void UI::WriteWarning(std::string msg)
@@ -19,9 +20,14 @@ void UI::WriteError(std::string msg)
 void UI::PrintHeadline()
 {
 	SetColor(CYAN);
-	std::cout << "            .-----------------------------." << std::endl;
-	std::cout << "            | Process Scheduler Simulator |" << std::endl;
-	std::cout << "            '-----------------------------'" << std::endl;
+	const unsigned int HEADLINE_WIDTH = 30;
+
+	std::cout << std::setw((LINE_LENGTH - HEADLINE_WIDTH) / 2) << std::setfill(' ') << "";
+	std::cout << ".-----------------------------." << std::endl;
+	std::cout << std::setw((LINE_LENGTH - HEADLINE_WIDTH) / 2) << std::setfill(' ') << "";
+	std::cout << "| Process Scheduler Simulator |" << std::endl;
+	std::cout << std::setw((LINE_LENGTH - HEADLINE_WIDTH) / 2) << std::setfill(' ') << ""; // centers the headline
+	std::cout << "'-----------------------------'" << std::endl;
 	std::cout << std::endl;
 	ResetColor();
 }
@@ -29,37 +35,43 @@ void UI::PrintHeadline()
 void UI::PrintUIModeMenu()
 {
 	std::cout << "Select in what mode your want the simulation to run" << std::endl;
-	std::cout << "\'I\' for Interactive, \'T\' for step by step, \'S\' for silent: ";
+	std::cout << "\'I\' for Interactive, \'T\' for step by step, \'S\' for silent, \'D\' for debug: ";
 
 	char aMode;
 	std::cin >> aMode;
 	std::cin.ignore(1000, '\n');
-	// TODO: delete in phase 2
-	WriteWarning("only Interactive mode is available in phase 1");
-
 
 	switch (aMode)
 	{
-		// Enable in Phase 2, in phase 1 only mode is interactive
-		#if 0
 	case 'I':
+	case 'i':
 		SetMode(INTERACTIVE);
 		break;
 	case 'T':
+	case 't':
 		SetMode(STEP_BY_STEP);
 		break;
 	case 'S':
-		SetMode(SILENT)
-			break;
-		#endif
+	case 's':
+		SetMode(SILENT);
+		break;
+	case 'D':
+	case 'd':
+		SetMode(DEBUG);
+		break;
 	default:
-		SetMode(INTERACTIVE);
+		WriteWarning("Invalid input, please select one of the interface options");
+		PrintUIModeMenu();
 		break;
 	}
 }
 
 void UI::PrintTimeStamp()
 {
+	// if the mode is silent, don't print anything
+	if (mode == SILENT)
+		return;
+
 	SetColor(CYAN);
 	std::cout << "_--------------------------------------------------------_" << std::endl;
 
@@ -88,15 +100,43 @@ void UI::PrintTimeStamp()
 
 void UI::PrintSimulationParmas()
 {
-	SetColor(DARK_YELLOW);
+	SetColor(CYAN);
 	std::cout << scheduler->SimulationParametersToString();
 	ResetColor();
 }
 
 void UI::PrintProcessKilled(int PID)
 {
+	if (mode == SILENT) // if the mode is silent, don't print anything
+		return;
+
 	SetColor(DARK_YELLOW);
 	std::cout << "Process " << PID << " Received SIGKILL" << " ...\n";
+	ResetColor();
+}
+
+void UI::PrintWorkStealingAlert()
+{
+	if (mode == SILENT) // if the mode is silent, don't print anything
+		return;
+
+	SetColor(DARK_YELLOW);
+
+	std::cout << "=================================\n";
+	std::cout << "  Work Stealing Is Running....\n";
+	std::cout << "=================================\n";
+
+	ResetColor();
+}
+
+void UI::PrintOverheatingAlert()
+{
+	if (mode == SILENT) // if the mode is silent, don't print anything
+		return;
+	SetColor(BRIGHT_RED);
+	std::cout << "=================================\n";
+	std::cout << "         CPU Overheating...\n";
+	std::cout << "=================================\n";
 	ResetColor();
 }
 
@@ -147,10 +187,14 @@ void UI::Wait()
 std::string UI::GetInputFileName()
 {
 	SetColor(CYAN);
-	std::cout << "Enter the name of the input file: ";
+	std::cout << "Enter the name of the input file (\'d\' for default): ";
 	ResetColor();
 	std::string fileName;
 	std::cin >> fileName;
+
+	if (fileName == "d")
+		fileName = "test.txt";
+
 	return fileName;
 }
 
@@ -178,4 +222,9 @@ void UI::SetColor(Color color)
 void UI::SetMode(UIMode aMode)
 {
 	mode = aMode;
+}
+
+UIMode UI::GetMode()
+{
+	return mode;
 }

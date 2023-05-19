@@ -1,12 +1,27 @@
 #include "Simulator.h"
 #include <cstdlib>
 #include <time.h>
+#include <iomanip>
 
-bool Simulator::LoadInpuitFile()
+/// ////////////////////////////////// ///
+///       Constructor & Destructor	   ///
+/// ////////////////////////////////// ///
+Simulator::Simulator()
+{
+}
+
+Simulator::~Simulator()
+{
+}
+
+/// ////////////////////////////////// ///
+///			I/O File Handling          ///
+/// ////////////////////////////////// ///
+bool Simulator::LoadInpuitFile(std::string filePath)
 {
 	std::ifstream InFile;
 
-	InFile.open("test.txt");
+	InFile.open(filePath);
 
 	if (!InFile.is_open())
 	{
@@ -16,11 +31,11 @@ bool Simulator::LoadInpuitFile()
 
 	/// read the main data of the project & assign it to the simulator parameter in scheduler
 	unsigned int maxWaitingTime, RRTimeSlice, nFCFS, nSJF,
-		nRR, forkProbability, stl, rtf, nProcess;
+		nRR, forkProbability, stl, rtf, nProcess, overheat_time;
 
 	InFile >> nFCFS >> nSJF >> nRR;
 	InFile >> RRTimeSlice;
-	InFile >> rtf >> maxWaitingTime >> stl >> forkProbability;
+	InFile >> rtf >> maxWaitingTime >> stl >> forkProbability >> overheat_time;
 	InFile >> nProcess;
 
 	SimulationParameters sP = scheduler.GetSimulationParameters();
@@ -34,6 +49,7 @@ bool Simulator::LoadInpuitFile()
 	sP.STL = stl;
 	sP.RTF = rtf;
 	sP.N_PROCESS = nProcess;
+	sP.OVERHEAT_TIME = overheat_time;
 
 	scheduler.SetSimulationParameters(sP);
 
@@ -64,7 +80,7 @@ bool Simulator::LoadInpuitFile()
 			}
 		}
 
-		scheduler.CreateNewProcess(AT, PID, CT, N, IO);
+		scheduler.CreateNewProcess(AT, PID, CT, IO);
 	}
 
 
@@ -78,7 +94,7 @@ bool Simulator::LoadInpuitFile()
 	while (InFile >> killTime >> PID)	//loop till the end of the file
 	{
 		Pair<unsigned int, unsigned int> sigkillP(killTime, PID);
-		scheduler.AddToSIGKILL(sigkillP);
+		ProcessorFCFS::AddToKill(sigkillP);
 	}
 
 
@@ -88,37 +104,207 @@ bool Simulator::LoadInpuitFile()
 
 bool Simulator::CreateOutputFile()
 {
+	/// create the output file and validate it
+	std::ofstream OutFile;
+	OutFile.open("output.txt");
+	if (!OutFile.is_open())
+	{
+		ui.PrintOutputFileMsg(false);
+		return false;
+	}
+
+	/// Print TRM processes
+	OutFile << "TT  PID AT  CT  IO_D WT  RT  TRT" << std::endl;
+	OutFile << "================================" << std::endl;
+	OutFile << scheduler.TRMListStatsToString();
+	OutFile << "================================" << std::endl << std::endl;
+
+	/// Print NUM of processes
+	OutFile << "Processes: " << scheduler.GetSimulationParameters().N_PROCESS << std::endl;
+
+	/// TIME AVERAGES
+	OutFile << "Average Waiting Time     (WT): ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageWaitTime() << std::endl;
+
+	OutFile << "Average Response Time    (RT): ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageResponseTime() << std::endl;
+
+	OutFile << "Average Turnaround Time (TRT): ";
+	OutFile << std::setw(NUM_PRECISION) << std::setfill('0') << scheduler.CalculateAverageTurnaroundTime() << std::endl;
+
+	OutFile << std::endl;
+
+	/// MIGRATION STATS
+	OutFile << "Migration %: RTF%= " << scheduler.CalculateRTFMigrationPercent() << "%, ";
+	OutFile << "MaxW%= " << scheduler.CalculateMaxWMigrationPercent() << "%" << std::endl;
+
+	/// WORK STEALING STATS
+	OutFile << "Work Steal%: " << scheduler.CaculateWorkStealPercent() << "%" << std::endl;
+
+	/// FORKING STATS
+	OutFile << "Forked processes%: " << scheduler.CalculateForkedProcessPercent() << "%" << std::endl;
+
+	/// KILLING STATS
+	OutFile << "Killed processes%: " << scheduler.CalculateKillCountPercent() << "%" << std::endl;
+
+	/// OVERHEAT STATS
+	OutFile << "Overheating count: " << scheduler.GetNumberOfOverHeatedProcessors() << std::endl;
+
+	OutFile << std::endl;
+
+	/// PROCESSOR STATS
+	unsigned int numOfProcesors = scheduler.GetSimulationParameters().N_FCFS
+		+ scheduler.GetSimulationParameters().N_SJF
+		+ scheduler.GetSimulationParameters().N_RR;
+	OutFile << "Processors: " << numOfProcesors;
+	OutFile << " ["
+		<< scheduler.GetSimulationParameters().N_FCFS << " FCFS, "
+		<< scheduler.GetSimulationParameters().N_SJF << " SJF, "
+		<< scheduler.GetSimulationParameters().N_RR << " RR]" << std::endl;
+
+	/// CPU LOAD
+	unsigned int* cpuLoad = scheduler.CalculateProcessorsLoad();
+	OutFile << "Processors Load: \n";
+
+	for (unsigned int i = 0; i < numOfProcesors; i++)
+	{
+		OutFile << "P" << i + 1 << ": " << cpuLoad[i] << "% ";
+
+		if (i < numOfProcesors - 1)
+		{
+			OutFile << ", ";
+		}
+	}
+	OutFile << std::endl << std::endl;
+
+	delete[] cpuLoad;
+
+	/// CPU UTILIZATION
+	unsigned int* cpuUtilization = scheduler.CalculateProcessorsUtilization();
+	OutFile << "Processors Utilization: \n";
+
+	for (unsigned int i = 0; i < numOfProcesors; i++)
+	{
+		OutFile << "P" << i + 1 << ": " << cpuUtilization[i] << "%";
+
+		if (i < numOfProcesors - 1)
+		{
+			OutFile << ", ";
+		}
+	}
+	OutFile << std::endl;
+
+	delete[] cpuUtilization;
+
+	OutFile << "Average Processor Utilization: " << scheduler.CalculateAverageProcessorsUtilization() << "%\n";
+
+	OutFile << std::endl;
+
+
+	/// OUTPUT MSG && close file
+	OutFile.close();
+	ui.PrintOutputFileMsg(true);
 	return true;
 }
 
+/// ////////////////////////////////// ///
+///		START POINT OF SIMULATION      ///
+/// ////////////////////////////////// ///
 void Simulator::Run()
 {
-	Simulation();
-}
+	/// 1. prepare simulation by printing the headline, getting the input file name, and loading the input file
+	if (!PrepareSimulation())
+		return;
 
-void Simulator::Simulation()
-{
-	srand(time(0));
-	LoadInpuitFile();
-	scheduler.CreateAllProcessors();
-
-	ui.PrintHeadline();
-	ui.PrintSimulationParmas();
-	ui.PrintUIModeMenu();
-
+	/// 2. Run the simulation
+	// Simulation Loop
 	while (true)
 	{
+		// i. step the time
 		clk.Step();
-		int kill = scheduler.SimulateKill();
+
+		// ii. schedule the next process
 		scheduler.ScheduleNext();
+
+		// iii. run the processes (calls the schedule algorithm for each processor and executes its current running task)
 		scheduler.RunProcesses();
-		scheduler.MoveFromRun();
-		scheduler.MoveFromBLK();
+
+		// iV. manages process in BLK list
+		scheduler.ManageBlock();
+
+
+		//  work stealing
+		#if WORK_STEALING
+		unsigned int STL = scheduler.GetSimulationParameters().STL;
+		if (STL > 0 && clk.GetTime() % STL == 0)
+		{
+			scheduler.WorkStealing();
+			ui.PrintWorkStealingAlert();
+		}
+		#endif
+
+		// Over heating
+		#if OVER_HEATING
+		bool willOverHeat = rand() % OVER_HEATING_PERCENT_SCALE < OVER_HEATING_PERCENT;
+		if (willOverHeat)
+		{
+			scheduler.OverHeating();
+			ui.PrintOverheatingAlert();
+		}
+		#endif
+
+
+		// print the time stamp
 		ui.PrintTimeStamp();
-		if (kill != -1)
-			ui.PrintProcessKilled(kill);
+
+		// check if the simulation is done, and return
 		if (scheduler.isDone())
-			return;
+			break;
+
+		// wait for the user to press enter or wait for a specific time if the mode is STEP-BY-STEp
 		ui.Wait();
 	}
+
+	/// 3. End Simulation
+	// ending message in silent mode
+	if (ui.GetMode() == SILENT)
+	{
+		ui.PrintSilentModeEnd();
+	}
+
+	// creates the output file
+	CreateOutputFile();
+}
+
+/// ////////////////////////////////// ///
+///         Private Functions          ///
+/// ////////////////////////////////// ///
+bool Simulator::PrepareSimulation()
+{
+	/// 1. Print Headline
+	ui.PrintHeadline();
+
+	/// 2. Load Input File 
+	std::string filePath = ui.GetInputFileName();
+	if (!LoadInpuitFile(filePath))
+	{
+		ui.WriteError("File Not Found");
+		return false;
+	}
+
+	/// 3. Get UI Mode
+	ui.PrintSimulationParmas();
+	ui.PrintUIModeMenu();
+	if (ui.GetMode() == SILENT)
+	{
+		ui.PrintSilentModeStart();
+	}
+
+	/// 4. SET the random seed
+	srand((unsigned int)time(0));
+
+	/// 5. Create the processors
+	scheduler.CreateAllProcessors();
+
+	return true;
 }

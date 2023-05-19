@@ -1,14 +1,22 @@
 #include "Scheduler.h"
 #include <cstdlib>
+#include <string>
+#include <sstream>
+#include <iomanip>
 
 /// ////////////////////////////////// ///
 ///    constructors and destructor     ///
 /// ////////////////////////////////// ///
 Scheduler::Scheduler(Clock* clk)
-	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0),
+	:simulationParameters(0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
 	IOProcess(nullptr)
 {
 	this->clk = clk;
+	maxWMigrations = 0;
+	rtfMigrations = 0;
+	killCount = 0;
+	overHeatingCount = 0;
+	forkedProcessCount = 0;
 }
 
 Scheduler::~Scheduler()
@@ -19,26 +27,30 @@ Scheduler::~Scheduler()
 		processors.Remove(i);
 	}
 
-	for (int i = 0; i < TRMList.getSize(); i++)
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
 	{
 		delete TRMList.peekFront();
 		TRMList.dequeue();
 	}
 }
 
+int Scheduler::GetCurrentTime()
+{
+	return clk->GetTime();
+}
 
 /// ////////////////////////////////// ///
 ///         Creation and setup         ///
 /// ////////////////////////////////// ///
 void Scheduler::CreateAllProcessors()
 {
-	for (int i = 0; i < simulationParameters.N_FCFS; i++)
+	for (unsigned int i = 0; i < simulationParameters.N_FCFS; i++)
 		CreateProcessor(FCFS);
 
-	for (int i = 0; i < simulationParameters.N_SJF; i++)
+	for (unsigned int i = 0; i < simulationParameters.N_SJF; i++)
 		CreateProcessor(SJF);
 
-	for (int i = 0; i < simulationParameters.N_RR; i++)
+	for (unsigned int i = 0; i < simulationParameters.N_RR; i++)
 		CreateProcessor(RR);
 }
 
@@ -66,20 +78,18 @@ void Scheduler::CreateProcessor(ProcessorType aType)
 
 void Scheduler::CreateNewProcess(int id)
 {
-	// create new processor
-	int N = 0;			//set NumOfIORequest with 0
-	Queue<Pair<unsigned int, unsigned int>> emptyQ;			//empty Queue to initialize process with
-	Process* newProcess = new Process(id, N, emptyQ);
+	Queue<Pair<unsigned int, unsigned int>> emptyQ;		//empty Queue to initialize process with
+	Process* newProcess = new Process(id, emptyQ);
 	newProcess->SetStatus(NEW);
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
 }
 
-void Scheduler::CreateNewProcess(int AT, int PID, int CT, int N,
+void Scheduler::CreateNewProcess(int AT, int PID, int CT,
 	Queue<Pair<unsigned int, unsigned int>>& outIO)
 {
-	// create new processor
-	Process* newProcess = new Process(PID, N, outIO);
+	// create new process
+	Process* newProcess = new Process(PID, outIO);
 	newProcess->SetStatus(NEW);
 
 	TimeInfo timeInfo;
@@ -91,6 +101,25 @@ void Scheduler::CreateNewProcess(int AT, int PID, int CT, int N,
 
 	// add processor to the NEW list
 	NEWList.enqueue(newProcess);
+}
+
+Process* Scheduler::CreateForkedProcess(int PID, int AT, int CT)
+{
+	Queue<Pair<unsigned int, unsigned int>> emptyQ;	 //empty Queue to initialize process with
+	Process* newProcess = new Process(PID, emptyQ);
+	newProcess->SetStatus(NEW);
+
+	TimeInfo timeInfo;
+	timeInfo.AT = AT;
+	timeInfo.CT = CT;
+	timeInfo.RCT = CT;
+
+	newProcess->SetTimeInfo(timeInfo);
+
+	// increment forked process count for statistics
+	forkedProcessCount++;
+
+	return newProcess;
 }
 
 SimulationParameters Scheduler::GetSimulationParameters()
@@ -105,14 +134,7 @@ void Scheduler::SetSimulationParameters(SimulationParameters sP)
 
 bool Scheduler::isDone()
 {
-	// this means we must change N_PROCESS when we fork .. or terminate the program in another way
-
 	return (simulationParameters.N_PROCESS == TRMList.getSize());
-}
-
-void Scheduler::AddToSIGKILL(Pair<unsigned int, unsigned int> outP)
-{
-	SIGKILL.enqueue(outP);
 }
 
 /// ////////////////////////////////// ///
@@ -185,21 +207,23 @@ std::string Scheduler::RUNListToString()
 
 std::string Scheduler::SimulationParametersToString()
 {
-	std::string str = "";
-	str += "Simulation Parameters:\n";
-	str += ".-----------------------------------------------------------------------------------------------------------.\n";
-	str += "| NP\t" + std::to_string(simulationParameters.N_PROCESS);
-	str += " | N_FCFS\t" + std::to_string(simulationParameters.N_FCFS);
-	str += " | N_RR\t" + std::to_string(simulationParameters.N_RR);
-	str += " | N_SJF\t" + std::to_string(simulationParameters.N_SJF);
-	str += " | FB\t" + std::to_string(simulationParameters.FORK_PROBABILITY);
-	str += " | MWT\t" + std::to_string(simulationParameters.MAX_WAITING_TIME);
-	str += " | TS\t" + std::to_string(simulationParameters.RR_TIME_SLICE);
-	str += " | RTF\t" + std::to_string(simulationParameters.RTF);
-	str += " | STL\t" + std::to_string(simulationParameters.STL);
-	str += " |\n";
-	str += "'-----------------------------------------------------------------------------------------------------------'\n";
-	return str;
+	std::stringstream ss;
+	ss << "Simulation Parameters:\n";
+	ss << ".";
+	ss << std::setfill('-') << std::setw(LINE_LENGTH - 2) << ".\n";
+	ss << "| NP " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.N_PROCESS;
+	ss << " | N_FCFS " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.N_FCFS;
+	ss << " | N_RR " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.N_RR;
+	ss << " | N_SJF " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.N_SJF;
+	ss << " | FB " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.FORK_PROBABILITY;
+	ss << " | MWT " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.MAX_WAITING_TIME;
+	ss << " | TS " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.RR_TIME_SLICE;
+	ss << " | RTF " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.RTF;
+	ss << " | STL " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.STL;
+	ss << " | OHT " << std::setfill('0') << std::setw(NUM_PRECISION) << simulationParameters.OVERHEAT_TIME;
+	ss << " |\n";
+	ss << "'" << std::setfill('-') << std::setw(LINE_LENGTH - 2) << "'\n";
+	return ss.str();
 }
 
 /// ////////////////////////////////// ///
@@ -217,36 +241,174 @@ void Scheduler::ScheduleNext()
 
 		NEWList.dequeue();
 
-		/// TODO: implement the scheduling algorithm (Phase 2)
+		Processor* processor = GetShortestRDYProcessor();
 
-		// get the next processor
-		Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
-		nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
+		if (processor == nullptr)
+		{
+			return;
+		}
 
 		// schedule the process
 		processor->AddProcessToList(process);
 	}
 }
 
-void Scheduler::ScheduleNextFCFS(Process* process)
+void Scheduler::Schedule(Process* process, Processor* processor)
 {
+	processor->AddProcessToList(process);
 }
 
-void Scheduler::ScheduleNextSJF(Process* process)
+bool Scheduler::ScheduleNextFCFS(Process* process)
 {
+	Processor* processorFCFS = GetShortestRDYProcessorOfFCFS();
+
+	//false means that no FCFS processors in the system
+	if (processorFCFS == nullptr)
+		return false;
+
+	processorFCFS->AddProcessToList(process);
+	return true;
 }
 
-void Scheduler::ScheduleNextRR(Process* process)
+bool Scheduler::ScheduleNextSJF(Process* process)
 {
+	Processor* processorSJF = GetShortestRDYProcessorOfSJF();
+
+	//false means that no SJF processors in the system
+	if (processorSJF == nullptr)
+		return false;
+
+	processorSJF->AddProcessToList(process);
+	return true;
+}
+
+bool Scheduler::ScheduleNextRR(Process* process)
+{
+	Processor* processorRR = GetShortestRDYProcessorOfRR();
+
+	//false means that no RR processors in the system
+	if (processorRR == nullptr)
+		return false;
+
+	processorRR->AddProcessToList(process);
+	return true;
+}
+
+bool Scheduler::MigrateRR(Process* process)
+{
+	if (process->GetTimeInfo().RCT < simulationParameters.RTF)
+	{
+		//migrate the process to a SJF processor
+		bool isSuccessful = ScheduleNextSJF(process);
+
+		//if the migration failed due to not having any SJF processors
+		if (!isSuccessful)
+			return false;
+
+		/// ADDED for statistics by Amir
+		this->IncrementRTFMigrations();
+
+		return true;
+	}
+
+	return false;
+}
+
+bool Scheduler::MigrateFCFS(Process* process)
+{
+	//if the process is forked, it can't be migrated
+	if (process->IsForked())
+		return false;
+
+
+	TimeInfo timeInfo = process->GetTimeInfo();
+	unsigned int waitingTime = (clk->GetTime() - timeInfo.AT) - (timeInfo.CT - timeInfo.RCT);
+
+	if (waitingTime > simulationParameters.MAX_WAITING_TIME)
+	{
+		//migrate the process to a FCFS processor
+		bool isSuccessful = ScheduleNextRR(process);
+
+		//if the migration failed due to not having any FCFS processors
+		if (!isSuccessful)
+			return false;
+
+		/// ADDED for stats by Amir
+		this->IncrementMaxWMigrations();
+
+
+		return true;
+	}
+
+	return false;
+}
+
+void Scheduler::ForkHandler(Process* process)
+{
+	// checks if there is no FCFS processors or no running process
+	if (simulationParameters.N_FCFS == 0 || process == nullptr)
+		return;
+
+	// checks if the process can not have any other child
+	if (!process->CanFork())
+		return;
+
+	unsigned int Rand = rand() % 100;
+	if (Rand < simulationParameters.FORK_PROBABILITY)
+	{
+		int id = simulationParameters.N_PROCESS + 10; // create id for new process
+		Process* ForkedProcess = CreateForkedProcess(id, clk->GetTime(), process->GetTimeInfo().RCT);
+		ForkedProcess->SetForked(true);		// set the forked flag to true
+		ScheduleNextFCFS(ForkedProcess);    // move the new process to shortest FCFS
+		process->SetChild(ForkedProcess);   // link child to parent
+		simulationParameters.N_PROCESS++;   // increase number of processes in the system
+	}
+}
+
+void Scheduler::KillORPH(Process* process)
+{
+	Process* firstChild = process->GetFirstChild();
+	Process* secondChild = process->GetSecondChild();
+	process->killchildren();
+
+
+	if (firstChild)
+	{
+		ProcessorFCFS* currentProcessor = dynamic_cast<ProcessorFCFS*>(firstChild->GetCurrentProcessor());
+
+		if (currentProcessor == nullptr) // Error --> How a forked process has been to processor other than FCFS ?
+			return;
+
+		currentProcessor->KillORPH(firstChild->GetID());
+	}
+
+	if (secondChild)
+	{
+		ProcessorFCFS* currentProcessor = dynamic_cast<ProcessorFCFS*>(secondChild->GetCurrentProcessor());
+
+		if (currentProcessor == nullptr) // Error --> How a forked process has been to processor other than FCFS ?
+			return;
+
+		currentProcessor->KillORPH(secondChild->GetID());
+	}
 }
 
 void Scheduler::TerminateProcess(Process* process)
 {
 	if (process->GetStatus() == TRM)
-	{
 		return;
+
+	// check if the process had descendants or not to kill them
+	if (process->GetFirstChild() != nullptr || process->GetSecondChild() != nullptr)
+	{
+		KillORPH(process);
 	}
+
+	process->SetCurrentProcessor(nullptr);
 	process->SetStatus(TRM);
+	process->SetTT(clk->GetTime());
+	process->CalcTRT();
+	process->CalcWT();
 	TRMList.enqueue(process);
 }
 
@@ -256,9 +418,311 @@ void Scheduler::BlockProcess(Process* process)
 	{
 		return;
 	}
-
+	process->SetCurrentProcessor(nullptr);
 	process->SetStatus(BLK);
 	BLKList.enqueue(process);
+}
+
+void Scheduler::ManageBlock()
+{
+	if (BLKList.isEmpty())
+		return;
+
+	//get the first process in the block list
+	Process* blockedProcess = BLKList.peekFront();
+
+	//decrement the currentIOD by one 
+	TimeInfo timeInfo = blockedProcess->GetTimeInfo();
+	timeInfo.currentIOD--;
+	blockedProcess->SetTimeInfo(timeInfo);
+
+	//check if the process finished its IO duration
+	if (timeInfo.currentIOD <= 0)
+	{
+		//remove the process from the Block List and move it to the shortest RDY Queue
+		BLKList.dequeue();
+		Processor* shortestProcessor = GetShortestRDYProcessor();
+		shortestProcessor->AddProcessToList(blockedProcess);
+	}
+
+	//Note: when handling the IO Request we should first call the ManageBlock function then move the processes from the processors to the BLKList
+}
+
+bool Scheduler::IO_RequestHandler(Process* process)
+{
+	TimeInfo timeinfo = process->GetTimeInfo();
+	if (process->NeedIO(clk->GetTime())) // checks if process needs IO this timestamp
+	{
+		timeinfo.currentIOD = process->GetTopIOPair().second;
+		timeinfo.totalIOD += timeinfo.currentIOD;
+		process->SetTimeInfo(timeinfo);
+		BlockProcess(process);
+		return true;
+	}
+	return false;
+}
+
+Processor* Scheduler::GetShortestRDYProcessor() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+
+
+	int shortestProcessorIndex = 1;
+	Processor* shortestProcessor = processors.GetEntry(shortestProcessorIndex);
+	while (shortestProcessor && shortestProcessor->GetStatus() == STOP)
+	{
+		shortestProcessor = processors.GetEntry(++shortestProcessorIndex);
+	}
+
+	if (shortestProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
+
+		if (shortestProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestProcessor = tempProcessor;
+		}
+	}
+
+	return shortestProcessor;
+}
+
+Processor* Scheduler::GetLongestRDYProcessor() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	int longestProcessorIndex = 1;
+	Processor* longestProcessor = processors.GetEntry(longestProcessorIndex);
+	while (longestProcessor && longestProcessor->GetStatus() == STOP)
+	{
+		longestProcessor = processors.GetEntry(++longestProcessorIndex);
+	}
+
+	if (longestProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
+
+		if (longestProcessor->GetExpectedFinishTime() < tempProcessor->GetExpectedFinishTime())
+		{
+			longestProcessor = tempProcessor;
+		}
+	}
+	return longestProcessor;
+}
+
+Processor* Scheduler::GetShortestRDYProcessorOfRR() const
+{
+	int counter = simulationParameters.N_FCFS + simulationParameters.N_SJF + 1;
+
+	//check if there are any RR Processors
+	if (counter > processors.GetLength())
+		return nullptr;
+
+	Processor* shortestRRProcessor = processors.GetEntry(counter);
+
+	/// ADDED for overheating by Amir
+	while (shortestRRProcessor && shortestRRProcessor->GetStatus() == STOP)
+	{
+		shortestRRProcessor = processors.GetEntry(++counter);
+	}
+
+	if (shortestRRProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
+	for (int i = counter + 1; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
+
+		if (shortestRRProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestRRProcessor = tempProcessor;
+		}
+	}
+
+	return shortestRRProcessor;
+}
+
+Processor* Scheduler::GetShortestRDYProcessorOfSJF() const
+{
+	//check if there are any SJF Processors
+	if (simulationParameters.N_SJF <= 0)
+		return nullptr;
+
+	int counter, size;
+
+	counter = simulationParameters.N_FCFS + 1;
+	size = counter + simulationParameters.N_SJF;
+
+	Processor* shortestSJFProcessor = processors.GetEntry(counter);
+	/// ADDED for overheating by Amir
+	while (shortestSJFProcessor && shortestSJFProcessor->GetStatus() == STOP)
+	{
+		shortestSJFProcessor = processors.GetEntry(++counter);
+	}
+
+	if (shortestSJFProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
+	for (int i = counter + 1; i < size; i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
+
+		if (shortestSJFProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestSJFProcessor = tempProcessor;
+		}
+	}
+
+	return shortestSJFProcessor;
+}
+
+Processor* Scheduler::GetShortestRDYProcessorOfFCFS() const
+{
+	//check if there are any FCFS Processors
+	if (simulationParameters.N_FCFS <= 0)
+		return nullptr;
+
+	int counter, size;
+
+	counter = 1;
+	size = counter + simulationParameters.N_FCFS;
+
+	Processor* shortestFCFSProcessor = processors.GetEntry(counter);
+	/// ADDED for overheating by Amir
+	while (shortestFCFSProcessor && shortestFCFSProcessor->GetStatus() == STOP)
+	{
+		shortestFCFSProcessor = processors.GetEntry(++counter);
+	}
+
+	if (shortestFCFSProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
+	for (int i = counter + 1; i < size; i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
+
+		if (shortestFCFSProcessor->GetExpectedFinishTime() > tempProcessor->GetExpectedFinishTime())
+		{
+			shortestFCFSProcessor = tempProcessor;
+		}
+	}
+
+	return shortestFCFSProcessor;
+}
+
+Processor* Scheduler::GetShortestProcessorWithoutRUN() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	int shortestProcessorIndex = 1;
+	Processor* shortestProcessor = processors.GetEntry(shortestProcessorIndex);
+	/// ADDED for overheating by Amir
+	while (shortestProcessor && shortestProcessor->GetStatus() == STOP)
+	{
+		shortestProcessor = processors.GetEntry(++shortestProcessorIndex);
+	}
+
+	if (shortestProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for overheating by Amir
+		if (shortestProcessor->GetStatus() == STOP)
+			continue;
+
+		if (shortestProcessor->GetTotalReadyTime() > tempProcessor->GetTotalReadyTime())
+		{
+			shortestProcessor = tempProcessor;
+		}
+	}
+
+	return shortestProcessor;
+}
+
+Processor* Scheduler::GetLongestProcessorWithoutRUN() const
+{
+	if (processors.IsEmpty())
+	{
+		return nullptr;
+	}
+
+	int longestProcessorIndex = 1;
+	Processor* longestProcessor = processors.GetEntry(longestProcessorIndex);
+	/// Added for overheating by Amir
+	while (longestProcessor && longestProcessor->GetStatus() == STOP)
+	{
+		longestProcessor = processors.GetEntry(++longestProcessorIndex);
+	}
+
+	if (longestProcessor == nullptr)
+	{
+		return nullptr;
+	}
+
+	for (int i = 2; i <= processors.GetLength(); i++)
+	{
+		Processor* tempProcessor = processors.GetEntry(i);
+
+		/// ADDED for over heating by Amir
+		if (tempProcessor->GetStatus() == STOP)
+			continue;
+
+		if (longestProcessor->GetTotalReadyTime() < tempProcessor->GetTotalReadyTime())
+		{
+			longestProcessor = tempProcessor;
+		}
+	}
+	return longestProcessor;
 }
 
 /// ////////////////////////////////// ///
@@ -270,128 +734,306 @@ void Scheduler::RunProcesses()
 	for (int i = 0; i < processors.GetLength(); i++)
 	{
 		Processor* processor = processors.GetEntry(i + 1);
-		if (processor->GetStatus() == IDLE)
-		{
-			processor->ExecuteProcess(clk->GetTime());
-		}
-
+		processor->ExecuteProcess(clk->GetTime());
 	}
 }
 
-void Scheduler::MoveToRDY(Process* process)
+void Scheduler::WorkStealing()
 {
-	// get the next processor
-	Processor* processor = processors.GetEntry(nextProcessorIndex + 1);
-	nextProcessorIndex = (nextProcessorIndex + 1) % processors.GetLength();
+	// get the shortest processor
+	Processor* shortestProcessor = GetShortestProcessorWithoutRUN();
 
-	// schedule the process
-	processor->AddProcessToList(process);
-}
+	// get the longest processor
+	Processor* longestProcessor = GetLongestProcessorWithoutRUN();
 
-void Scheduler::MoveFromRun()
-{
-	for (int i = 0; i < processors.GetLength(); i++)
+	// if no processors are available, return
+	if (shortestProcessor == nullptr || longestProcessor == nullptr)
 	{
-		Processor* processor = processors.GetEntry(i + 1);
-		Process* CurrentProcess = processor->GetCurrentProcess();
-		if (CurrentProcess == nullptr)
-			continue;
-
-		TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
-
-		if (timeInfo.RT + timeInfo.AT == clk->GetTime())
-			continue;
-
-		int probability = (rand() % 100) + 1;
-		if (probability <= 15)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			BlockProcess(CurrentProcess);
-
-			TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
-			timeInfo.BT = clk->GetTime();
-			CurrentProcess->SetTimeInfo(timeInfo);
-		}
-		else if (probability >= 20 && probability <= 30)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			MoveToRDY(CurrentProcess);
-		}
-		else if (probability >= 50 && probability <= 60)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			TerminateProcess(CurrentProcess);
-		}
+		return;
 	}
+
+	// calculate the stealing limit and check if it is more than the maximum stealing limit
+	while (CalculateStealingLimit(longestProcessor, shortestProcessor) > MAX_STEALING_LIMIT)
+	{
+		Process* stolenProcess = longestProcessor->StealProcess();
+		if (!stolenProcess) // No more processes to steal
+			break;
+
+		stolenProcess->SetStolen(true);					// set the stolen flag to true - (FOR STATS ONLY)
+		Schedule(stolenProcess, shortestProcessor);		// move the stolen process to the shortest processor
+	}
+
 }
 
-void Scheduler::MoveFromBLK()
+void Scheduler::OverHeating()
 {
-	int probability = (rand() % 100) + 1;
-	if (BLKList.isEmpty())
+	// Get a random processor
+	int randomProcessorIndex = (rand() % processors.GetLength()) + 1;
+
+	Processor* randomProcessor = processors.GetEntry(randomProcessorIndex);
+
+	if (randomProcessor->GetStatus() == STOP)
 		return;
 
-	Process* BlockedProcess = BLKList.peekFront();
+	// set the status of the random processor to STOP
+	randomProcessor->SetStatus(STOP);
+	randomProcessor->SetHeatingTime(simulationParameters.OVERHEAT_TIME);
 
-	if (BlockedProcess->GetTimeInfo().BT == clk->GetTime())
-		return;
+	// Overheat the processor
+	randomProcessor->OverHeat();
 
-	if (probability < 10)
-	{
-		BLKList.dequeue();
-		MoveToRDY(BlockedProcess);
-	}
+	// increment overheated processors count for statistics
+	overHeatingCount++;
 }
 
-int Scheduler::SimulateKill()
-{
-	int RandID = rand() % 31;
-	for (int i = 0; i < simulationParameters.N_FCFS; i++)
-	{
-		Processor* processor = processors.GetEntry(i + 1);
-		ProcessorFCFS* processorFCFS = dynamic_cast<ProcessorFCFS*>(processor);
-		bool found = processorFCFS->KillProcess(RandID);
 
-		if (found)
-			return RandID;
-	}
-	return -1;
+double Scheduler::CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor)
+{
+	// largest processor expected time
+	double largestProcessorExpectedTime = largestProcessor->GetTotalReadyTime();
+
+	// smallest processor expected time
+	double smallestProcessorExpectedTime = smallestProcessor->GetTotalReadyTime();
+
+	// calculate the stealing limit
+	double stealingLimit = (largestProcessorExpectedTime - smallestProcessorExpectedTime) / (double)largestProcessorExpectedTime;
+
+	return stealingLimit;
 }
 
 /// ////////////////////////////////// ///
 ///        Statistics Functions        ///
 /// ////////////////////////////////// ///
 
+std::string Scheduler::TRMListStatsToString()
+{
+	std::stringstream ss;
+
+	unsigned int numOfTrmListProcess = TRMList.getSize();
+
+	for (unsigned int i = 0; i < numOfTrmListProcess; i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+
+		// Termination time (TT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().TT;
+		ss << " ";
+
+		// Process ID (PID)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetID();
+		ss << " ";
+
+		// Arrival Time (AT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().AT;
+		ss << " ";
+
+		// CPU Time (CT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().CT;
+		ss << " ";
+
+		// Total IO_Time Time (IO_D)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().totalIOD;
+		ss << " ";
+
+		// Waiting Time (WT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().WT;
+		ss << " ";
+
+		// Response Time (RT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().RT;
+		ss << " ";
+
+		// Turnaround Time (TRT)
+		ss << std::setfill('0') << std::setw(NUM_PRECISION) << process->GetTimeInfo().TRT;
+		ss << " ";
+
+		// end line
+		ss << "\n";
+		TRMList.enqueue(process);
+	}
+
+
+	return ss.str();
+}
+
+void Scheduler::IncrementMaxWMigrations()
+{
+	maxWMigrations += 1;
+}
+
+void Scheduler::IncrementRTFMigrations()
+{
+	rtfMigrations += 1;
+}
+
+void Scheduler::IncrementKillCount()
+{
+	killCount += 1;
+}
+
 unsigned int Scheduler::CalculateAverageWaitTime()
 {
-	return 0;
+	unsigned int totalWaitingTime = 0;
+
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalWaitingTime += process->GetTimeInfo().WT;
+		TRMList.enqueue(process);
+	}
+
+	return totalWaitingTime / TRMList.getSize();
+}
+
+unsigned int Scheduler::CalculateTotalTurnaroundTime()
+{
+	unsigned int totalTurnaroundTime = 0;
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalTurnaroundTime += process->GetTimeInfo().TRT;
+		TRMList.enqueue(process);
+	}
+	return totalTurnaroundTime;
 }
 
 unsigned int Scheduler::CalculateAverageTurnaroundTime()
 {
-	return 0;
+	unsigned int totalTurnaroundTime = 0;
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalTurnaroundTime += process->GetTimeInfo().TRT;
+		TRMList.enqueue(process);
+	}
+	return totalTurnaroundTime / TRMList.getSize();
 }
 
 unsigned int Scheduler::CalculateAverageResponseTime()
 {
-	return 0;
+	unsigned int totalResponseTime = 0;
+
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		totalResponseTime += process->GetTimeInfo().RT;
+		TRMList.enqueue(process);
+	}
+
+	return totalResponseTime / TRMList.getSize();
 }
 
 unsigned int* Scheduler::CalculateProcessorsUtilization()
 {
-	return nullptr;
+	// get total turnaround time
+	unsigned int totalCPUTime = clk->GetTime();
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+
+	// create array of processors utilization
+	unsigned int* processorsUtilization = new unsigned int[numOfProcessors];
+
+	// calculate utilization for each processor
+	for (unsigned int i = 0; i < numOfProcessors; i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		processorsUtilization[i] = (unsigned int)((processor->GetTotalBusyTime() / (double)totalCPUTime) * 100);
+	}
+
+	return processorsUtilization;
 }
 
 unsigned int* Scheduler::CalculateProcessorsLoad()
 {
-	return nullptr;
+	// get total turnaround time
+	unsigned int totalTurnaroundTime = CalculateTotalTurnaroundTime();
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_RR + simulationParameters.N_SJF;
+
+	// create array of processors load
+	unsigned int* processorsLoad = new unsigned int[numOfProcessors];
+
+	// calculate load for each processor
+	for (unsigned int i = 0; i < numOfProcessors; i++)
+	{
+		Processor* processor = processors.GetEntry(i + 1);
+		processorsLoad[i] = (unsigned int)((processor->GetTotalBusyTime() / (double)totalTurnaroundTime) * 100);
+	}
+
+	return processorsLoad;
 }
 
 unsigned int Scheduler::CalculateAverageProcessorsUtilization()
 {
-	return 0;
+	// get processors utilization
+	unsigned int* processorsUtilization = CalculateProcessorsUtilization();
+
+	// calculate average utilization
+	unsigned int totalUtilization = 0;
+	unsigned int numOfProcessors = simulationParameters.N_FCFS + simulationParameters.N_SJF + simulationParameters.N_RR;
+	for (unsigned int i = 0; i < numOfProcessors; i++)
+	{
+		totalUtilization += processorsUtilization[i];
+	}
+
+	delete[] processorsUtilization;
+
+	return totalUtilization / numOfProcessors;
+}
+
+unsigned int Scheduler::CaculateWorkStealPercent()
+{
+	// count stolen processes
+	unsigned int numOfStolenProcesses = 0;
+	for (unsigned int i = 0; i < TRMList.getSize(); i++)
+	{
+		Process* process = TRMList.peekFront();
+		TRMList.dequeue();
+		if (process->IsStolen())
+		{
+			numOfStolenProcesses++;
+		}
+		TRMList.enqueue(process);
+	}
+
+	return (unsigned int)((numOfStolenProcesses * 100 / (double)TRMList.getSize()));
+}
+
+unsigned int Scheduler::GetNumberOfRTFMigrations()
+{
+	return rtfMigrations;
+}
+
+unsigned int Scheduler::GetNumberOfMaxWMigrations()
+{
+	return maxWMigrations;
+}
+
+unsigned int Scheduler::GetNumberOfOverHeatedProcessors()
+{
+	return overHeatingCount;
+}
+
+unsigned int Scheduler::CalculateMaxWMigrationPercent()
+{
+	return (unsigned int)(maxWMigrations * 100.f / simulationParameters.N_PROCESS);
+}
+
+unsigned int Scheduler::CalculateRTFMigrationPercent()
+{
+	return (unsigned int)(rtfMigrations * 100.f / simulationParameters.N_PROCESS);
+}
+
+unsigned int Scheduler::CalculateKillCountPercent()
+{
+	return (unsigned int)(killCount * 100.f / simulationParameters.N_PROCESS);
+}
+
+unsigned int Scheduler::CalculateForkedProcessPercent()
+{
+	return (unsigned int)(forkedProcessCount * 100.f / simulationParameters.N_PROCESS);
 }
 

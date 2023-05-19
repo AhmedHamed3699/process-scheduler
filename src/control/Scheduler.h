@@ -24,7 +24,15 @@ private:
 
 	Clock* clk;
 	SimulationParameters simulationParameters;
-	int nextProcessorIndex = 0; /// TODO: remove this later (Phase 2)
+
+	/// ////////////////////////////////// ///
+	///  Stats Data Members and counters   ///
+	/// ////////////////////////////////// ///
+	unsigned int maxWMigrations;
+	unsigned int rtfMigrations;
+	unsigned int killCount;
+	unsigned int overHeatingCount;
+	unsigned int forkedProcessCount;
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
@@ -43,7 +51,6 @@ public:
 	Scheduler(Clock* clk);
 	~Scheduler();
 
-
 	/// ////////////////////////////////// ///
 	///         Creation and setup         ///
 	/// ////////////////////////////////// ///
@@ -53,13 +60,16 @@ public:
 	// Create a new process with the given id and add it to the NEW list
 	void CreateNewProcess(int id);
 	// Create a new process with the all params and add it to the NEW list
-	void CreateNewProcess(int AT, int PID, int CT, int N,
-		Queue<Pair<unsigned int, unsigned int>>& outIO);
+	void CreateNewProcess(int AT, int PID, int CT, Queue<Pair<unsigned int, unsigned int>>& outIO);
+	// Create a new forked process
+	Process* CreateForkedProcess(int PID, int AT, int CT);
 
+	/// ////////////////////////////////// ///
+	///         SIMULARION PARAMS          ///
+	/// ////////////////////////////////// ///
 	SimulationParameters GetSimulationParameters();
 	void SetSimulationParameters(SimulationParameters sP);
 	bool isDone(); // to know when to terminate the program
-	void AddToSIGKILL(Pair<unsigned int, unsigned int> outP);
 
 	/// ////////////////////////////////// ///
 	///           UI AID Functions         ///
@@ -78,34 +88,78 @@ public:
 	/// ////////////////////////////////// ///
 	///      Process State Management      ///
 	/// ////////////////////////////////// ///
-	// in phase 1 get the next process from the NEW list and add it to the 
-	// first processor then the second and so on
 	void ScheduleNext();
-	void ScheduleNextFCFS(Process* process);
-	void ScheduleNextSJF(Process* process);
-	void ScheduleNextRR(Process* process);
+	void Schedule(Process* process, Processor* procesor);
+	bool ScheduleNextFCFS(Process* process);
+	bool ScheduleNextSJF(Process* process);
+	bool ScheduleNextRR(Process* process);
+	bool MigrateRR(Process* process);
+	bool MigrateFCFS(Process* process);
+	void ForkHandler(Process* process);
+	void KillORPH(Process* process);
 	// if process is not terminated then add it to the TRM list and change its state
 	void TerminateProcess(Process* process);
 	// if process is not blocked then add it to the BLK list and change its state
 	void BlockProcess(Process* process);
+	// it manages the block list and the processes in it
+	void ManageBlock();
+	// handles io_requests an move process to BLK list
+	bool IO_RequestHandler(Process* process);
+	//returns the Processor with the shortest time
+	Processor* GetShortestRDYProcessor() const;
+	//returns the Processor with the longest time
+	Processor* GetLongestRDYProcessor() const;
+	//returns the RR Processor with the shortest time 
+	Processor* GetShortestRDYProcessorOfRR() const;
+	//returns the SJF Processor with the shortest time 
+	Processor* GetShortestRDYProcessorOfSJF() const;
+	//returns the FCFS Processor with the shortest time 
+	Processor* GetShortestRDYProcessorOfFCFS() const;
+	// returns the processor with the shortest ready list
+	Processor* GetShortestProcessorWithoutRUN() const;
+	// returns the processor with the longest ready list
+	Processor* GetLongestProcessorWithoutRUN() const;
 
 	/// ////////////////////////////////// ///
 	///        Simulation Functions        ///
 	/// ////////////////////////////////// ///
+	// Runs Execute() for each processor
 	void RunProcesses();
-	void MoveToRDY(Process* process);
-	void MoveFromRun();
-	void MoveFromBLK();
-	int SimulateKill();
+	// calculates the stealing limit for two given processors
+	double CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor);
+	// work stealing algorithm
+	void WorkStealing();
+	// Over Heating algorithm
+	void OverHeating();
 
 	/// ////////////////////////////////// ///
-	///        Statistics Functions        ///
+	///    Statistics & output Functions   ///
 	/// ////////////////////////////////// ///
+	int GetCurrentTime();
+	std::string TRMListStatsToString();
+	void IncrementMaxWMigrations();
+	void IncrementRTFMigrations();
+	void IncrementKillCount();
+
+	/// TIME STATS
 	unsigned int CalculateAverageWaitTime();
+	unsigned int CalculateTotalTurnaroundTime();
 	unsigned int CalculateAverageTurnaroundTime();
 	unsigned int CalculateAverageResponseTime();
+
+	/// PROCESSOR STATS
 	unsigned int* CalculateProcessorsUtilization();
 	unsigned int* CalculateProcessorsLoad();
 	unsigned int CalculateAverageProcessorsUtilization();
+
+	/// OTHER FUNCTIONS STATS
+	unsigned int CaculateWorkStealPercent();
+	unsigned int GetNumberOfRTFMigrations();
+	unsigned int GetNumberOfMaxWMigrations();
+	unsigned int GetNumberOfOverHeatedProcessors();
+	unsigned int CalculateMaxWMigrationPercent();
+	unsigned int CalculateRTFMigrationPercent();
+	unsigned int CalculateKillCountPercent();
+	unsigned int CalculateForkedProcessPercent();
 };
 

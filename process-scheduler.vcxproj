@@ -175,6 +175,23 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="ID.txt" />
+    <Text Include="output\test-defalult-output.txt" />
+    <Text Include="output\test-large-system-output.txt" />
+    <Text Include="output\test-rr-output.txt" />
+    <Text Include="output\test-ws-output.txt" />
+    <Text Include="test-FCFS.txt" />
+    <Text Include="test-Fork.txt" />
+    <Text Include="test-FTree.txt" />
+    <Text Include="test-IO.txt" />
+    <Text Include="test-kill.txt" />
+    <Text Include="test-KillORPH.txt" />
+    <Text Include="test-large-system.txt" />
+    <Text Include="test-mh-FCFSToRR.txt" />
+    <Text Include="test-rr.txt" />
+    <Text Include="test-RRtoSJF.txt" />
+    <Text Include="test-run.txt" />
+    <Text Include="test-ws.txt" />
+    <Text Include="test.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,12 +20,12 @@ public:
 	position > getLength(). */
 	ItemType GetEntry(int position) const;
 	/** @throw PrecondViolatedExcep if position < 1 or
-    position > getLength(). */
+	position > getLength(). */
 	void SetEntry(int position, const ItemType& newEntry);
 };
 
 template<class ItemType>
-inline ArrayList<ItemType>::ArrayList(): itemCount(0), maxItems(DEFAULT_CAPACITY)
+inline ArrayList<ItemType>::ArrayList() : itemCount(0), maxItems(DEFAULT_CAPACITY), items()
 {
 }
 
@@ -74,7 +74,7 @@ bool ArrayList<ItemType>::Remove(int position)
 		for (int fromIndex = position, toIndex = fromIndex - 1;
 			fromIndex < itemCount; fromIndex++, toIndex++)
 			items[toIndex] = items[fromIndex];
-		itemCount-- ; // Decrease count of entries 
+		itemCount--; // Decrease count of entries 
 	} // end if 
 	return ableToRemove;
 } // end remove
