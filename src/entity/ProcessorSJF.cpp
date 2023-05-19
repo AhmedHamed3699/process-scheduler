@@ -25,15 +25,6 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 		}
 		return false;
 	}
-
-	//if the process finished execution, it should be terminated
-	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
-	{
-		scheduler->TerminateProcess(currentProcess);
-		currentProcess = nullptr;
-		SetStatus(IDLE);
-	}
-
 	if (currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
@@ -45,7 +36,16 @@ bool ProcessorSJF::ExecuteProcess(int CurrentTime)
 		}
 	}
 
-	//check if there is no process running
+	// if the process finished execution, it should be terminated
+	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		SetStatus(IDLE);
+	}
+
+
+	// check if there is no process running
 	if (currentProcess == nullptr)
 	{
 		if (readyList.isEmpty())

@@ -32,6 +32,9 @@ bool ProcessorFCFS::KillORPH(int PID)
 		return false;
 
 	scheduler->TerminateProcess(killedProcess);
+
+	scheduler->IncrementKillCount();
+
 	return true;
 }
 
@@ -101,11 +104,7 @@ bool ProcessorFCFS::KillProcess(int PID)
 
 bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 {
-	// we need to re-order callings, so it makes more sense
-
-	SIGKILLHandler();
-
-	// check if the processor is over heated - OVER HEATING
+	// i. check if the processor is over heated - OVER HEATING
 	if (this->status == STOP)
 	{
 		overheatCounter--;
@@ -117,15 +116,7 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		return false;
 	}
 
-	//if the process finished execution, it should be terminated
-	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
-	{
-		scheduler->TerminateProcess(currentProcess);
-		currentProcess = nullptr;
-		status = IDLE;
-	}
-
-	//checks if the current process needs IO
+	// ii. checks if the current process needs IO
 	if (currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
@@ -137,7 +128,16 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		}
 	}
 
-	//check if there is no process running
+	// iii. if the process finished execution, it should be terminated
+	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		status = IDLE;
+	}
+
+
+	// iV. Migration and schedule next - check if there is no process running
 	if (currentProcess == nullptr)
 	{
 
@@ -173,14 +173,17 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		return true;
 	}
 
-	// fork a child if you meet the probability
+	// V. fork a child if you meet the probability
 	scheduler->ForkHandler(currentProcess);
 
-	//decrement the expected finish time and the RCT by one
+	// Vi. decrement the expected finish time and the RCT by one
 	expectedFinishTime--;
 	currentProcess->DecrementRCT();
 
-	// increment the total busy time
+	// VII. manage kill signals
+	SIGKILLHandler();
+
+	// VIII. increment the total busy time
 	IncrementTotalBusyTime();
 
 	return true;
