@@ -999,7 +999,7 @@ unsigned int Scheduler::CaculateWorkStealPercent()
 		TRMList.enqueue(process);
 	}
 
-	return (unsigned int)((numOfStolenProcesses / (double)TRMList.getSize()) * 100);
+	return (unsigned int)((numOfStolenProcesses * 100 / (double)TRMList.getSize()));
 }
 
 unsigned int Scheduler::GetNumberOfRTFMigrations()
