@@ -168,7 +168,12 @@ bool Simulator::CreateOutputFile()
 
 	for (unsigned int i = 0; i < numOfProcesors; i++)
 	{
-		OutFile << "P" << i << ": " << cpuLoad[i] << "%,  ";
+		OutFile << "P" << i + 1 << ": " << cpuLoad[i] << "% ";
+
+		if (i < numOfProcesors - 1)
+		{
+			OutFile << ", ";
+		}
 	}
 	OutFile << std::endl << std::endl;
 
@@ -180,7 +185,12 @@ bool Simulator::CreateOutputFile()
 
 	for (unsigned int i = 0; i < numOfProcesors; i++)
 	{
-		OutFile << "P" << i << ": " << cpuUtilization[i] << "%,  ";
+		OutFile << "P" << i + 1 << ": " << cpuUtilization[i] << "%";
+
+		if (i < numOfProcesors - 1)
+		{
+			OutFile << ", ";
+		}
 	}
 	OutFile << std::endl;
 
