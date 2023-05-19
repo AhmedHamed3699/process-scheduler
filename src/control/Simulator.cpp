@@ -142,10 +142,13 @@ bool Simulator::CreateOutputFile()
 	OutFile << "Work Steal%: " << scheduler.CaculateWorkStealPercent() << "%" << std::endl;
 
 	/// FORKING STATS
-	OutFile << "Forked processes%: " << scheduler.GetSimulationParameters().FORK_PROBABILITY << "%" << std::endl;
+	OutFile << "Forked processes%: " << scheduler.CalculateForkedProcessPercent() << "%" << std::endl;
 
 	/// KILLING STATS
 	OutFile << "Killed processes%: " << scheduler.CalculateKillCountPercent() << "%" << std::endl;
+
+	/// OVERHEAT STATS
+	OutFile << "Overheating count: " << scheduler.GetNumberOfOverHeatedProcessors() << std::endl;
 
 	OutFile << std::endl;
 
@@ -165,7 +168,12 @@ bool Simulator::CreateOutputFile()
 
 	for (unsigned int i = 0; i < numOfProcesors; i++)
 	{
-		OutFile << "P" << i << ": " << cpuLoad[i] << "%,  ";
+		OutFile << "P" << i + 1 << ": " << cpuLoad[i] << "% ";
+
+		if (i < numOfProcesors - 1)
+		{
+			OutFile << ", ";
+		}
 	}
 	OutFile << std::endl << std::endl;
 
@@ -177,7 +185,12 @@ bool Simulator::CreateOutputFile()
 
 	for (unsigned int i = 0; i < numOfProcesors; i++)
 	{
-		OutFile << "P" << i << ": " << cpuUtilization[i] << "%,  ";
+		OutFile << "P" << i + 1 << ": " << cpuUtilization[i] << "%";
+
+		if (i < numOfProcesors - 1)
+		{
+			OutFile << ", ";
+		}
 	}
 	OutFile << std::endl;
 
