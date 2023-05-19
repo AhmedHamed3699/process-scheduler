@@ -122,7 +122,9 @@ void UI::PrintWorkStealingAlert()
 
 	SetColor(DARK_YELLOW);
 
-	std::cout << "Work Stealing Is Running....\n";
+	std::cout << "=================================\n";
+	std::cout << "	Work Stealing Is Running....\n";
+	std::cout << "=================================\n";
 
 	ResetColor();
 }

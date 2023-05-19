@@ -4,7 +4,7 @@
 ///=////////////////////////////////////////////=///
 #include "ds/Queue.h"
 
-/// CONSTANTS
+/// CONSTANTS and SETTINGS ///
 #define LINE_LENGTH 106
 #define NUM_PRECISION 3
 #define WORK_STEALING true				// true if work stealing is enabled, false otherwise

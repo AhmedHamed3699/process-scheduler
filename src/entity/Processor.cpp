@@ -20,19 +20,9 @@ Process* Processor::GetCurrentProcess() const
 	return currentProcess;
 }
 
-void Processor::SetCurrentProcess(Process* outProcess)
-{
-	currentProcess = outProcess;
-}
-
 unsigned int Processor::GetTotalBusyTime() const
 {
 	return totalBusyTime;
-}
-
-void Processor::SetTotalBusyTime(unsigned int time)
-{
-	totalBusyTime = time;
 }
 
 void Processor::SetHeatingTime(int time)
@@ -57,11 +47,6 @@ unsigned int Processor::GetTotalReadyTime() const
 		return expectedFinishTime;
 
 	return expectedFinishTime - currentProcess->GetTimeInfo().RCT;
-}
-
-void Processor::SetExpectedFinishTime(unsigned int time)
-{
-	expectedFinishTime = time;
 }
 
 Processor::~Processor()

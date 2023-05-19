@@ -88,7 +88,7 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 	// if quantum is finished, add the process to the ready list
 	if (quantumCounter == 0) // add here the quantum counter
 	{
-		//checks if didn't migrate so it can go back to the readylist
+		//checks if didn't migrate so it can go back to the ready list
 		bool didMigrate = scheduler->MigrateRR(currentProcess);
 
 		if (!didMigrate)

@@ -3,6 +3,20 @@
 #include <time.h>
 #include <iomanip>
 
+/// ////////////////////////////////// ///
+///       Constructor & Destructor	   ///
+/// ////////////////////////////////// ///
+Simulator::Simulator()
+{
+}
+
+Simulator::~Simulator()
+{
+}
+
+/// ////////////////////////////////// ///
+///			I/O File Handling          ///
+/// ////////////////////////////////// ///
 bool Simulator::LoadInpuitFile(std::string filePath)
 {
 	std::ifstream InFile;
@@ -183,6 +197,9 @@ bool Simulator::CreateOutputFile()
 	return true;
 }
 
+/// ////////////////////////////////// ///
+///		START POINT OF SIMULATION      ///
+/// ////////////////////////////////// ///
 void Simulator::Run()
 {
 	/// 1. prepare simulation by printing the headline, getting the input file name, and loading the input file
@@ -236,7 +253,7 @@ void Simulator::Run()
 	}
 
 	/// 3. End Simulation
-	// ending msg in silent mode
+	// ending message in silent mode
 	if (ui.GetMode() == SILENT)
 	{
 		ui.PrintSilentModeEnd();
@@ -246,34 +263,9 @@ void Simulator::Run()
 	CreateOutputFile();
 }
 
-void Simulator::Simulation()
-{
-	/// TODO: Code in this block should be removed
-	/// every functionality here should be re-factored into its appropriate class and/ or method
-	/// this block is only for phase 1 testing
-	/// TODO: CAN BE DELETED NOW, LEFT FOR REFERENCE
-
-	while (true)
-	{
-		clk.Step();
-		/// TODO: commented the most of the random moving code for testing purposes
-
-		//int kill = scheduler.SimulateKill();
-		scheduler.ScheduleNext();
-		scheduler.RunProcesses();
-		//scheduler.MoveFromRun();
-		//scheduler.MoveFromBLK();
-
-		ui.PrintTimeStamp();
-
-		//if (kill != -1)
-		//	ui.PrintProcessKilled(kill);
-		if (scheduler.isDone())
-			return;
-		ui.Wait();
-	}
-}
-
+/// ////////////////////////////////// ///
+///         Private Functions          ///
+/// ////////////////////////////////// ///
 bool Simulator::PrepareSimulation()
 {
 	/// 1. Print Headline
@@ -296,7 +288,7 @@ bool Simulator::PrepareSimulation()
 	}
 
 	/// 4. SET the random seed
-	srand(time(0));
+	srand((unsigned int)time(0));
 
 	/// 5. Create the processors
 	scheduler.CreateAllProcessors();

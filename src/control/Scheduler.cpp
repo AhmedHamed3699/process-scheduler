@@ -734,58 +734,6 @@ void Scheduler::RunProcesses()
 	}
 }
 
-
-void Scheduler::MoveFromRun()
-{
-	for (int i = 0; i < processors.GetLength(); i++)
-	{
-		Processor* processor = processors.GetEntry(i + 1);
-		Process* CurrentProcess = processor->GetCurrentProcess();
-		if (CurrentProcess == nullptr)
-			continue;
-
-		TimeInfo timeInfo = CurrentProcess->GetTimeInfo();
-
-		if (timeInfo.RT + timeInfo.AT == clk->GetTime())
-			continue;
-
-		int probability = (rand() % 100) + 1;
-		if (probability <= 15)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			BlockProcess(CurrentProcess);
-		}
-		else if (probability >= 20 && probability <= 30)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			Schedule(CurrentProcess, processor);
-		}
-		else if (probability >= 50 && probability <= 60)
-		{
-			processor->SetStatus(IDLE);
-			processor->SetCurrentProcess(nullptr);
-			TerminateProcess(CurrentProcess);
-		}
-	}
-}
-
-void Scheduler::MoveFromBLK()
-{
-	int probability = (rand() % 100) + 1;
-	if (BLKList.isEmpty())
-		return;
-
-	Process* BlockedProcess = BLKList.peekFront();
-
-	if (probability < 10)
-	{
-		BLKList.dequeue();
-		//	Schedule(BlockedProcess, Processor);
-	}
-}
-
 void Scheduler::WorkStealing()
 {
 	// get the shortest processor

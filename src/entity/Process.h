@@ -10,6 +10,9 @@ class Processor;
 class Process
 {
 private:
+	/// ////////////////////////////////// ///
+	///			  Data Members			   ///
+	/// ////////////////////////////////// ///
 	const int PID;
 	Processor* currentProcessor;
 	Process* firstChild;
@@ -21,8 +24,14 @@ private:
 	int numberOfForking;            // number of times a process has forked, it ranges from 0 to 2
 	Queue<Pair<unsigned int, unsigned int>> IO;		//in Pair, first is IO_R and second is IO_D
 public:
+	/// ////////////////////////////////// ///
+	///	     Constructors & Destructor	   ///
+	/// ////////////////////////////////// ///
 	Process(int id, Queue<Pair<unsigned int, unsigned int>>& outIO);
 
+	/// ////////////////////////////////// ///
+	/// 		 Process Interface		   ///
+	/// ////////////////////////////////// ///
 	int GetID() const;
 	Process* GetFirstChild() const;
 	Process* GetSecondChild() const;
@@ -46,22 +55,27 @@ public:
 	// Calculates and sets the total waiting time (WT) of the process, used when terminating the process
 	void CalcWT();
 
+
 	ProcessStatus GetStatus() const;
 	void SetStatus(ProcessStatus outStatus);
-	Pair<unsigned int, unsigned int> GetTopIOPair();	//it dequeues and return the first pair in the queue (if empty return Pair of (0,0)
-	bool operator== (int id);
-	bool operator< (Process* p);
+	//it dequeues and return the first pair in the queue (if empty return Pair of (0,0)
+	Pair<unsigned int, unsigned int> GetTopIOPair();
 
 	//returns true if the process needs IO in this timestep
 	bool NeedIO(int currentTime) const;
-
 	bool IsStolen() const;
 	void SetStolen(bool isStolen);
-
 	bool IsForked() const;
 	void SetForked(bool isForked);
 	bool CanFork() const;
 	void killchildren();
+
+	/// ////////////////////////////////// ///
+	/// 		 Overloaded Operators	   ///
+	/// ////////////////////////////////// ///
+	bool operator== (int id);
+	bool operator< (Process* p);
+
 
 	// for UI and debugging
 	std::string ToString();
