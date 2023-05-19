@@ -21,6 +21,8 @@ public:
 	void OverHeat();												//OverHeating function
 	static void AddToKill(Pair<unsigned int, unsigned int> outP);	// adds new kill messages
 	bool KillORPH(int PID);											//Function to handle killing the Orphans in the Processor
+	// For FCFS processors this function doesn't take into consideration forked processes RCT
+	virtual unsigned GetTotalReadyTime() const;
 
 	std::string ToString();
 };
