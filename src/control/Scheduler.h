@@ -27,9 +27,11 @@ private:
 
 	/// ////////////////////////////////// ///
 	///  Stats Data Members and counters   ///
+	/// ////////////////////////////////// ///
 	unsigned int maxWMigrations;
 	unsigned int rtfMigrations;
 	unsigned int killCount;
+	unsigned int overHeatingCount;
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
@@ -155,6 +157,7 @@ public:
 	unsigned int CaculateWorkStealPercent();
 	unsigned int GetNumberOfRTFMigrations();
 	unsigned int GetNumberOfMaxWMigrations();
+	unsigned int GetNumberOfOverHeatedProcessors();
 	unsigned int CalculateMaxWMigrationPercent();
 	unsigned int CalculateRTFMigrationPercent();
 	unsigned int CalculateKillCountPercent();

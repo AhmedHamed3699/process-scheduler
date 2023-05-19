@@ -15,6 +15,7 @@ Scheduler::Scheduler(Clock* clk)
 	maxWMigrations = 0;
 	rtfMigrations = 0;
 	killCount = 0;
+	overHeatingCount = 0;
 }
 
 Scheduler::~Scheduler()
@@ -369,10 +370,10 @@ void Scheduler::KillORPH(Process* process)
 
 	if (firstChild)
 	{
-		 ProcessorFCFS* currentProcessor = dynamic_cast<ProcessorFCFS*>(firstChild->GetCurrentProcessor());
+		ProcessorFCFS* currentProcessor = dynamic_cast<ProcessorFCFS*>(firstChild->GetCurrentProcessor());
 
-		 if (currentProcessor == nullptr) // Error --> How a forked process has been to processor other than FCFS ?
-			 return;
+		if (currentProcessor == nullptr) // Error --> How a forked process has been to processor other than FCFS ?
+			return;
 
 		currentProcessor->KillORPH(firstChild->GetID());
 	}
@@ -392,7 +393,7 @@ void Scheduler::TerminateProcess(Process* process)
 {
 	if (process->GetStatus() == TRM)
 		return;
-	
+
 	// check if the process had descendants or not to kill them
 	if (process->GetFirstChild() != nullptr || process->GetSecondChild() != nullptr)
 	{
@@ -828,6 +829,9 @@ void Scheduler::OverHeating()
 
 	// Overheat the processor
 	randomProcessor->OverHeat();
+
+	// increment overheated processors count for statistics
+	overHeatingCount++;
 }
 
 
@@ -1054,6 +1058,11 @@ unsigned int Scheduler::GetNumberOfRTFMigrations()
 unsigned int Scheduler::GetNumberOfMaxWMigrations()
 {
 	return maxWMigrations;
+}
+
+unsigned int Scheduler::GetNumberOfOverHeatedProcessors()
+{
+	return overHeatingCount;
 }
 
 unsigned int Scheduler::CalculateMaxWMigrationPercent()

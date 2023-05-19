@@ -133,6 +133,9 @@ bool Simulator::CreateOutputFile()
 	/// KILLING STATS
 	OutFile << "Killed processes%: " << scheduler.CalculateKillCountPercent() << "%" << std::endl;
 
+	/// OVERHEAT STATS
+	OutFile << "Overheating count: " << scheduler.GetNumberOfOverHeatedProcessors() << std::endl;
+
 	OutFile << std::endl;
 
 	/// PROCESSOR STATS
