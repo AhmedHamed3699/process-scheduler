@@ -28,18 +28,7 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		return false;
 	}
 
-	/// 1. if the process is finished, terminate it
-	// Check if the process is finished
-	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
-	{
-		// Set the process as finished
-		scheduler->TerminateProcess(currentProcess);
-		currentProcess = nullptr;
-		SetStatus(IDLE);
-		quantumCounter = RR_TIME_SLICE;
-	}
-
-	/// 2. checks if the current process needs IO
+	/// 1. checks if the current process needs IO
 	if (currentProcess)
 	{
 		bool moveFromRun = scheduler->IO_RequestHandler(currentProcess);
@@ -49,6 +38,17 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 			currentProcess = nullptr;
 			status = IDLE;
 		}
+	}
+
+	/// 2. if the process is finished, terminate it
+	// Check if the process is finished
+	if (currentProcess && currentProcess->GetTimeInfo().RCT <= 0)
+	{
+		// Set the process as finished
+		scheduler->TerminateProcess(currentProcess);
+		currentProcess = nullptr;
+		SetStatus(IDLE);
+		quantumCounter = RR_TIME_SLICE;
 	}
 
 	/// 3. if no running process, schedule next process
