@@ -35,6 +35,23 @@ bool ProcessorFCFS::KillORPH(int PID)
 	return true;
 }
 
+
+unsigned ProcessorFCFS::GetTotalReadyTime() const
+{
+	unsigned totalReadyTime = 0;
+
+	for (int i = 0; i < readyList.GetLength(); i++)
+	{
+		Process* process = readyList.GetEntry(i + 1);
+
+		if (!process->IsForked())
+			totalReadyTime += process->GetTimeInfo().RCT;
+
+	}
+
+	return totalReadyTime;
+}
+
 void ProcessorFCFS::SIGKILLHandler()
 {
 	if (SIGKILL.isEmpty())
@@ -131,7 +148,7 @@ bool ProcessorFCFS::ExecuteProcess(int CurrentTime)
 		{
 			if (readyList.IsEmpty())
 				return false;
-		
+
 			process = readyList.GetEntry(1);
 
 			// if the process just arrived, make it wait in the ready list
