@@ -1,0 +1,29 @@
+TT  PID AT  CT  IO_D WT  RT  TRT
+================================
+010 003 003 011 000 007 000 007 
+014 001 001 011 000 002 001 013 
+015 002 002 011 000 002 001 013 
+020 006 006 011 000 014 000 014 
+025 004 004 011 000 011 011 021 
+026 005 005 011 000 010 009 021 
+================================
+
+Processes: 6
+Average Waiting Time     (WT): 007
+Average Response Time    (RT): 003
+Average Turnaround Time (TRT): 014
+
+Migration %: RTF%= 0%, MaxW%= 0%
+Work Steal%: 0%
+Forked processes%: 0%
+Killed processes%: 50%
+Overheating count: 0
+
+Processors: 2 [2 FCFS, 0 SJF, 0 RR]
+Processors Load: 
+P1: 24% , P2: 22% 
+
+Processors Utilization: 
+P1: 84%, P2: 76%
+Average Processor Utilization: 80%
+

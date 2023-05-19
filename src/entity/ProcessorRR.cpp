@@ -84,7 +84,17 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		return true;
 	}
 
-	/// 4. if the process is not finished, check if the quantum is finished
+	/// 6. if there is a running process, execute it
+	// execute the process
+	currentProcess->DecrementRCT(); // decrement the RCT
+
+	// decrement the quantum counter
+	quantumCounter--;
+
+	// decrement the expected finish time of the processor by one
+	expectedFinishTime--;
+
+	/// 5. if the process is not finished, check if the quantum is finished
 	// if quantum is finished, add the process to the ready list
 	if (quantumCounter == 0) // add here the quantum counter
 	{
@@ -99,16 +109,6 @@ bool ProcessorRR::ExecuteProcess(int CurrentTime)
 		quantumCounter = RR_TIME_SLICE;
 		return true;
 	}
-
-	/// 5. if there is a running process, execute it
-	// execute the process
-	currentProcess->DecrementRCT(); // decrement the RCT
-
-	// decrement the quantum counter
-	quantumCounter--;
-
-	// decrement the expected finish time of the processor by one
-	expectedFinishTime--;
 
 	// increment the total busy time
 	IncrementTotalBusyTime();
