@@ -16,6 +16,7 @@ Scheduler::Scheduler(Clock* clk)
 	rtfMigrations = 0;
 	killCount = 0;
 	overHeatingCount = 0;
+	forkedProcessCount = 0;
 }
 
 Scheduler::~Scheduler()
@@ -114,6 +115,9 @@ Process* Scheduler::CreateForkedProcess(int PID, int AT, int CT)
 	timeInfo.RCT = CT;
 
 	newProcess->SetTimeInfo(timeInfo);
+
+	// increment forked process count for statistics
+	forkedProcessCount++;
 
 	return newProcess;
 }
@@ -1026,5 +1030,10 @@ unsigned int Scheduler::CalculateRTFMigrationPercent()
 unsigned int Scheduler::CalculateKillCountPercent()
 {
 	return (unsigned int)(killCount * 100.f / simulationParameters.N_PROCESS);
+}
+
+unsigned int Scheduler::CalculateForkedProcessPercent()
+{
+	return (unsigned int)(forkedProcessCount * 100.f / simulationParameters.N_PROCESS);
 }
 

@@ -32,6 +32,7 @@ private:
 	unsigned int rtfMigrations;
 	unsigned int killCount;
 	unsigned int overHeatingCount;
+	unsigned int forkedProcessCount;
 
 	/// ////////////////////////////////// ///
 	///           Scheduler Lists          ///
@@ -159,5 +160,6 @@ public:
 	unsigned int CalculateMaxWMigrationPercent();
 	unsigned int CalculateRTFMigrationPercent();
 	unsigned int CalculateKillCountPercent();
+	unsigned int CalculateForkedProcessPercent();
 };
 

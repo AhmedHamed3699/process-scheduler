@@ -142,7 +142,7 @@ bool Simulator::CreateOutputFile()
 	OutFile << "Work Steal%: " << scheduler.CaculateWorkStealPercent() << "%" << std::endl;
 
 	/// FORKING STATS
-	OutFile << "Forked processes%: " << scheduler.GetSimulationParameters().FORK_PROBABILITY << "%" << std::endl;
+	OutFile << "Forked processes%: " << scheduler.CalculateForkedProcessPercent() << "%" << std::endl;
 
 	/// KILLING STATS
 	OutFile << "Killed processes%: " << scheduler.CalculateKillCountPercent() << "%" << std::endl;
