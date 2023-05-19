@@ -790,10 +790,10 @@ void Scheduler::OverHeating()
 double Scheduler::CalculateStealingLimit(Processor* largestProcessor, Processor* smallestProcessor)
 {
 	// largest processor expected time
-	double largestProcessorExpectedTime = largestProcessor->GetExpectedFinishTime();
+	double largestProcessorExpectedTime = largestProcessor->GetTotalReadyTime();
 
 	// smallest processor expected time
-	double smallestProcessorExpectedTime = smallestProcessor->GetExpectedFinishTime();
+	double smallestProcessorExpectedTime = smallestProcessor->GetTotalReadyTime();
 
 	// calculate the stealing limit
 	double stealingLimit = (largestProcessorExpectedTime - smallestProcessorExpectedTime) / (double)largestProcessorExpectedTime;
