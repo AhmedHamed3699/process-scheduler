@@ -5,7 +5,7 @@ Made as a project for Data Structures &amp; Algorithms course in Computer Engine
 ---
 
 ## 💡 Abstract
- - The system is a multiprocessor, it uses three kinds of process Scheduling algorithms:
+ - The system is a multiprocessor, it uses three kinds of process scheduling algorithms:
    - FCFS --> First Come First Serve
    - SJF  --> Shortest Job First
    - RR   --> Round Robin
@@ -14,7 +14,7 @@ Made as a project for Data Structures &amp; Algorithms course in Computer Engine
    - Step-By-Step
    - Silent
  - Info is taken from an input file
- - Statistics is displayed in and output file
+ - Statistics is displayed in an output file
 
 ---
 
