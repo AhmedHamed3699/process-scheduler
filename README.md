@@ -32,13 +32,12 @@ Made as a project for Data Structures &amp; Algorithms course in Computer Engine
 
 ---
 
-### Timestamp
+### Sample Timestamp
 ![graph-2](./screenshots/timestamp.png)
 
 ---
 
-### Output Stats
+### Sample Output Stats
 ![graph-3](./screenshots/output.png)
-
 
 ---
