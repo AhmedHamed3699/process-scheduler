@@ -193,7 +193,9 @@ std::string UI::GetInputFileName()
 	std::cin >> fileName;
 
 	if (fileName == "d")
-		fileName = "test.txt";
+		fileName = "test/test.txt";
+	else
+		fileName = "test/" + fileName + ".txt";
 
 	return fileName;
 }
